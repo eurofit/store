@@ -11,7 +11,6 @@ import { Mail } from "lucide-react"
 export const site = {
   name: "EUROFIT",
   legalName: "Eurofit Health & Beauty LTD",
-  // TODO: use public url using t3 env
   url: publicUrl,
   description:
     "Eurofit is Kenya’s biggest supplier of sports nutrition, supplements, and skincare for both retail and wholesale customers.",
