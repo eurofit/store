@@ -1,35 +1,33 @@
-import { GlobalConfig } from 'payload';
-import { revalidateNavTag } from './hooks/revalidate-nav-tag';
+import { GlobalConfig } from "payload"
 
 export const nav: GlobalConfig = {
-  slug: 'nav',
+  slug: "nav",
   fields: [
     {
-      name: 'items',
-      label: 'Menu Items',
-      type: 'array',
+      name: "items",
+      label: "Menu Items",
+      type: "array",
       required: true,
       admin: {
         components: {
-          RowLabel: '@/globals/nav/row-label#RowLabel',
+          RowLabel: "@/globals/nav/row-label#RowLabel",
         },
-        initCollapsed: true,
       },
       fields: [
         {
-          name: 'label',
-          type: 'text',
+          name: "label",
+          type: "text",
           required: true,
         },
         {
-          name: 'url',
-          type: 'text',
+          name: "url",
+          type: "text",
           required: true,
         },
       ],
     },
   ],
   hooks: {
-    afterChange: [revalidateNavTag],
+    // afterChange: [revalidateNavTag],
   },
-};
+}
