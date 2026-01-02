@@ -8,7 +8,7 @@ export default async function HeadersPage() {
   )
 
   return (
-    <main style={{ padding: 24 }}>
+    <main className="space-y-10 p-8">
       <h1>Request Headers</h1>
 
       <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-all" }}>
