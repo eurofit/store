@@ -32,10 +32,23 @@ export async function POST(req: Request) {
   })
 
   if (body.event == "charge.success") {
+    const orders = await payload.find({
+      collection: "orders",
+      where: {
+        orderIdNumber: {
+          equals: body.data.reference,
+        },
+      },
+      limit: 0,
+      pagination: false,
+    })
+
+    const order = orders.docs[0]
+
     await payload.create({
       collection: "transactions",
       data: {
-        order: body.data.reference,
+        order: order.id,
         ref: body.data.reference,
         amount: body.data.amount / 100,
         provider: "paystack",
