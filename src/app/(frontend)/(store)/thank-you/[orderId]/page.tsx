@@ -1,15 +1,15 @@
-import { Heading } from '@/components/typography';
-import Image from 'next/image';
-import Link from 'next/link';
+import { Heading } from "@/components/typography"
+import Image from "next/image"
+import Link from "next/link"
 
 type ThankYouPageProps = {
-  params: {
-    orderId: string;
-  };
-};
+  params: Promise<{
+    orderId: string
+  }>
+}
 
 export default async function ThankYouPage({ params }: ThankYouPageProps) {
-  const { orderId } = await params;
+  const { orderId } = await params
   // const user = await getCurrentUser();
 
   // if (!user) notFound();
@@ -38,9 +38,9 @@ export default async function ThankYouPage({ params }: ThankYouPageProps) {
           <p className="text-muted-foreground">
             Your order has been received and is being processed.
           </p>
-          <Link href={'/orders/' + orderId}>See your order</Link>
+          <Link href={"/orders/" + orderId}>See your order</Link>
         </hgroup>
       </div>
     </main>
-  );
+  )
 }
