@@ -1,5 +1,4 @@
 import { CollectionConfig } from "payload"
-import { revalidateCache } from "./hooks/revalidate-tag"
 import { validateCartItems } from "./hooks/validate-cart-items"
 
 export const carts: CollectionConfig = {
