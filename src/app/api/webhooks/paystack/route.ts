@@ -31,8 +31,8 @@ export async function POST(req: Request) {
     config,
   })
 
-  if ((body.event = "charge.success")) {
-    payload.create({
+  if (body.event == "charge.success") {
+    await payload.create({
       collection: "transactions",
       data: {
         order: body.data.reference,
