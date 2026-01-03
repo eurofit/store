@@ -1,6 +1,6 @@
 import { MetadataRoute } from "next"
 
-export function manifets(): MetadataRoute.Manifest {
+export default function manifets(): MetadataRoute.Manifest {
   return {
     name: "EUROFIT",
     short_name: "EUROFIT",
