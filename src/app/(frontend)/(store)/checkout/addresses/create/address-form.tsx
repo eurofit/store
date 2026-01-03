@@ -1,6 +1,7 @@
 "use client"
 
 import { createAddress as createAddressAction } from "@/actions/address"
+import { CurrentUser } from "@/actions/auth/get-current-user"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -31,7 +32,6 @@ import { Spinner } from "@/components/ui/spinner"
 import { Textarea } from "@/components/ui/textarea"
 import { titles } from "@/constants/titles"
 import { Address, addressSchema } from "@/lib/schemas/address"
-import { SafeUser } from "@/lib/schemas/safe-user"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
@@ -40,11 +40,11 @@ import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 type AddressFormProps = {
-  user: Promise<SafeUser | null>
+  user: CurrentUser
+  city?: string | null
 }
 
-export function AddressForm({ user: userPromise }: AddressFormProps) {
-  const user = React.use(userPromise)
+export function AddressForm({ user, city }: AddressFormProps) {
   const {
     mutateAsync: createAddress,
     isPending: isCreatingAddress,
@@ -71,7 +71,7 @@ export function AddressForm({ user: userPromise }: AddressFormProps) {
       line2: "",
       line3: "",
       postalCode: "",
-      city: "",
+      city: city ?? "",
       county: "",
       country: "Kenya",
 
