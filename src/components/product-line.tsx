@@ -1,31 +1,37 @@
-'use client';
+"use client"
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { useCart } from '@/hooks/use-cart';
-import { useMounted } from '@/hooks/use-mounted';
-import { CartItem } from '@/lib/schemas/cart';
-import { type ProductLine } from '@/types';
-import { cn } from '@/utils/cn';
-import { formatWithCommas } from '@/utils/format-with-commas';
-import { clamp } from 'lodash-es';
-import { Minus, Plus } from 'lucide-react';
-import React from 'react';
-import { useDebouncedCallback } from 'use-debounce';
-import { NotifyMeButton } from './notify-me-button';
-import { Badge } from './ui/badge';
-import { ButtonGroup } from './ui/button-group';
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { useCart } from "@/hooks/use-cart"
+import { useMounted } from "@/hooks/use-mounted"
+import { CartItem } from "@/lib/schemas/cart"
+import { type ProductLine } from "@/types"
+import { buildWhatsAppLink } from "@/utils/build-wa-link"
+import { cn } from "@/utils/cn"
+import { formatWithCommas } from "@/utils/format-with-commas"
+import { clamp } from "lodash-es"
+import { Minus, Plus } from "lucide-react"
+import Link from "next/link"
+import React from "react"
+import { useDebouncedCallback } from "use-debounce"
+import { Whatsapp } from "./icons/whatsapp"
+import { NotifyMeButton } from "./notify-me-button"
+import { Badge } from "./ui/badge"
+import { ButtonGroup } from "./ui/button-group"
 
 type ProductLineProps = {
-  product: CartItem['product'];
-  line: ProductLine;
-  userId?: string | null;
-};
+  product: CartItem["product"]
+  line: ProductLine
+  userId?: string | null
+}
 
 export function ProductLine({ product, userId, line }: ProductLineProps) {
   const {
     queryResult: { cart, isQueryPending },
-    createCartWithItemMutation: { mutate: createCartWithItem, isPending: isCreatingCart },
+    createCartWithItemMutation: {
+      mutate: createCartWithItem,
+      isPending: isCreatingCart,
+    },
     addItemToCartMutation: { mutate: addItemToCart },
     updateCartItemQuantityMutation: {
       mutate: updateCartItemQuantity,
@@ -33,22 +39,22 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
     },
     removeItemFromCartMutation: { mutate: removeItemFromCart },
     deleteCartMutation: { mutate: deleteCart },
-  } = useCart();
-  const isMounted = useMounted();
+  } = useCart()
+  const isMounted = useMounted()
 
-  const cartItem = cart?.items.find((item) => item.id === line.id);
+  const cartItem = cart?.items.find((item) => item.id === line.id)
 
-  const [qty, setQty] = React.useState(0);
+  const [qty, setQty] = React.useState(0)
 
   // Sync local qty state with cart item quantity
   React.useEffect(() => {
-    if (cartItem && cartItem.quantity === qty) return;
-    setQty(cartItem?.quantity ?? 0);
-  }, [cartItem?.quantity]);
+    if (cartItem && cartItem.quantity === qty) return
+    setQty(cartItem?.quantity ?? 0)
+  }, [cartItem?.quantity])
 
   const commitCartChange = (newQty: number) => {
     // if item has no price, do nothing
-    if (!line.price) return;
+    if (!line.price) return
 
     // if there is no cart, create one with the item
     if (!isQueryPending && !cart) {
@@ -60,8 +66,8 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
         snapshot: {
           retailPrice: line.price!,
         },
-      });
-      return;
+      })
+      return
     }
 
     // if there is a cart, but item not in it, add the item
@@ -73,9 +79,9 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
         quantity: newQty,
         price: line.price!,
         snapshot: { retailPrice: line.price! },
-      });
+      })
 
-      return;
+      return
     }
 
     // if there is a cart and item in it, update the item quantity
@@ -92,62 +98,77 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
         quantity: newQty,
         price: line.price!,
         snapshot: { retailPrice: line.price! },
-      });
-      return;
+      })
+      return
     }
 
     // if new quantity is zero, and there are more than 1 items in the cart, remove the item
-    if (!isQueryPending && cart && cart?.items.length > 1 && cartItem && newQty === 0) {
+    if (
+      !isQueryPending &&
+      cart &&
+      cart?.items.length > 1 &&
+      cartItem &&
+      newQty === 0
+    ) {
       removeItemFromCart({
         item: cartItem.id,
-      });
-      return;
+      })
+      return
     }
 
     // if new quantity is zero, and this is the only item in the cart, delete the cart
-    if (!isQueryPending && cart && cart?.items.length === 1 && cartItem && newQty === 0) {
-      deleteCart();
-      return;
+    if (
+      !isQueryPending &&
+      cart &&
+      cart?.items.length === 1 &&
+      cartItem &&
+      newQty === 0
+    ) {
+      deleteCart()
+      return
     }
-  };
+  }
 
-  const debouncedCommitChange = useDebouncedCallback(commitCartChange, 400);
+  const debouncedCommitChange = useDebouncedCallback(commitCartChange, 400)
 
   const handleQtyChange = (newQty: number) => {
-    setQty(newQty);
+    setQty(newQty)
 
-    debouncedCommitChange(newQty);
-  };
+    debouncedCommitChange(newQty)
+  }
 
   const handleIncrement = () => {
-    setQty((qty) => qty + 1);
-    debouncedCommitChange(clamp(qty + 1, 0, line.stock));
-  };
+    setQty((qty) => qty + 1)
+    debouncedCommitChange(clamp(qty + 1, 0, line.stock))
+  }
 
   const handleDecrement = () => {
-    setQty((qty) => qty - 1);
-    debouncedCommitChange(clamp(qty - 1, 0, line.stock));
-  };
+    setQty((qty) => qty - 1)
+    debouncedCommitChange(clamp(qty - 1, 0, line.stock))
+  }
 
   // TODO: refactor qty input to separate component be reusable in cart sheet and checkout item
 
   return (
     <div
       className={cn(
-        'relative flex w-full flex-col items-center justify-between rounded-lg p-3 transition-all duration-200 md:flex-row',
+        "relative flex w-full flex-col items-center justify-between rounded-lg p-3 transition-all duration-200 md:flex-row",
         {
-          'border-blue-300 bg-blue-50': line.price && qty > 0,
-          'border-gray-200 bg-white hover:bg-gray-50': !line.price || qty === 0,
-          'border-red-200 bg-red-50 hover:bg-red-50': line.isOutOfStock,
-          'gap-4 max-md:flex-col max-md:items-start': line.stock,
-        },
+          "border-blue-300 bg-blue-50": line.price && qty > 0,
+          "border-gray-200 bg-white hover:bg-gray-50": !line.price || qty === 0,
+          "border-red-200 bg-red-50 hover:bg-red-50": line.isOutOfStock,
+          "gap-4 max-md:flex-col max-md:items-start": line.stock,
+        }
       )}
       aria-label={line.title}
     >
       <div className="w-full min-w-0 grow">
         <div className="mb-1 flex items-center gap-2">
           {line.variant && (
-            <h3 id={line.slug} className="scroll-m-20 text-sm text-gray-600 capitalize">
+            <h3
+              id={line.slug}
+              className="scroll-m-20 text-sm text-gray-600 capitalize"
+            >
               {line.variant}
             </h3>
           )}
@@ -171,7 +192,9 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
             </span>
           )}
           {!line.isLowStock && !line.isOutOfStock && (
-            <span className="text-xs text-green-500">{line.stock} in stock</span>
+            <span className="text-xs text-green-500">
+              {line.stock} in stock
+            </span>
           )}
           {line.isOutOfStock && (
             <span className="text-xs text-gray-500">Out of stock</span>
@@ -190,8 +213,8 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
 
         {!line.isOutOfStock && line.price && (
           <ButtonGroup
-            className={cn('relative w-full', {
-              'border border-amber-500': isUpdatingCartItem,
+            className={cn("relative w-full", {
+              "border border-amber-500": isUpdatingCartItem,
             })}
           >
             <Button
@@ -213,7 +236,7 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
               inputMode="numeric"
               pattern="[0-9]*"
               placeholder="0"
-              value={qty || ''}
+              value={qty || ""}
               onChange={(e) =>
                 handleQtyChange(clamp(Number(e.target.value), 0, line.stock))
               }
@@ -230,7 +253,23 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
             </Button>
           </ButtonGroup>
         )}
+
+        {!line.isOutOfStock && !line.price && (
+          <Button variant="outline" className="text-[#103928]" asChild>
+            <Link
+              href={buildWhatsAppLink({
+                phone: "254110990666",
+                message: `Hello Eurofit Team,\n\nI would like to inquire about the price for this product:\n\n*Product*: ${line.title}\n${line.variant ? `*Variant*: ${line.variant}` : ""}\n*SKU*: ${line.sku}\n\nThank you.`,
+              })}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Whatsapp />
+              Inquire price
+            </Link>
+          </Button>
+        )}
       </div>
     </div>
-  );
+  )
 }
