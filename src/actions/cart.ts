@@ -216,8 +216,6 @@ export async function addItemToCart(
       srcStock: true,
       isOutOfStock: true,
     },
-    user: user?.id,
-    overrideAccess: false,
     limit: 1,
     pagination: false,
   })
@@ -271,7 +269,6 @@ export async function addItemToCart(
     collection: "carts",
     id: cart.id,
     data: updateCart,
-    user: user?.id,
   })
 
   return {
