@@ -249,7 +249,7 @@ export async function addItemToCart(
   const updateCart: Cart = {
     ...cart,
     user: user?.id,
-    guestSessionId: guestSessionId,
+    guestSessionId: user ? undefined : guestSessionId,
     lastActiveAt: new Date().toISOString(),
     items: [
       ...cart.items,
