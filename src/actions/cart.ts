@@ -175,22 +175,17 @@ export async function addItemToCart(
   const { docs: carts } = await payload.find({
     collection: "carts",
     where: {
-      or: [
-        ...[
-          user
-            ? {
-                user: {
-                  equals: user.id,
-                },
-              }
-            : {},
-        ],
-        {
-          guestSessionId: {
-            equals: guestSessionId,
-          },
-        },
-      ],
+      ...(user
+        ? {
+            user: {
+              equals: user.id,
+            },
+          }
+        : {
+            guestSessionId: {
+              equals: guestSessionId,
+            },
+          }),
       "items.productLine": {
         not_equals: item,
       },
@@ -306,22 +301,17 @@ export async function updateCartItemQuantity(
   const { docs: carts } = await payload.find({
     collection: "carts",
     where: {
-      or: [
-        ...[
-          user
-            ? {
-                user: {
-                  equals: user.id,
-                },
-              }
-            : {},
-        ],
-        {
-          guestSessionId: {
-            equals: guestSessionId,
-          },
-        },
-      ],
+      ...(user
+        ? {
+            user: {
+              equals: user.id,
+            },
+          }
+        : {
+            guestSessionId: {
+              equals: guestSessionId,
+            },
+          }),
     },
   })
 
