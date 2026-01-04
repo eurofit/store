@@ -1,77 +1,62 @@
-'use client';
+"use client"
 
-import { getBrands } from '@/actions/brands/get-brands';
-import { useInView } from '@/hooks/use-in-view';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { Brand } from '@/types';
-import { uniqBy } from 'lodash-es';
-import { CheckCircle, CircleX } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import * as React from 'react';
-import { BrandCard, BrandsSkeleton } from './brand-card';
+import { getBrands } from "@/actions/brands/get-brands"
+import { BrandCard, BrandsSkeleton } from "@/components/brand-card"
+import { useInView } from "@/hooks/use-in-view"
+import { useIsMobile } from "@/hooks/use-mobile"
+import { useInfiniteQuery } from "@tanstack/react-query"
+import { CheckCircle, CircleX } from "lucide-react"
+import { useSearchParams } from "next/navigation"
+import * as React from "react"
 
 type BrandListProps = {
-  initialBrands?: Brand[];
-  totalBrands: number;
-  pathname?: string;
-} & React.ComponentProps<'section'>;
+  initialData: Awaited<ReturnType<typeof getBrands>>
+  totalBrands: number
+} & React.ComponentProps<"section">
 
-const PAGE_LIMIT = 25;
+const BRANDS_LIMIT = 25
 
 export function BrandList({
-  initialBrands = [],
+  initialData,
   totalBrands,
-  pathname: href = '/brands',
   ...props
 }: BrandListProps) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParams()
 
-  const page = Math.max(1, Number(searchParams.get('page')) || 1);
+  const page = Math.max(1, Number(searchParams.get("page")) || 1)
 
-  const [brands, setBrands] = React.useState<Brand[]>(initialBrands);
+  const {
+    data,
+    hasNextPage,
+    fetchNextPage,
+    isError,
+    isFetchingNextPage,
+    hasPreviousPage,
+  } = useInfiniteQuery({
+    queryKey: ["brands"],
+    queryFn: ({ pageParam = page }) =>
+      getBrands({ page: pageParam, limit: BRANDS_LIMIT }),
+    initialPageParam: page,
+    getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
+    initialData: {
+      pages: [initialData],
+      pageParams: [page],
+    },
+  })
 
-  const [error, setError] = React.useState('');
+  const brands = React.useMemo(
+    () => data?.pages.flatMap((page) => page.brands) ?? [],
+    [data]
+  )
 
-  const loadingRef = React.useRef(false);
-  const loaderRef = React.useRef<HTMLDivElement>(null!);
-  const isLoaderInView = useInView(loaderRef);
-
-  const isMobile = useIsMobile();
+  const { ref, isInView } = useInView()
+  const isMobile = useIsMobile()
 
   React.useEffect(() => {
-    if (!isLoaderInView || loadingRef.current || brands.length >= totalBrands) return;
+    if (!isInView || !hasNextPage || isFetchingNextPage) return
 
-    loadingRef.current = true;
-
-    getBrands({ page: page + 1, limit: PAGE_LIMIT })
-      .then(({ brands: newBrands, page: currentPage }) => {
-        if (newBrands.length === 0) {
-          return;
-        }
-
-        setBrands((prev) => uniqBy([...prev, ...newBrands], 'id'));
-
-        const params = new URLSearchParams(searchParams.toString());
-        params.set('page', String(currentPage));
-        router.replace(`${href}?${params.toString()}`, { scroll: false });
-      })
-
-      .catch(() => {
-        setError('Oops! Something went wrong!');
-      })
-      .finally(() => loadingRef.current && (loadingRef.current = false));
-  }, [
-    isLoaderInView,
-    loaderRef,
-    brands,
-    totalBrands,
-    page,
-    pathname,
-    router,
-    searchParams,
-  ]);
+    fetchNextPage()
+  }, [isInView])
 
   return (
     <section {...props}>
@@ -83,29 +68,33 @@ export function BrandList({
       >
         {brands.map((brand, index) => (
           <li key={brand.id}>
-            <BrandCard {...brand} index={index} href={`${href}/${brand.slug}`} />
+            <BrandCard {...brand} index={index} />
           </li>
         ))}
       </ul>
 
-      {/* --- LOADER / END STATE --- */}
-      {error && !loadingRef.current && (
+      {hasNextPage && (
+        <div ref={ref}>
+          <BrandsSkeleton length={isMobile ? 1 : 5} className="mt-10" />
+        </div>
+      )}
+
+      {isError && (
         <div
           role="alert"
           aria-live="assertive"
           className="mt-10 flex items-center justify-center gap-2"
         >
           <CircleX className="text-destructive" />
-          <span>{error}</span>
+          <span>Sorry, we encountered an error while loading more brands.</span>
         </div>
       )}
 
-      {brands.length < totalBrands && (
-        <BrandsSkeleton ref={loaderRef} length={isMobile ? 1 : 5} className="mt-10" />
-      )}
-
       {brands.length == totalBrands && (
-        <div aria-live="polite" className="mt-10 flex items-center justify-center gap-2">
+        <div
+          aria-live="polite"
+          className="mt-10 flex items-center justify-center gap-2"
+        >
           <CheckCircle className="text-green-600" />
           <span>That is it! You have seen all {brands.length} brands.</span>
         </div>
@@ -116,17 +105,17 @@ export function BrandList({
         className="h-px overflow-hidden text-[1px] opacity-5"
         aria-label="Pagination navigation for brands"
       >
-        {page > 1 && (
-          <a href={`${href}?page=${page - 1}`} rel="prev">
+        {hasPreviousPage && (
+          <a href={`?page=${page - 1}`} rel="prev">
             Previous
           </a>
         )}
-        {brands.length < totalBrands && (
-          <a href={`${href}?page=${page + 1}`} rel="next">
+        {hasNextPage && (
+          <a href={`?page=${page + 1}`} rel="next">
             Next
           </a>
         )}
       </nav>
     </section>
-  );
+  )
 }

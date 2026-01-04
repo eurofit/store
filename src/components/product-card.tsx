@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/card"
 import type { Product } from "@/types"
 
+import { pluralizeByCount } from "@/utils/pluralize"
 import { ImageOff } from "lucide-react"
 import Link from "next/link"
 import React from "react"
@@ -17,7 +18,7 @@ import { Skeleton } from "./ui/skeleton"
 
 type ProductCardProps = React.ComponentProps<typeof Card> & {
   product: Product
-  userId: string | null
+  userId?: string | null
   href?: string
 }
 
@@ -25,7 +26,6 @@ type ProductCardProps = React.ComponentProps<typeof Card> & {
 
 export function ProductCard({
   product: { id, slug, title, origin, image, productLines },
-  href = `/products/${slug}`,
   userId,
 }: ProductCardProps) {
   return (
@@ -37,7 +37,7 @@ export function ProductCard({
         <div className="space-y-2">
           <CardTitle className="text-xl tracking-tight text-pretty">
             <Link
-              href={href}
+              href={`/products/${slug}`}
               className="hover:underline hover:underline-offset-4"
             >
               {title}
@@ -72,7 +72,9 @@ export function ProductCard({
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-gray-900">Choose Options</h3>
               <span className="border-gray-300 text-xs text-gray-600">
-                {productLines.length} options
+                {productLines.length}
+                &nbsp;
+                {pluralizeByCount("Option", productLines.length)}
               </span>
             </div>
 

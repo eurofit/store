@@ -1,26 +1,22 @@
-import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { Brand } from '@/types';
-import { cn } from '@/utils/cn';
-import { ImageOff } from 'lucide-react';
-import Link from 'next/link';
-import { ImageWithRetry } from './image-with-retry';
-import { Skeleton } from './ui/skeleton';
+import { AspectRatio } from "@/components/ui/aspect-ratio"
+import { Brand } from "@/types"
+import { cn } from "@/utils/cn"
+import { ImageOff } from "lucide-react"
+import Link from "next/link"
+import { ImageWithRetry } from "./image-with-retry"
+import { Skeleton } from "./ui/skeleton"
 
 type BrandCardProps = Brand & {
-  index: number;
-  href?: string;
-};
+  index: number
+}
 
-export function BrandCard({ title, image, slug, index, href }: BrandCardProps) {
+export function BrandCard({ title, image, slug, index }: BrandCardProps) {
   return (
     <article
       aria-labelledby={slug}
-      className="group relative overflow-hidden rounded-tl-lg rounded-tr-lg"
+      className="group hover:outline hover:outline-red-500 transition-color duration-300 relative overflow-hidden rounded-lg"
     >
-      <AspectRatio
-        ratio={4 / 3}
-        className="transition-all duration-300 group-hover:border group-hover:border-red-500 group-hover:shadow-lg"
-      >
+      <AspectRatio ratio={4 / 3}>
         {image && (
           <ImageWithRetry
             src={image}
@@ -28,7 +24,7 @@ export function BrandCard({ title, image, slug, index, href }: BrandCardProps) {
             fill
             className="mx-auto object-contain"
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 33vw, 20vw"
-            loading={index > 4 ? 'lazy' : 'eager'}
+            loading={index > 4 ? "lazy" : "eager"}
             priority={index <= 4}
           />
         )}
@@ -42,7 +38,7 @@ export function BrandCard({ title, image, slug, index, href }: BrandCardProps) {
           </div>
         )}
       </AspectRatio>
-      <div className="from-primary to-primary/90 text-primary-foreground flex-1 rounded-b-lg bg-linear-to-r py-4 group-hover:border-x group-hover:border-b group-hover:border-red-500 group-hover:shadow-lg">
+      <div className="from-primary to-primary/90 text-primary-foreground flex-1 rounded-b-lg bg-linear-to-r py-4">
         <h2 id={slug} className="font-heading text-center font-bold uppercase">
           {title}
         </h2>
@@ -50,11 +46,11 @@ export function BrandCard({ title, image, slug, index, href }: BrandCardProps) {
       <Link
         title={`Shop ${title} products`}
         aria-label={`View products from ${title}`}
-        href={href ?? `/brands/${slug}`}
+        href={`/brands/${slug}`}
         className="absolute inset-0"
       />
     </article>
-  );
+  )
 }
 
 export function BrandSkeleton() {
@@ -62,12 +58,12 @@ export function BrandSkeleton() {
     <div>
       <Skeleton className="aspect-square max-w-xs" />
     </div>
-  );
+  )
 }
 
-type BrandsSkeletonProps = React.ComponentPropsWithRef<'div'> & {
-  length?: number;
-};
+type BrandsSkeletonProps = React.ComponentPropsWithRef<"div"> & {
+  length?: number
+}
 
 export function BrandsSkeleton({
   length = 10,
@@ -77,8 +73,8 @@ export function BrandsSkeleton({
   return (
     <div
       className={cn(
-        'grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-10 lg:grid-cols-4 xl:grid-cols-5',
-        className,
+        "grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-10 lg:grid-cols-4 xl:grid-cols-5",
+        className
       )}
       {...props}
     >
@@ -86,5 +82,5 @@ export function BrandsSkeleton({
         <BrandSkeleton key={`brand-skeleton-${i}`} />
       ))}
     </div>
-  );
+  )
 }

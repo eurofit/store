@@ -1,38 +1,38 @@
-import { getAllBrands } from '@/actions/brands/get-brands';
-import { BrandsSkeleton } from '@/components/brand-card';
-import { Brands } from '@/components/brands';
-import { JsonLd } from '@/components/json-ld';
-import { TotalBrands } from '@/components/total-brands';
-import { site } from '@/constants/site';
-import { getBrandsJsonLd } from '@/utils/brand/get-brand-list-jsonld';
-import { Metadata } from 'next';
-import React from 'react';
+import { getAllBrands } from "@/actions/brands/get-brands"
+import { BrandsSkeleton } from "@/components/brand-card"
+import { Brands } from "@/components/brands"
+import { JsonLd } from "@/components/json-ld"
+import { TotalBrands } from "@/components/total-brands"
+import { site } from "@/constants/site"
+import { getBrandsJsonLd } from "@/utils/brand/get-brand-list-jsonld"
+import { Metadata } from "next"
+import React from "react"
 
 export const metadata: Metadata = {
-  title: 'Shop by Brand',
-  description: 'Explore our wide range of brands and find your favorites.',
+  title: "Shop by Brand",
+  description: "Explore our wide range of brands and find your favorites.",
   alternates: {
-    canonical: site.url + '/brands',
+    canonical: site.url + "/brands",
   },
-};
+}
 
 type BrandsPageProps = {
   searchParams: Promise<{
-    page?: string;
-  }>;
-};
+    page?: string
+  }>
+}
 
 export default async function BrandsPage({
   searchParams: searchParamsPromise,
 }: BrandsPageProps) {
-  const page = searchParamsPromise.then((params) => Number(params.page) || 1);
+  const page = searchParamsPromise.then((params) => Number(params.page) || 1)
 
-  const { brands } = await getAllBrands();
+  const { brands } = await getAllBrands()
 
   // --- JSON LD'S ---
   const jsonLds = getBrandsJsonLd({
     brands,
-  });
+  })
 
   return (
     <main>
@@ -46,19 +46,19 @@ export default async function BrandsPage({
           id="brand-list-heading"
           className="scroll-m-20 text-3xl font-bold tracking-tight text-pretty lg:text-4xl"
         >
-          Discover{' '}
+          Discover{" "}
           <React.Suspense fallback={<span>...</span>}>
             <TotalBrands />
           </React.Suspense>
-          + top sports nutrition brands at unbeatable trade prices from Kenya&apos;s
-          leading sports nutrition supplier — EURO
+          + top sports nutrition brands at unbeatable trade prices from
+          Kenya&apos;s leading sports nutrition supplier — EURO
           <span className="text-red-500">FIT</span>.
         </h1>
         <p className="text-muted-foreground text-pretty">
-          We bring you the world&apos;s biggest sports nutrition brands—trusted by
-          athletes and fitness lovers—at unbeatable wholesale & retail prices, directly
-          available in Kenya from Eurofit, the nation&apos;s #1 sports supplements
-          supplier.
+          We bring you the world&apos;s biggest sports nutrition brands—trusted
+          by athletes and fitness lovers—at unbeatable wholesale & retail
+          prices, directly available in Kenya from Eurofit, the nation&apos;s #1
+          sports supplements supplier.
         </p>
       </hgroup>
 
@@ -66,5 +66,5 @@ export default async function BrandsPage({
         <Brands page={page} />
       </React.Suspense>
     </main>
-  );
+  )
 }

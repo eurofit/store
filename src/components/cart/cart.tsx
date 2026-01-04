@@ -1,16 +1,21 @@
-'use client';
+"use client"
 
-import { useCart } from '@/hooks/use-cart';
-import { cn } from '@/utils/cn';
-import { formatWithCommas } from '@/utils/format-with-commas';
-import { uniqBy } from 'lodash-es';
-import { ChevronRight, ShoppingBag, ShoppingBasket, ShoppingCart } from 'lucide-react';
-import Link from 'next/link';
-import { Fragment } from 'react';
-import { Large, Muted } from '../typography';
-import { Badge } from '../ui/badge';
-import { Button } from '../ui/button';
-import { Separator } from '../ui/separator';
+import { useCart } from "@/hooks/use-cart"
+import { cn } from "@/utils/cn"
+import { formatWithCommas } from "@/utils/format-with-commas"
+import { uniqBy } from "lodash-es"
+import {
+  ChevronRight,
+  ShoppingBag,
+  ShoppingBasket,
+  ShoppingCart,
+} from "lucide-react"
+import Link from "next/link"
+import { Fragment } from "react"
+import { Large, Muted } from "../typography"
+import { Badge } from "../ui/badge"
+import { Button } from "../ui/button"
+import { Separator } from "../ui/separator"
 import {
   Sheet,
   SheetClose,
@@ -20,18 +25,19 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '../ui/sheet';
-import { CartItem } from './cart-item';
+} from "../ui/sheet"
+import { CartItem } from "./cart-item"
 
 export function Cart() {
   const {
     queryResult: { cart, isQueryPending },
-  } = useCart();
-  const totalItems = cart?.items.reduce((total, item) => total + item.quantity, 0) || 0;
+  } = useCart()
+  const totalItems =
+    cart?.items.reduce((total, item) => total + item.quantity, 0) || 0
 
-  const isCartEmpty = !cart || (cart && cart.items.length === 0);
+  const isCartEmpty = !cart || (cart && cart.items.length === 0)
   return (
-    <Sheet>
+    <Sheet modal>
       <SheetTrigger disabled={isQueryPending} asChild>
         <Button variant="outline" size="icon" className="relative">
           <ShoppingBag />
@@ -51,7 +57,8 @@ export function Cart() {
           <SheetTitle>Cart</SheetTitle>
           {cart && cart.items.length > 0 && (
             <SheetDescription className="text-xs">
-              ({cart && cart.items.length} item{cart && cart.items.length > 1 ? 's' : ''})
+              ({cart && cart.items.length} item
+              {cart && cart.items.length > 1 ? "s" : ""})
             </SheetDescription>
           )}
         </SheetHeader>
@@ -62,7 +69,9 @@ export function Cart() {
             <section className="m-auto flex max-w-sm flex-col items-center gap-6 text-center">
               <ShoppingBasket className="size-24 text-gray-200" />
               <hgroup className="space-y-2">
-                <h2 className="text-muted-foreground text-xl font-medium">Empty Cart</h2>
+                <h2 className="text-muted-foreground text-xl font-medium">
+                  Empty Cart
+                </h2>
                 <p className="text-muted-foreground mx-auto max-w-3/5 text-sm text-pretty">
                   Your cart is empty. Add some items to see them here!
                 </p>
@@ -74,7 +83,7 @@ export function Cart() {
         {/* CART ITEMS */}
         {cart && cart.items.length > 0 && (
           <div className="scrollbar flex grow flex-col overflow-y-auto px-6">
-            {uniqBy(cart.items, 'id').map((item, itemIndex) => (
+            {uniqBy(cart.items, "id").map((item, itemIndex) => (
               <Fragment key={item.id}>
                 {itemIndex > 0 && itemIndex < cart.items.length && (
                   <Separator className="my-6" />
@@ -87,8 +96,8 @@ export function Cart() {
 
         {/* FOOTER   */}
         <SheetFooter
-          className={cn('bg-background mt-auto flex-col space-y-0 p-6', {
-            'border-t': cart && cart.items.length > 0,
+          className={cn("bg-background mt-auto flex-col space-y-0 p-6", {
+            "border-t": cart && cart.items.length > 0,
           })}
         >
           {cart && cart.items.length > 0 && (
@@ -110,8 +119,8 @@ export function Cart() {
                         {formatWithCommas(
                           cart.items.reduce(
                             (total, item) => total + item.price * item.quantity,
-                            0,
-                          ),
+                            0
+                          )
                         )}
                       </Large>
                     </dd>
@@ -157,5 +166,5 @@ export function Cart() {
         </SheetFooter>
       </SheetContent>
     </Sheet>
-  );
+  )
 }

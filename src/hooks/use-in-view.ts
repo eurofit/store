@@ -1,32 +1,36 @@
-import { useEffect, useState } from 'react';
+import * as React from "react"
 
-export function useInView(ref?: React.Ref<HTMLElement> | null, threshold = 0.1) {
-  const [isInView, setIsInView] = useState(false);
+export function useInView(threshold = 0.1) {
+  const ref = React.useRef<HTMLDivElement | null>(null)
+  const [isInView, setIsInView] = React.useState(false)
 
-  useEffect(() => {
+  React.useEffect(() => {
     const node =
-      ref && typeof ref !== 'function'
+      ref && typeof ref !== "function"
         ? ref.current
-        : (ref as React.RefCallback<HTMLElement> & { current?: HTMLElement | null })
-            ?.current;
+        : (
+            ref as React.RefCallback<HTMLElement> & {
+              current?: HTMLElement | null
+            }
+          )?.current
 
     if (!node) {
-      return;
+      return
     }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsInView(entry.isIntersecting);
+        setIsInView(entry.isIntersecting)
       },
-      { threshold },
-    );
+      { threshold }
+    )
 
-    observer.observe(node);
+    observer.observe(node)
 
     return () => {
-      observer.unobserve(node);
-    };
-  }, [ref, threshold]);
+      observer.unobserve(node)
+    }
+  }, [ref, threshold])
 
-  return isInView;
+  return { ref, isInView }
 }

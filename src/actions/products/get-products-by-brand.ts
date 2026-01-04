@@ -147,10 +147,6 @@ export async function getProductsByBrand(opts: GetProductsByBrandArgs) {
 }
 
 export async function getTotalProductLinesByBrand(slug: string) {
-  // 'use cache';
-  // cacheTag('products');
-  // cacheLife('days');
-
   const payload = await getPayload({ config: payloadConfig })
   const { totalDocs: totalProducts } = await payload.count({
     collection: "product-lines",

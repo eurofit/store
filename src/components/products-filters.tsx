@@ -1,7 +1,10 @@
-import { FilterGroup } from '@/types';
-import { FunnelIcon } from 'lucide-react';
-import { FilterClearButton, FilterGroupClearButton } from './filter-clear-button';
-import { FilterItem } from './filter-item';
+import { FilterGroup } from "@/types"
+import { FunnelIcon } from "lucide-react"
+import {
+  FilterClearButton,
+  FilterGroupClearButton,
+} from "./filter-clear-button"
+import { FilterItem } from "./filter-item"
 import {
   ProductFilter,
   ProductFilterContent,
@@ -12,13 +15,17 @@ import {
   ProductFilterGroupTitle,
   ProductFilterHeader,
   ProductFilterTitle,
-} from './product-filters';
+} from "./product-filters"
 
 type BrandFiltersProps = {
-  getFilters: (...args: any) => Promise<FilterGroup[]>;
-};
+  getFilters: (...args: any) => Promise<FilterGroup[]>
+}
 export async function ProductFilters({ getFilters }: BrandFiltersProps) {
-  const filters = await getFilters();
+  const filters = await getFilters()
+
+  if (filters.length === 0) {
+    return null
+  }
 
   return (
     <ProductFilter>
@@ -27,7 +34,9 @@ export async function ProductFilters({ getFilters }: BrandFiltersProps) {
           <FunnelIcon />
           <h2>Filter By</h2>
         </ProductFilterTitle>
-        <FilterClearButton keys={['brand', 'category', 'size', 'flavour-colour']} />
+        <FilterClearButton
+          keys={["brand", "category", "size", "flavour-colour"]}
+        />
       </ProductFilterHeader>
       <ProductFilterContent>
         {filters.map(({ key, title, items }) => {
@@ -55,9 +64,9 @@ export async function ProductFilters({ getFilters }: BrandFiltersProps) {
                 </ProductFilterGroupList>
               </ProductFilterGroupContent>
             </ProductFilterGroup>
-          );
+          )
         })}
       </ProductFilterContent>
     </ProductFilter>
-  );
+  )
 }

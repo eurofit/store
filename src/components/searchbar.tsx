@@ -1,27 +1,37 @@
-'use client';
+"use client"
 
 import {
   SearchProductResult,
   searchProductSuggestions,
-} from '@/actions/search-product-suggestions';
-import { recentSearchesAtom } from '@/atoms/search-bar';
-import { useToggle } from '@/hooks/use-toggle';
-import { cn } from '@/utils/cn';
-import { useMutation } from '@tanstack/react-query';
-import { useAtom } from 'jotai';
-import { ImageOff, SearchIcon, X, XCircle } from 'lucide-react';
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import * as React from 'react';
-import { useClickAway } from 'react-use';
-import { useDebouncedCallback } from 'use-debounce';
-import { ImageWithRetry } from './image-with-retry';
-import { Button, buttonVariants } from './ui/button';
-import { ButtonGroup } from './ui/button-group';
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from './ui/empty';
-import { Input } from './ui/input';
-import { Skeleton } from './ui/skeleton';
-import { Spinner } from './ui/spinner';
+} from "@/actions/search-product-suggestions"
+import { recentSearchesAtom } from "@/atoms/search-bar"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group"
+import { useToggle } from "@/hooks/use-toggle"
+import { cn } from "@/utils/cn"
+import { useMutation } from "@tanstack/react-query"
+import { useAtom } from "jotai"
+import { truncate } from "lodash-es"
+import { ImageOff, SearchIcon, X, XCircle } from "lucide-react"
+import Link from "next/link"
+import { useSearchParams } from "next/navigation"
+import * as React from "react"
+import { useClickAway } from "react-use"
+import { useDebouncedCallback } from "use-debounce"
+import { ImageWithRetry } from "./image-with-retry"
+import { Button, buttonVariants } from "./ui/button"
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "./ui/empty"
+import { Skeleton } from "./ui/skeleton"
+import { Spinner } from "./ui/spinner"
 
 export function SearchBar() {
   const {
@@ -31,104 +41,101 @@ export function SearchBar() {
   } = useMutation({
     mutationFn: searchProductSuggestions,
     onSuccess: (result) => {
-      setHasSearched(true);
+      setHasSearched(true)
 
       if (!result) {
-        setTotalProducts(0);
-        setProducts([]);
-        return;
+        setTotalProducts(0)
+        setProducts([])
+        return
       }
 
       if (trimmedQuery) {
-        setLastSearchedQuery(result.query);
-        setTotalProducts(result.totalProducts);
-        setProducts(result.products);
+        setTotalProducts(result.totalProducts)
+        setProducts(result.products)
       }
 
       setRecentSearches((prev = []) => {
-        if (!trimmedQuery) return prev;
+        if (!trimmedQuery) return prev
         const updatedSearches = [
           trimmedQuery,
           ...prev.filter((term) => term !== trimmedQuery),
-        ];
-        return updatedSearches.slice(0, 5);
-      });
+        ]
+        return updatedSearches.slice(0, 5)
+      })
     },
     onError: () => {
-      setProducts([]);
-      setTotalProducts(0);
-      setHasSearched(true);
-      setLastSearchedQuery(trimmedQuery);
+      setProducts([])
+      setTotalProducts(0)
+      setHasSearched(true)
     },
-  });
+  })
 
-  const searchParams = useSearchParams();
-  const q = searchParams.get('q')?.toString() ?? '';
+  const searchParams = useSearchParams()
+  const q = searchParams.get("q")?.toString() ?? ""
 
-  const [query, setQuery] = React.useState(q);
-  const trimmedQuery = query.trim();
+  const [query, setQuery] = React.useState(q)
+  const trimmedQuery = query.trim()
 
-  const [hasSearched, setHasSearched] = React.useState(false);
+  const [hasSearched, setHasSearched] = React.useState(false)
   const [products, setProducts] = React.useState<
-    NonNullable<SearchProductResult>['products']
-  >([]);
-  const [totalProducts, setTotalProducts] = React.useState<number>(0);
-  const [lastSearchedQuery, setLastSearchedQuery] = React.useState<string>('');
-  const [recentSearches, setRecentSearches] = useAtom(recentSearchesAtom);
+    NonNullable<SearchProductResult>["products"]
+  >([])
+  const [totalProducts, setTotalProducts] = React.useState<number>(0)
 
-  const { value: isOpen, setOn: setOpen, setOff: closeSearch } = useToggle();
+  const [recentSearches, setRecentSearches] = useAtom(recentSearchesAtom)
 
-  const ref = React.useRef<HTMLDivElement>(null);
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const { value: isOpen, setOn: setOpen, setOff } = useToggle()
+
+  const ref = React.useRef<HTMLDivElement>(null)
+  const inputRef = React.useRef<HTMLInputElement>(null)
 
   // sync search params
   React.useEffect(() => {
-    if (!q) return;
-    setQuery(q);
-  }, []);
+    if (!q) return
+    setQuery(q)
+  }, [])
 
-  const debouncedSearch = useDebouncedCallback((term: string) => search(term), 300);
+  const debouncedSearch = useDebouncedCallback(
+    (term: string) => search(term),
+    300
+  )
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    setQuery(newValue);
+    const newValue = e.target.value
+    setQuery(newValue)
+
+    debouncedSearch.cancel()
 
     if (!newValue.trim()) {
-      setProducts([]);
-      setTotalProducts(0);
-      setHasSearched(false);
-      setLastSearchedQuery('');
+      setProducts([])
+      setTotalProducts(0)
+      setHasSearched(false)
 
-      return;
+      return
     }
 
-    React.startTransition(() => {
-      debouncedSearch.cancel();
-      if (trimmedQuery.length <= 1) return;
-
-      debouncedSearch(newValue.trim());
-    });
-  };
+    if (trimmedQuery.length <= 1) return
+    debouncedSearch(newValue.trim())
+  }
 
   const handleClear = () => {
-    setQuery('');
-    setProducts([]);
-    setTotalProducts(0);
-    setHasSearched(false);
-    setLastSearchedQuery('');
+    setQuery("")
+    setProducts([])
+    setTotalProducts(0)
+    setHasSearched(false)
 
-    inputRef.current?.focus();
-  };
+    inputRef.current?.focus()
+  }
 
   const handleRecentSearchClick = (term: string) => {
-    setQuery(term);
-    setLastSearchedQuery('');
-    debouncedSearch.cancel();
-    debouncedSearch(term);
-    setOpen();
-  };
+    setQuery(term)
 
-  useClickAway(ref, closeSearch);
+    debouncedSearch.cancel()
+    debouncedSearch(term)
+    setOpen()
+  }
+
+  useClickAway(ref, setOff)
   return (
     <div ref={ref} className="relative hidden max-w-sm grow md:flex">
       <search className="grow">
@@ -138,55 +145,52 @@ export function SearchBar() {
           role="search"
           aria-label="Sitewide"
           onSubmit={(e) => {
-            if (!trimmedQuery) e.preventDefault();
+            if (!trimmedQuery) e.preventDefault()
           }}
         >
-          <ButtonGroup className="relative w-full">
-            <Button
-              variant="outline"
-              size="icon"
-              type="submit"
-              disabled={!trimmedQuery || isSearching}
-            >
-              {isSearching && (
-                <>
-                  <Spinner />
-                  <span className="sr-only">Searching the term: {query}</span>
-                </>
-              )}
-              {!isSearching && (
-                <>
-                  <SearchIcon />
-                  <span className="sr-only">Search the term: {query}</span>
-                </>
-              )}
-            </Button>
-
-            <Input
+          <InputGroup className="bg-background! opacity-100! has-[[data-slot=input-group-control]:focus-visible]:ring-0! has-[[data-slot][aria-invalid=true]]:ring-0!">
+            <InputGroupAddon align="inline-start">
+              <SearchIcon />
+            </InputGroupAddon>
+            <InputGroupInput
               ref={inputRef}
               type="search"
               name="q"
+              placeholder="Search here..."
               value={query}
               onChange={handleChange}
               onFocus={setOpen}
               autoComplete="off"
-              className="bg-background text-foreground"
               required
-              onInvalid={(e) => e.currentTarget.setCustomValidity('Enter a search term')}
-              onInput={(e) => e.currentTarget.setCustomValidity('')}
+              onInvalid={(e) =>
+                e.currentTarget.setCustomValidity("Enter a search term")
+              }
+              onInput={(e) => e.currentTarget.setCustomValidity("")}
             />
-            {query && (
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={handleClear}
-                disabled={isSearching}
-              >
-                <X />
-                <span className="sr-only">Clear search</span>
-              </Button>
+
+            {query && !isSearching && (
+              <InputGroupAddon align="inline-end">
+                <Button
+                  size="icon-sm"
+                  variant="ghost"
+                  onClick={handleClear}
+                  disabled={isSearching}
+                >
+                  <X />
+                  <span className="sr-only">Clear search</span>
+                </Button>
+              </InputGroupAddon>
             )}
-          </ButtonGroup>
+
+            {isSearching && (
+              <InputGroupAddon align="inline-end">
+                <Button size="icon-sm" variant="ghost" disabled={true}>
+                  <Spinner />
+                  <span className="sr-only">Searching the term: {query}</span>
+                </Button>
+              </InputGroupAddon>
+            )}
+          </InputGroup>
         </form>
       </search>
 
@@ -197,7 +201,9 @@ export function SearchBar() {
             {Array(5)
               .fill(0)
               .map((_, index) => (
-                <SearchListItemSkeleton key={`search-list-item-skeleton-${index}`} />
+                <SearchListItemSkeleton
+                  key={`search-list-item-skeleton-${index}`}
+                />
               ))}
           </div>
         </SearchContent>
@@ -205,7 +211,7 @@ export function SearchBar() {
 
       {/*  RECENT SEARCH */}
       {!trimmedQuery && recentSearches && recentSearches.length > 0 && (
-        <SearchContent isOpen={isOpen} key={recentSearches.join('-')}>
+        <SearchContent isOpen={isOpen} key={recentSearches.join("-")}>
           <RecentSearch>
             <RecentSearchHeader>
               <RecentSearchTitle>Recent Searches</RecentSearchTitle>
@@ -220,11 +226,13 @@ export function SearchBar() {
             <RecentSearchList>
               {recentSearches.map((term) => (
                 <RecentSearchListItem
-                  key={'recent-search-' + term}
+                  key={"recent-search-" + term}
                   term={term}
                   onClick={() => handleRecentSearchClick(term)}
                   onClear={() =>
-                    setRecentSearches((prev = []) => prev.filter((t) => t !== term))
+                    setRecentSearches((prev = []) =>
+                      prev.filter((t) => t !== term)
+                    )
                   }
                 />
               ))}
@@ -240,8 +248,8 @@ export function SearchBar() {
             <SearchResultList>
               {products.map((product) => (
                 <SearchResultListItem
-                  key={'search-result-list-' + product.slug}
-                  onClose={closeSearch}
+                  key={"search-result-list-" + product.slug}
+                  onClose={setOff}
                   {...product}
                 />
               ))}
@@ -250,9 +258,10 @@ export function SearchBar() {
               <Link
                 href={`/search?q=${encodeURIComponent(trimmedQuery)}`}
                 className="not-hover:text-muted-foreground text-xs hover:underline hover:underline-offset-4"
-                onNavigate={closeSearch}
+                onNavigate={setOff}
               >
-                View all {totalProducts} Product{totalProducts > 1 ? 's' : ''} &rarr;
+                View all {totalProducts} Product{totalProducts > 1 ? "s" : ""}{" "}
+                &rarr;
               </Link>
             )}
           </SearchResult>
@@ -277,45 +286,55 @@ export function SearchBar() {
         </SearchContent>
       )}
     </div>
-  );
+  )
 }
 
-type RecentSearchProps = React.ComponentProps<'section'>;
+type RecentSearchProps = React.ComponentProps<"section">
 
 function RecentSearch({ className, ...props }: RecentSearchProps) {
-  return <section className={cn('space-y-4 p-4', className)} {...props} />;
+  return <section className={cn("space-y-3 p-4", className)} {...props} />
 }
 
-type RecentSearchHeaderProps = React.ComponentProps<'div'>;
+type RecentSearchHeaderProps = React.ComponentProps<"div">
 
 function RecentSearchHeader({ className, ...props }: RecentSearchHeaderProps) {
   return (
-    <div className={cn('flex items-center justify-between', className)} {...props} />
-  );
+    <div
+      className={cn("flex items-center justify-between", className)}
+      {...props}
+    />
+  )
 }
-type RecentSearchTitleProps = React.ComponentProps<'h2'>;
+type RecentSearchTitleProps = React.ComponentProps<"h2">
 
 function RecentSearchTitle({ className, ...props }: RecentSearchTitleProps) {
   return (
     <h2
-      className={cn('text-muted-foreground px-4 text-sm leading-tight', className)}
+      className={cn(
+        "text-muted-foreground px-3 text-sm leading-tight",
+        className
+      )}
       {...props}
     />
-  );
+  )
 }
 
-type RecentSearchListProps = React.ComponentProps<'ul'>;
+type RecentSearchListProps = React.ComponentProps<"ul">
 
 function RecentSearchList({ className, ...props }: RecentSearchListProps) {
-  return <ul className={cn('space-y-1', className)} {...props} />;
+  return <ul className={cn("space-y-1", className)} {...props} />
 }
 
 type RecentSearchListItemProps = React.ComponentProps<typeof Button> & {
-  term: string;
-  onClear: () => void;
-};
+  term: string
+  onClear: () => void
+}
 
-function RecentSearchListItem({ term, onClear, ...props }: RecentSearchListItemProps) {
+function RecentSearchListItem({
+  term,
+  onClear,
+  ...props
+}: RecentSearchListItemProps) {
   return (
     <li className="flex items-center">
       <Button
@@ -324,34 +343,34 @@ function RecentSearchListItem({ term, onClear, ...props }: RecentSearchListItemP
         {...props}
       >
         <SearchIcon className="text-muted-foreground" />
-        {term.length > 40 ? term.slice(0, 40) + '...' : term}
+        {truncate(term)}
       </Button>
       <Button variant="ghost" size="icon" onClick={onClear}>
         <X className="text-muted-foreground size-4" />
         <span className="sr-only">Clear recent search: {term}</span>
       </Button>
     </li>
-  );
+  )
 }
 
-type SearchResultProps = React.ComponentPropsWithRef<'div'>;
+type SearchResultProps = React.ComponentPropsWithRef<"div">
 
 function SearchResult({ className, ...props }: SearchResultProps) {
-  return <div className={cn('space-y-4 p-2', className)} {...props} />;
+  return <div className={cn("space-y-4 p-2", className)} {...props} />
 }
 
-type SearchResultListProps = React.ComponentProps<'ul'>;
+type SearchResultListProps = React.ComponentProps<"ul">
 
 function SearchResultList({ className, ...props }: SearchResultListProps) {
-  return <ul className={cn('space-y-1', className)} {...props} />;
+  return <ul className={cn("space-y-1", className)} {...props} />
 }
 
 type SearchResultListItemProps = {
-  title: string;
-  slug: string;
-  image?: string | null;
-  onClose?: () => void;
-} & React.ComponentProps<'li'>;
+  title: string
+  slug: string
+  image?: string | null
+  onClose?: () => void
+} & React.ComponentProps<"li">
 
 function SearchResultListItem({
   title,
@@ -365,8 +384,8 @@ function SearchResultListItem({
       <Link
         href={`/products/${slug}`}
         className={cn(
-          buttonVariants({ variant: 'ghost' }),
-          'h-auto w-full justify-start p-3',
+          buttonVariants({ variant: "ghost" }),
+          "h-auto w-full justify-start p-3"
         )}
         onClick={handleClose}
       >
@@ -392,7 +411,7 @@ function SearchResultListItem({
         </div>
       </Link>
     </li>
-  );
+  )
 }
 
 function SearchListItemSkeleton() {
@@ -404,12 +423,12 @@ function SearchListItemSkeleton() {
         <Skeleton className="h-2.5 w-50" />
       </div>
     </div>
-  );
+  )
 }
 
 type EmptySearchResultProps = {
-  query: string;
-};
+  query: string
+}
 
 function EmptySearchResult({ query }: EmptySearchResultProps) {
   return (
@@ -420,18 +439,15 @@ function EmptySearchResult({ query }: EmptySearchResultProps) {
         </EmptyMedia>
         <EmptyTitle>No products found</EmptyTitle>
         <EmptyDescription className="line-clamp-3 wrap-break-word whitespace-normal">
-          We couldn&apos;t find any products for{' '}
-          <strong>
-            &quot;{query.length > 50 ? query.slice(0, 50) + '...' : query}&quot;
-          </strong>
-          .
+          We couldn&apos;t find any products for{" "}
+          <strong>&quot;{truncate(query)}&quot;</strong>.
         </EmptyDescription>
         <EmptyDescription>
           Please try different keywords or check your spelling.
         </EmptyDescription>
       </EmptyHeader>
     </Empty>
-  );
+  )
 }
 
 function SearchResultError() {
@@ -445,20 +461,20 @@ function SearchResultError() {
         An error occurred while searching. Please try again.
       </p>
     </div>
-  );
+  )
 }
 
-type SearchContentProps = React.ComponentProps<'div'> & {
-  isOpen: boolean;
-};
+type SearchContentProps = React.ComponentProps<"div"> & {
+  isOpen: boolean
+}
 
 function SearchContent({ isOpen, ...props }: SearchContentProps) {
-  if (!isOpen) return null;
+  if (!isOpen) return null
   return (
     <div
       data-open={isOpen}
       {...props}
-      className="bg-popover data-open:animate-in data-[open=false]:zoom-out-95 data-[state=false]:fade-out-0 data-[open=false]:animate-out text-popover-foreground absolute top-full right-0 left-0 z-9999 mt-2 overflow-hidden overscroll-contain rounded-md border shadow-lg"
+      className="bg-popover  data-open:animate-in data-[open=false]:zoom-out-95 data-[state=false]:fade-out-0 data-[open=false]:animate-out text-popover-foreground absolute top-full right-0 left-0 z-9999 mt-2 overflow-hidden overscroll-contain rounded-md border shadow-lg"
     />
-  );
+  )
 }

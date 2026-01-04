@@ -1,22 +1,17 @@
-'use server';
+"use server"
 
-import payloadConfig from '@/payload.config';
-import { getPayload } from 'payload';
+import payloadConfig from "@/payload.config"
+import { getPayload } from "payload"
 
 type GetBrandArgs = {
-  slug: string;
-};
+  slug: string
+}
 
 export async function getBrand({ slug }: GetBrandArgs) {
-  // 'use cache';
-
-  // cacheTag('brands', `brands:${slug}`);
-  // cacheLife('days');
-
-  const payload = await getPayload({ config: payloadConfig });
+  const payload = await getPayload({ config: payloadConfig })
 
   const { docs: brands } = await payload.find({
-    collection: 'brands',
+    collection: "brands",
     where: {
       slug: {
         equals: slug,
@@ -28,7 +23,7 @@ export async function getBrand({ slug }: GetBrandArgs) {
     },
     limit: 1,
     pagination: false,
-  });
+  })
 
-  return brands[0] ?? null;
+  return brands[0] ?? null
 }

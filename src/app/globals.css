@@ -121,7 +121,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground pointer-events-auto! font-sans;
   }
   button:not(:disabled),
   [role="button"]:not(:disabled) {
@@ -137,6 +137,7 @@
   }
 
   input[type="number"] {
+    appearance: textfield; /* Chrome, Safari, Edge */
     -moz-appearance: textfield; /* Firefox */
   }
 
@@ -146,5 +147,6 @@
   input[type="search"]::-webkit-search-results-button,
   input[type="search"]::-webkit-search-results-decoration {
     display: none;
+    appearance: none;
   }
 }

@@ -78,6 +78,7 @@ export async function getProductBySlug(slug: string) {
 
   return {
     ...p,
+    categories,
     image: srcImage || null,
     productLines: formattedProductLines,
   }
