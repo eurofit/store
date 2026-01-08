@@ -11,7 +11,6 @@ const DEFAULT_PRODUCTS_PER_PAGE = 20
 const DEFAULT_PAGE = 1
 
 const optionsSchema = z.object({
-  slug: z.string(),
   page: z
     .number()
     .optional()
@@ -24,14 +23,15 @@ const optionsSchema = z.object({
     .pipe(z.transform((val) => Math.max(1, val))),
   sort: z.string().optional().nullable(),
   brand: z.array(z.string()).optional().nullable(),
+  category: z.array(z.string()).optional().nullable(),
   size: z.array(z.string()).optional().nullable(),
   flavourColour: z.array(z.string()).optional().nullable(),
 })
 
-type GetProductsByCategory = z.infer<typeof optionsSchema>
+type GetProductsArgs = z.infer<typeof optionsSchema>
 
-export async function getProductsByCategory(opts: GetProductsByCategory) {
-  const { slug, page, limit, sort, brand, size, flavourColour } =
+export async function getProducts(opts: GetProductsArgs) {
+  const { page, limit, sort, brand, category, size, flavourColour } =
     optionsSchema.parse(opts)
 
   const [user, payload] = await Promise.all([
@@ -48,15 +48,26 @@ export async function getProductsByCategory(opts: GetProductsByCategory) {
   } = await payload.find({
     collection: "products",
     where: {
-      "categories.slug": {
-        equals: slug,
-      },
       or: [
         ...(!isEmpty(brand)
           ? [
               {
                 "brand.slug": {
                   in: brand,
+                },
+              },
+            ]
+          : []),
+        ...(!isEmpty(category)
+          ? [
+              {
+                "categories.slug": {
+                  in: category,
+                },
+              },
+              {
+                "productLines.category": {
+                  in: category,
                 },
               },
             ]
@@ -119,7 +130,7 @@ export async function getProductsByCategory(opts: GetProductsByCategory) {
     const { srcImage, ...p } = product
     return {
       ...p,
-      image: srcImage ?? null,
+      image: srcImage || null,
       productLines: (product.productLines.docs
         ?.filter((pl) => typeof pl === "object")
         .map((productLine) => {
@@ -130,7 +141,7 @@ export async function getProductsByCategory(opts: GetProductsByCategory) {
             stock: pl.stock || (srcStock ?? 0),
             price: retailPrice ?? null,
           }
-        }) || []) as ProductLine[],
+        }) || []) as unknown as ProductLine[],
     }
   }) as Product[]
 
@@ -141,15 +152,10 @@ export async function getProductsByCategory(opts: GetProductsByCategory) {
   }
 }
 
-export async function getTotalProductsByCategory(slug: string) {
+export async function getTotalProductLines() {
   const payload = await getPayload({ config: payloadConfig })
   const { totalDocs: totalProducts } = await payload.count({
-    collection: "products",
-    where: {
-      "categories.slug": {
-        equals: slug,
-      },
-    },
+    collection: "product-lines",
   })
 
   return totalProducts

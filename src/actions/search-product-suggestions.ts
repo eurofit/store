@@ -11,9 +11,6 @@ export async function searchProductSuggestions(q: string) {
   const query = z.string().min(2).parse(q)
   const payload = await getPayload({ config: payloadConfig })
 
-  // sleep 2 sec
-  await new Promise((resolve) => setTimeout(resolve, 2000))
-
   const tsQuery = buildPrefixTsQuery(query)
   if (!tsQuery) {
     return null

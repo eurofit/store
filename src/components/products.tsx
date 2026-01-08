@@ -1,6 +1,6 @@
 import { getCurrentUser } from "@/actions/auth/get-current-user"
 
-import { getProductsByBrand } from "@/actions/products/get-products-by-brand"
+import { getProducts } from "@/actions/products/get-products"
 import {
   Pagination,
   PaginationContent,
@@ -14,10 +14,10 @@ import { EmptyProducts } from "./empty-products"
 import { ProductCard } from "./product-card"
 import { ProductSort } from "./product-sort"
 
-type BrandProductsListProps = {
-  slug: Promise<string>
+type ProductsListProps = {
   searchParams: Promise<{
     page: number
+    brand: string[]
     category: string[]
     sort: string
     size: string[]
@@ -32,23 +32,21 @@ const PRODUCT_SORT_OPTIONS = [
   { label: "Product Name: Z-A", value: "desc" },
 ]
 
-export async function BrandProducts({
-  slug: slugPromise,
+export async function Products({
   searchParams: searchParamsPromise,
-}: BrandProductsListProps) {
-  const [slug, searchParams, user] = await Promise.all([
-    slugPromise,
+}: ProductsListProps) {
+  const [searchParams, user] = await Promise.all([
     searchParamsPromise,
     getCurrentUser(),
   ])
 
-  const { page, category, sort, size, flavourColour } = searchParams
+  const { page, brand, category, sort, size, flavourColour } = searchParams
 
   const { products, totalProducts, totalPages, hasNextPage } =
-    await getProductsByBrand({
-      slug,
+    await getProducts({
       page,
       limit: PRODUCTS_PER_PAGE,
+      brand,
       category,
       sort,
       size,

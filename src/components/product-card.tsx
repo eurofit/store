@@ -7,9 +7,9 @@ import {
 } from "@/components/ui/card"
 import type { Product } from "@/types"
 
-import { pluralizeByCount } from "@/utils/pluralize"
 import { ImageOff } from "lucide-react"
 import Link from "next/link"
+import pluralize from "pluralize-esm"
 import React from "react"
 import { ImageWithRetry } from "./image-with-retry"
 import { ProductLine } from "./product-line"
@@ -74,7 +74,7 @@ export function ProductCard({
               <span className="border-gray-300 text-xs text-gray-600">
                 {productLines.length}
                 &nbsp;
-                {pluralizeByCount("Option", productLines.length)}
+                {pluralize("Option", productLines.length)}
               </span>
             </div>
 

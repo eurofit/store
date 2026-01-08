@@ -4,28 +4,22 @@ import payloadConfig from "@/payload.config"
 import { FilterGroup, FilterItem } from "@/types"
 import { flatMap, groupBy, sortBy, uniqBy } from "lodash-es"
 import { getPayload } from "payload"
-import z from "zod"
 
-export async function getBrandFilters(
-  slugPromise: Promise<string>
-): Promise<FilterGroup[]> {
-  const [payload, slug] = await Promise.all([
-    getPayload({ config: payloadConfig }),
-    slugPromise,
-  ])
-
-  const safeSlug = z.string().parse(slug)
+export async function getProductsFilters(): Promise<FilterGroup[]> {
+  const payload = await getPayload({ config: payloadConfig })
 
   const { docs: products, totalDocs: totalProducs } = await payload.find({
     collection: "products",
-    where: {
-      "brand.slug": { equals: safeSlug },
-    },
     select: {
+      brand: true,
       categories: true,
       productLines: true,
     },
     populate: {
+      brands: {
+        slug: true,
+        title: true,
+      },
       categories: {
         slug: true,
         title: true,
@@ -45,6 +39,22 @@ export async function getBrandFilters(
   })
 
   if (totalProducs === 0) return []
+
+  // -------------------------
+  // Brands
+  // -------------------------
+  const brands = products
+    .map((p) => p.brand)
+    .filter((b) => typeof b === "object" && "slug" in b && "title" in b)
+  const groupedBrands = groupBy(brands, (b) => b.slug)
+  const brandItems: FilterItem[] = sortBy(
+    Object.entries(groupedBrands).map(([rawSlug, entries]) => ({
+      slug: encodeURIComponent(rawSlug),
+      title: entries[0].title,
+      count: entries.length,
+    })),
+    (it) => it.title
+  )
 
   // -------------------------
   // Categories
@@ -132,6 +142,7 @@ export async function getBrandFilters(
   )
 
   const filters: FilterGroup[] = [
+    { key: "brand", title: "Brands", items: brandItems },
     { key: "category", title: "Categories", items: categoryItems },
     { key: "size", title: "Sizes", items: sizeItems },
     { key: "flavour-colour", title: "Flavour / Colour", items: flavorItems },

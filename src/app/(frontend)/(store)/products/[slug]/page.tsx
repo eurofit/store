@@ -14,11 +14,11 @@ import {
 } from "@/components/ui/breadcrumb"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { pluralizeByCount } from "@/utils/pluralize"
 import { ChevronRight, ImageOff } from "lucide-react"
 import { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import pluralize from "pluralize-esm"
 import * as React from "react"
 import { titleCase } from "title-case"
 
@@ -52,7 +52,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   if (!product) notFound()
 
-  const { id, image, title, productLines, relatedProducts } = product
+  const { id, image, title, productLines, categories, relatedProducts } =
+    product
+
+  const categoryParams = categories
+    .map((cat) => `category=${encodeURIComponent(cat.slug)}`)
+    .join("&")
+
   return (
     <div className="space-y-10">
       <Breadcrumb>
@@ -98,7 +104,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   <h3 className="font-semibold">Choose Options</h3>
                   <Badge variant="outline">
                     {product.productLines.length}{" "}
-                    {pluralizeByCount("option", product.productLines.length)}
+                    {pluralize("option", product.productLines.length)}
                   </Badge>
                 </div>
                 <div className="space-y-3">
@@ -122,10 +128,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
           {relatedProducts.products && relatedProducts?.products.length > 0 && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="font-medium">Related Products</h3>
+                <h3 className="font-medium">Similar Products</h3>
                 {relatedProducts.total > 5 && (
                   <Button variant="link" size="sm" asChild>
-                    <Link href={"/products/" + slug + "/related"}>
+                    <Link href={"/products" + "?" + categoryParams}>
                       See all
                       <ChevronRight className="size-4" />
                     </Link>

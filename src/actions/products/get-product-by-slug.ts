@@ -3,6 +3,7 @@
 import { getCurrentUser } from "@/actions/auth/get-current-user"
 import config from "@/payload.config"
 import { ProductLine } from "@/types"
+import { uniqBy } from "lodash-es"
 import { getPayload } from "payload"
 
 export async function getProductBySlug(slug: string) {
@@ -54,7 +55,9 @@ export async function getProductBySlug(slug: string) {
         },
       },
     },
-    user: user?.id,
+    context: {
+      relatedProducts: true,
+    },
     pagination: false,
     limit: 1,
   })
@@ -63,6 +66,13 @@ export async function getProductBySlug(slug: string) {
 
   const product = docs[0]
   const { srcImage, productLines, categories, ...p } = product
+
+  const formattedCategories = uniqBy(
+    (categories ?? [])
+      .filter((c) => typeof c === "object" && "slug" in c && "title" in c)
+      .map(({ slug, title }) => ({ slug, title })),
+    "slug"
+  )
 
   const formattedProductLines = (productLines.docs
     ?.filter((pl) => typeof pl === "object")
@@ -78,7 +88,7 @@ export async function getProductBySlug(slug: string) {
 
   return {
     ...p,
-    categories,
+    categories: formattedCategories,
     image: srcImage || null,
     productLines: formattedProductLines,
   }
