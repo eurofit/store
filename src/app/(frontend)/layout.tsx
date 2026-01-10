@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#fb2c36",
+  themeColor: "#000000",
 }
 
 export default function RootLayout({
@@ -39,7 +39,7 @@ export default function RootLayout({
         <NextTopLoader
           showSpinner={false}
           color="#fb2c36"
-          height={3}
+          height={4}
           crawlSpeed={200}
           easing="ease"
           shadow="0 0 10px rgba(0, 0, 0, 0.1)"
