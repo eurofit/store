@@ -37,9 +37,9 @@ export function ProductSort({
     const params = new URLSearchParams(searchParams.toString())
 
     if (value === "asc") {
-      params.delete("sort")
+      params.delete("title")
     } else {
-      params.set("sort", value)
+      params.set("title", value)
     }
 
     params.sort()

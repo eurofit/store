@@ -1,8 +1,10 @@
 import { dmSans } from "@/app/fonts/dm-sans"
 import { montserrat } from "@/app/fonts/montserrat"
 import "@/app/globals.css"
+import { JsonLd } from "@/components/json-ld"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { Toaster } from "@/components/ui/sonner"
+import { localBusiness, organization, website } from "@/constants/json-ld"
 import { site } from "@/constants/site"
 import { JotaiProvider } from "@/providers/jotai"
 import { ReactQueryProvider } from "@/providers/react-query"
@@ -23,7 +25,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#000000",
+  themeColor: "#FFFFFF",
 }
 
 export default function RootLayout({
@@ -34,6 +36,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${dmSans.variable} ${montserrat.variable} antialiased`}>
+        <JsonLd jsonLd={[organization, website, localBusiness]} />
         <TailwindIndicator />
         <Toaster richColors duration={8000} closeButton />
         <NextTopLoader

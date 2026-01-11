@@ -1,68 +1,67 @@
-import { cn } from '@/utils/cn';
-import * as React from 'react';
-import { ScrollArea } from './ui/scroll-area';
-import { Skeleton } from './ui/skeleton';
+import { Skeleton } from "@/components/ui/skeleton"
+import { cn } from "@/utils/cn"
+import * as React from "react"
 
-function ProductFilter({ className, ...props }: React.ComponentProps<'aside'>) {
+function ProductFilter({ className, ...props }: React.ComponentProps<"aside">) {
   return (
     <aside
       {...props}
-      className={cn('hidden h-full basis-1/5 space-y-6 md:block', className)}
+      className={cn("hidden h-full basis-1/5 space-y-6 md:block", className)}
     />
-  );
+  )
 }
-function ProductFilterHeader({ className, ...props }: React.ComponentProps<'div'>) {
+function ProductFilterHeader({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
   return (
-    <div {...props} className={cn('flex items-center justify-between pb-4', className)} />
-  );
+    <div
+      {...props}
+      className={cn("flex items-center justify-between pb-4", className)}
+    />
+  )
 }
-function ProductFilterTitle({ className, ...props }: React.ComponentProps<'header'>) {
+function ProductFilterTitle({
+  className,
+  ...props
+}: React.ComponentProps<"header">) {
   return (
     <hgroup
       {...props}
       className={cn(
         "font-lg flex items-center gap-2 capitalize [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        className,
+        className
       )}
     />
-  );
+  )
 }
 
-function ProductFilterContent(props: React.ComponentProps<'nav'>) {
-  return <nav {...props} />;
+function ProductFilterContent(props: React.ComponentProps<"nav">) {
+  return <nav {...props} />
 }
 
-function ProductFilterGroup(props: React.ComponentProps<'section'>) {
-  return <section {...props} className={cn('not-last:mb-6')} />;
+function ProductFilterGroup(props: React.ComponentProps<"section">) {
+  return <section {...props} className={cn("not-last:mb-6")} />
 }
 
-function ProductFilterGroupHeader({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div className={cn('mb-5 flex items-center justify-between')} {...props} />;
-}
-function ProductFilterGroupTitle({ className, ...props }: React.ComponentProps<'h3'>) {
-  return (
-    <h3
-      className={cn('text-muted-foreground text-sm leading-none capitalize')}
-      {...props}
-    />
-  );
-}
-function ProductFilterGroupContent({
+function ProductFilterGroupHeader({
   className,
   ...props
-}: React.ComponentProps<typeof ScrollArea>) {
+}: React.ComponentProps<"div">) {
   return (
-    <ScrollArea
-      className={cn('flex max-h-72 flex-col overflow-y-auto', className)}
+    <div className={cn("mb-5 flex items-center justify-between")} {...props} />
+  )
+}
+function ProductFilterGroupTitle({
+  className,
+  ...props
+}: React.ComponentProps<"h3">) {
+  return (
+    <h3
+      className={cn("text-muted-foreground text-sm leading-none capitalize")}
       {...props}
     />
-  );
-}
-function ProductFilterGroupList({ className, ...props }: React.ComponentProps<'ul'>) {
-  return <ul className={cn('mr-1.5 space-y-2', className)} {...props} />;
-}
-function ProductFilterGroupListItem({ ...props }: React.ComponentProps<'li'>) {
-  return <li {...props} />;
+  )
 }
 
 function FilterGroupSkeleton() {
@@ -87,12 +86,12 @@ function FilterGroupSkeleton() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 function FilterSkeleton() {
   return (
-    <div className={cn('hidden basis-1/5 flex-col gap-6 md:flex')}>
+    <div className={cn("hidden basis-1/5 flex-col gap-6 md:flex")}>
       <div className="relative flex w-full items-center justify-between">
         <Skeleton className="h-4 w-3/5" />
         <Skeleton className="h-4 w-1/5" />
@@ -102,7 +101,7 @@ function FilterSkeleton() {
       <FilterGroupSkeleton />
       <FilterGroupSkeleton />
     </div>
-  );
+  )
 }
 
 export {
@@ -110,11 +109,8 @@ export {
   ProductFilter,
   ProductFilterContent,
   ProductFilterGroup,
-  ProductFilterGroupContent,
   ProductFilterGroupHeader,
-  ProductFilterGroupList,
-  ProductFilterGroupListItem,
   ProductFilterGroupTitle,
   ProductFilterHeader,
   ProductFilterTitle,
-};
+}

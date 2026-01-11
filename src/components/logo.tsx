@@ -4,7 +4,7 @@ import { cva, VariantProps } from "class-variance-authority"
 import Link from "next/link"
 import React from "react"
 
-const logoVariants = cva("font-montserrat uppercase not-italic", {
+const logoVariants = cva("font-montserrat no-underline! uppercase not-italic", {
   variants: {
     variant: {
       default: "text-2xl font-black",
@@ -17,18 +17,13 @@ const logoVariants = cva("font-montserrat uppercase not-italic", {
 })
 
 type LogoProps = {
-  isHeading?: boolean
   rootClass?: string
+  as?: Extract<React.ElementType, "h1" | "span">
 } & VariantProps<typeof logoVariants> &
   React.HTMLAttributes<HTMLDivElement>
 
-export function Logo({
-  isHeading = false,
-  variant,
-  rootClass,
-  className,
-}: LogoProps) {
-  const Comp = !!isHeading ? "h1" : "span"
+export function Logo({ variant, rootClass, className, as = "h1" }: LogoProps) {
+  const Comp = as
   return (
     <Link href="/" aria-label={site.name} className={cn(rootClass)}>
       <Comp className={logoVariants({ variant, className })}>

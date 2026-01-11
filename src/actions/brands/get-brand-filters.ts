@@ -132,9 +132,17 @@ export async function getBrandFilters(
   )
 
   const filters: FilterGroup[] = [
-    { key: "category", title: "Categories", items: categoryItems },
-    { key: "size", title: "Sizes", items: sizeItems },
-    { key: "flavour-colour", title: "Flavour / Colour", items: flavorItems },
+    {
+      key: "category",
+      title: "Categories",
+      items: uniqBy(categoryItems, "slug"),
+    },
+    { key: "size", title: "Sizes", items: uniqBy(sizeItems, "slug") },
+    {
+      key: "flavour-colour",
+      title: "Flavour / Colour",
+      items: uniqBy(flavorItems, "slug"),
+    },
   ]
 
   return filters.filter((fg) => fg.items.length > 0)

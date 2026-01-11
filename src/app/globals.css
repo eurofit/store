@@ -123,6 +123,8 @@
   body {
     @apply bg-background text-foreground pointer-events-auto! font-sans;
   }
+
+  /* BUTTON  */
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;

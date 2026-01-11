@@ -1,21 +1,18 @@
-import { FilterGroup } from "@/types"
-import { FunnelIcon } from "lucide-react"
 import {
   FilterClearButton,
   FilterGroupClearButton,
-} from "./filter-clear-button"
-import { FilterItem } from "./filter-item"
+} from "@/components/filter-clear-button"
 import {
   ProductFilter,
   ProductFilterContent,
   ProductFilterGroup,
-  ProductFilterGroupContent,
-  ProductFilterGroupList,
-  ProductFilterGroupListItem,
   ProductFilterGroupTitle,
   ProductFilterHeader,
   ProductFilterTitle,
-} from "./product-filters"
+} from "@/components/product-filters"
+import { FilterGroup } from "@/types"
+import { FunnelIcon } from "lucide-react"
+import { ProductFilterGroupVirtualizedList } from "./products-filter-group-list"
 
 type BrandFiltersProps = {
   getFilters: (...args: any) => Promise<FilterGroup[]>
@@ -52,17 +49,7 @@ export async function ProductFilters({ getFilters }: BrandFiltersProps) {
                 </div>
                 <FilterGroupClearButton queryKey={key} />
               </ProductFilterHeader>
-              <ProductFilterGroupContent>
-                <ProductFilterGroupList>
-                  {items.map((item) => (
-                    <ProductFilterGroupListItem
-                      key={`filter-group-${key}-item-${item.slug}`}
-                    >
-                      <FilterItem queryKey={key} {...item} />
-                    </ProductFilterGroupListItem>
-                  ))}
-                </ProductFilterGroupList>
-              </ProductFilterGroupContent>
+              <ProductFilterGroupVirtualizedList queryKey={key} items={items} />
             </ProductFilterGroup>
           )
         })}

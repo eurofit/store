@@ -11,7 +11,7 @@ const DEFAULT_PRODUCTS_PER_PAGE = 20
 const DEFAULT_PAGE = 1
 
 const optionsSchema = z.object({
-  slug: z.string(), // brand slug
+  slug: z.string(),
   page: z
     .number()
     .optional()
@@ -22,7 +22,7 @@ const optionsSchema = z.object({
     .optional()
     .default(DEFAULT_PRODUCTS_PER_PAGE)
     .pipe(z.transform((val) => Math.max(1, val))),
-  sort: z.string().optional().nullable(),
+  title: z.string().optional().nullable(),
   category: z.array(z.string()).optional().nullable(),
   size: z.array(z.string()).optional().nullable(),
   flavourColour: z.array(z.string()).optional().nullable(),
@@ -31,7 +31,7 @@ const optionsSchema = z.object({
 type GetProductsByBrandArgs = z.infer<typeof optionsSchema>
 
 export async function getProductsByBrand(opts: GetProductsByBrandArgs) {
-  const { slug, page, limit, sort, category, size, flavourColour } =
+  const { slug, page, limit, title, category, size, flavourColour } =
     optionsSchema.parse(opts)
 
   const [user, payload] = await Promise.all([
@@ -95,7 +95,7 @@ export async function getProductsByBrand(opts: GetProductsByBrandArgs) {
     },
     joins: {
       productLines: {
-        sort: sort === "desc" ? "-title" : "title",
+        sort: title === "desc" ? "-title" : "title",
         limit: 0,
       },
     },
@@ -114,7 +114,7 @@ export async function getProductsByBrand(opts: GetProductsByBrandArgs) {
         isNotifyRequested: true,
       },
     },
-    sort: sort === "desc" ? "-title" : "title",
+    sort: title === "desc" ? "-title" : "title",
     user: user?.id,
     page,
     limit,

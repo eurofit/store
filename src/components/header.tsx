@@ -8,7 +8,7 @@ import { Cart } from "./cart/cart"
 export function Header() {
   return (
     <header className="bg-background sticky top-0 z-50 flex h-20 items-center justify-between gap-x-6 border-b px-6 md:h-16">
-      <Logo isHeading />
+      <Logo />
       <React.Suspense fallback={<NavSkeleton />}>
         <Nav />
       </React.Suspense>

@@ -1,16 +1,30 @@
-import Image from 'next/image';
-import { DefaultCellComponentProps } from 'payload';
+import { ImageWithRetry } from "@/components/image-with-retry"
+import { ImageOff } from "lucide-react"
+import Link from "next/link"
+import { DefaultCellComponentProps } from "payload"
 
-export function ImageCell({ cellData }: DefaultCellComponentProps) {
-  if (!cellData) return null;
+export function ImageCell({ cellData, rowData }: DefaultCellComponentProps) {
+  if (!cellData) return null
+
   return (
-    <Image
-      src={cellData}
-      alt="Image"
-      className="size-8 rounded bg-white object-contain"
-      loading="lazy"
-      width={32}
-      height={32}
-    />
-  );
+    <Link
+      href={`/dashboard/collections/brands/${rowData.id}`}
+      className="relative size-12  shrink-0 overflow-hidden rounded-md border bg-white"
+    >
+      {cellData ? (
+        <ImageWithRetry
+          src={cellData}
+          alt={`Product image`}
+          fill
+          className="object-contain p-1"
+          sizes="48px"
+        />
+      ) : (
+        <ImageOff
+          className="text-muted-foreground m-auto size-2/3"
+          aria-label="Image not available"
+        />
+      )}
+    </Link>
+  )
 }

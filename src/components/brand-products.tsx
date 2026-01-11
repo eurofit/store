@@ -19,7 +19,7 @@ type BrandProductsListProps = {
   searchParams: Promise<{
     page: number
     category: string[]
-    sort: string
+    title: string
     size: string[]
     flavourColour: string[]
   }>
@@ -42,7 +42,7 @@ export async function BrandProducts({
     getCurrentUser(),
   ])
 
-  const { page, category, sort, size, flavourColour } = searchParams
+  const { page, category, title, size, flavourColour } = searchParams
 
   const { products, totalProducts, totalPages, hasNextPage } =
     await getProductsByBrand({
@@ -50,7 +50,7 @@ export async function BrandProducts({
       page,
       limit: PRODUCTS_PER_PAGE,
       category,
-      sort,
+      title: title,
       size,
       flavourColour,
     })
@@ -65,7 +65,7 @@ export async function BrandProducts({
         <ProductSort
           className="ml-auto"
           options={PRODUCT_SORT_OPTIONS}
-          defaultValue={sort == "asc" ? "asc" : "desc"}
+          defaultValue={title == "asc" ? "asc" : "desc"}
         />
         <span className="text-sm">
           {totalProducts} {pluralize("Product", totalProducts)} found

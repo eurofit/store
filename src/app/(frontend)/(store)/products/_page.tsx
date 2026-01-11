@@ -1,13 +1,7 @@
-import { getProductsFilters } from "@/actions/products/get-product-filters"
-import { ProductCardSkeleton } from "@/components/product-card"
-import { FilterSkeleton } from "@/components/product-filters"
-import { Products } from "@/components/products"
-import { ProductFilters } from "@/components/products-filters"
 import { site } from "@/constants/site"
 import { SearchParams } from "@/types"
 import { castArray } from "lodash-es"
 import { Metadata } from "next"
-import * as React from "react"
 
 type ProductsPageProps = {
   searchParams: Promise<SearchParams>
@@ -41,16 +35,10 @@ export default async function ProductsPage({
     <div className="space-y-10">
       <div className="relative flex md:min-h-[calc(100vh-4rem)] md:gap-8 lg:gap-16">
         {/* SIDEBAR  */}
-        <React.Suspense fallback={<FilterSkeleton />}>
-          <ProductFilters getFilters={() => getProductsFilters()} />
-        </React.Suspense>
+        <aside className="basis-1/5 bg-muted"></aside>
 
         {/* MAIN CONTENT   */}
-        <main className="grow space-y-10">
-          <React.Suspense fallback={<ProductCardSkeleton />}>
-            <Products searchParams={formattedSearchParams} />
-          </React.Suspense>
-        </main>
+        <main className="grow space-y-10"></main>
       </div>
     </div>
   )
