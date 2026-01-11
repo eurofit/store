@@ -5,12 +5,12 @@ import { FilterItem } from "./filter-item"
 import { ScrollArea } from "./ui/scroll-area"
 
 type VirtualizedProductFilterListProps = {
-  key: string
+  queryKey: string
   items: TFilterItem[]
 }
 
 export function ProductFilterGroupVirtualizedList({
-  key,
+  queryKey: key,
   items,
 }: VirtualizedProductFilterListProps) {
   return (
