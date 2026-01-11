@@ -192,7 +192,7 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
             </span>
           )}
           {!line.isLowStock && !line.isOutOfStock && (
-            <span className="text-xs text-green-500">
+            <span className="text-xs text-green-600">
               {line.stock} in stock
             </span>
           )}
