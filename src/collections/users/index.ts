@@ -1,6 +1,7 @@
 import { generateForgotPasswordEmailHTML } from '@/emails/forgot-password';
 import { generateVerificationEmailHTML } from '@/emails/verification';
 import type { CollectionConfig } from 'payload';
+import { syncToPaystack } from './hooks/sync-to-paystack';
 
 export const users: CollectionConfig = {
   slug: 'users',
@@ -142,4 +143,7 @@ export const users: CollectionConfig = {
       },
     },
   ],
+  hooks: {
+    beforeChange: [syncToPaystack],
+  },
 };
