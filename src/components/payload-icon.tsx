@@ -1,5 +1,5 @@
-import { HouseIcon } from "lucide-react"
+import { HouseIcon } from 'lucide-react';
 
 export function PayloadIcon() {
-  return <HouseIcon className="text-muted-foreground size-5" />
+  return <HouseIcon className="text-muted-foreground size-4" />;
 }
