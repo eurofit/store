@@ -1,20 +1,18 @@
-import { generateForgotPasswordEmailHTML } from "@/emails/forgot-password"
-import { generateVerificationEmailHTML } from "@/emails/verification"
-import type { CollectionConfig } from "payload"
-
-import { syncPaystack } from "./hooks/paystack-sync"
+import { generateForgotPasswordEmailHTML } from '@/emails/forgot-password';
+import { generateVerificationEmailHTML } from '@/emails/verification';
+import type { CollectionConfig } from 'payload';
 
 export const users: CollectionConfig = {
-  slug: "users",
+  slug: 'users',
   typescript: {
-    interface: "User",
+    interface: 'User',
   },
   admin: {
-    useAsTitle: "email",
+    useAsTitle: 'email',
   },
   labels: {
-    singular: "User",
-    plural: "Users",
+    singular: 'User',
+    plural: 'Users',
   },
   auth: {
     verify: {
@@ -22,10 +20,10 @@ export const users: CollectionConfig = {
         return generateVerificationEmailHTML({
           token,
           firstName: user.firstName,
-        })
+        });
       },
       generateEmailSubject() {
-        return "Verify your email"
+        return 'Verify your email';
       },
     },
     maxLoginAttempts: 12,
@@ -40,112 +38,108 @@ export const users: CollectionConfig = {
   disableDuplicate: true,
   fields: [
     {
-      name: "email",
-      type: "email",
+      name: 'email',
+      type: 'email',
       required: true,
       unique: true,
       admin: {
-        position: "sidebar",
-        description:
-          "The email address of the user. This will be used for login.",
+        position: 'sidebar',
+        description: 'The email address of the user. This will be used for login.',
       },
       index: true,
     },
     {
-      name: "firstName",
-      type: "text",
+      name: 'firstName',
+      type: 'text',
       required: true,
       admin: {
-        position: "sidebar",
-        description: "The first name of the user.",
+        position: 'sidebar',
+        description: 'The first name of the user.',
       },
       index: true,
     },
     {
-      name: "middleName",
-      type: "text",
+      name: 'middleName',
+      type: 'text',
       admin: {
-        position: "sidebar",
-        description: "The middle name of the user.",
+        position: 'sidebar',
+        description: 'The middle name of the user.',
       },
       index: true,
     },
     {
-      name: "lastName",
-      type: "text",
+      name: 'lastName',
+      type: 'text',
       required: true,
       admin: {
-        position: "sidebar",
-        description: "The last name of the user.",
+        position: 'sidebar',
+        description: 'The last name of the user.',
       },
       index: true,
     },
 
     {
-      name: "gender",
-      type: "select",
+      name: 'gender',
+      type: 'select',
       options: [
         {
-          label: "Male",
-          value: "male",
+          label: 'Male',
+          value: 'male',
         },
         {
-          label: "Female",
-          value: "female",
+          label: 'Female',
+          value: 'female',
         },
       ],
-      defaultValue: "female",
+      defaultValue: 'female',
       required: true,
     },
     {
-      name: "birthDate",
-      type: "date",
+      name: 'birthDate',
+      type: 'date',
       admin: {
-        description: "The birth date of the user.",
+        description: 'The birth date of the user.',
       },
     },
     {
-      name: "addresses",
-      type: "join",
-      collection: "addresses",
+      name: 'addresses',
+      type: 'join',
+      collection: 'addresses',
       hasMany: true,
-      on: "user",
+      on: 'user',
       admin: {
         allowCreate: true,
       },
       saveToJWT: true,
     },
     {
-      name: "cart",
-      type: "join",
-      collection: "carts",
-      on: "user",
+      name: 'cart',
+      type: 'join',
+      collection: 'carts',
+      on: 'user',
       defaultLimit: 1,
       admin: {
         allowCreate: true,
       },
     },
     {
-      name: "stockAlerts",
-      type: "join",
-      collection: "stock-alerts",
-      on: "user",
+      name: 'stockAlerts',
+      type: 'join',
+      collection: 'stock-alerts',
+      on: 'user',
       admin: {
         allowCreate: true,
       },
     },
     {
-      name: "paystackCustomerCode",
-      type: "text",
+      name: 'paystackCustomerCode',
+      type: 'text',
       required: true,
       admin: {
         description:
-          "The Paystack customer code for this user. This is given by external payment processor Paystack.",
+          'The Paystack customer code for this user. This is given by external payment processor Paystack.',
         hidden: true,
       },
     },
   ],
-  hooks: {
-    beforeChange: [syncPaystack],
-  },
-}
+};
