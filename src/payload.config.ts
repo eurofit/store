@@ -4,7 +4,6 @@ import { NAMESPACE } from '@/constants/keys';
 import { site } from '@/constants/site';
 import { env } from '@/env.mjs';
 import { globals } from '@/globals';
-import { tasks } from '@/tasks';
 import { postgresAdapter } from '@payloadcms/db-postgres';
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer';
 import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs';
@@ -52,7 +51,7 @@ export default buildConfig({
   globals,
   collections,
   jobs: {
-    tasks,
+    // tasks,
   },
   editor: lexicalEditor(),
   secret: env.PAYLOAD_SECRET,
