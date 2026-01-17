@@ -1,6 +1,4 @@
-import type { PaymentTerm } from './schemas';
-
-export const defaultPaymentTerms: PaymentTerm[] = [
+export const defaultPaymentTerms = [
   {
     code: 'COD',
     name: 'Cash on Delivery',

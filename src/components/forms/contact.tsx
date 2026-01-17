@@ -1,45 +1,39 @@
-"use client"
+'use client';
 
-import { sendContactEmail } from "@/actions/contact"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { contactFormSchema, ContactFormValues } from "@/lib/schemas/contact"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useActionState, useEffect } from "react"
-import { Controller, useForm } from "react-hook-form"
-import { toast } from "sonner"
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-  FieldSet,
-} from "../ui/field"
+import { sendContactEmail } from '@/actions/contact';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { contactFormSchema, ContactFormValues } from '@/schemas/contact';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useActionState, useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from '../ui/field';
 
 export function ContactForm() {
-  const [state, formAction, isPending] = useActionState(sendContactEmail, null)
+  const [state, formAction, isPending] = useActionState(sendContactEmail, null);
 
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      subject: "",
-      message: "",
+      name: '',
+      email: '',
+      subject: '',
+      message: '',
     },
-  })
+  });
 
   useEffect(() => {
-    if (!state) return
+    if (!state) return;
 
     if (!state.success) {
-      toast.error(state.message)
-      return
+      toast.error(state.message);
+      return;
     }
 
-    toast.success(state.message)
-  }, [state])
+    toast.success(state.message);
+  }, [state]);
 
   return (
     <form action={formAction} className="max-w-md space-y-4 p-6 shadow-md">
@@ -58,9 +52,7 @@ export function ContactForm() {
                   {...field}
                 />
 
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}
           />
@@ -77,9 +69,7 @@ export function ContactForm() {
                   {...field}
                 />
 
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}
           />
@@ -97,9 +87,7 @@ export function ContactForm() {
                   {...field}
                 />
 
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}
           />
@@ -117,18 +105,16 @@ export function ContactForm() {
                   {...field}
                 />
 
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}
           />
 
           <Button type="submit" className="w-full" disabled={isPending}>
-            {isPending ? "Sending..." : "Send"}
+            {isPending ? 'Sending...' : 'Send'}
           </Button>
         </FieldGroup>
       </FieldSet>
     </form>
-  )
+  );
 }

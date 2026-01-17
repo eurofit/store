@@ -152,3 +152,17 @@
     appearance: none;
   }
 }
+
+@utility clip-left {
+  clip-path: polygon(0 0, 100% 0, 86% 100%, 0% 100%);
+}
+
+@utility clip-right {
+  clip-path: polygon(10% 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+@utility scrollbar-hidden {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

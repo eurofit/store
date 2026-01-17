@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { LoginData } from '@/lib/schemas/login';
+import { LoginData } from '@/schemas/login';
 import { cn } from '@/utils/cn';
 import { useMutation } from '@tanstack/react-query';
 import { useSetAtom } from 'jotai';

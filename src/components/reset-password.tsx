@@ -17,7 +17,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-import { ResetPasswordData, resetPasswordSchema } from '@/lib/schemas/reset-password';
+import { ResetPasswordData, resetPasswordSchema } from '@/schemas/reset-password';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter, useSearchParams } from 'next/navigation';
 

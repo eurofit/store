@@ -1,7 +1,7 @@
 'use client';
 
 import { cartAtom, cartHydratedAtom } from '@/atoms/cart';
-import { Cart } from '@/lib/schemas/cart';
+import { Cart } from '@/schemas/cart';
 import { useSetAtom } from 'jotai';
 import { useEffect, useRef } from 'react';
 

@@ -1,4 +1,4 @@
-import { type CartItem } from '@/lib/schemas/cart';
+import { type CartItem } from '@/schemas/cart';
 import { cn } from '@/utils/cn';
 import { formatWithCommas } from '@/utils/format-with-commas';
 

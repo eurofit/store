@@ -1,3 +1,4 @@
+import { site } from '@/constants/site';
 import { Button, render, Section, Text } from '@react-email/components';
 import { EmailLayout } from './layout';
 
@@ -6,15 +7,8 @@ type VerificationEmailProps = {
   firstName?: string;
 };
 
-const vercelHost =
-  process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
-    ? process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL
-    : process.env.NEXT_PUBLIC_VERCEL_URL;
-const vercelUrl = vercelHost ? `https://${vercelHost}` : undefined;
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL || vercelUrl;
-
 const VerificationEmail = ({ firstName, token }: VerificationEmailProps) => {
-  const verificationLink = `${baseUrl}/verify?token=${token}`;
+  const verificationLink = `${site.url}/verify?token=${token}`;
   return (
     <EmailLayout
       preview={`You're almost there${firstName ? `, ${firstName}` : ''}! Confirm your email to access your new Eurofit account.`}

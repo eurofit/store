@@ -1,5 +1,5 @@
-import { orderItemSnapShotSchema } from '@/lib/schemas/order';
 import { Order } from '@/payload-types';
+import { orderItemSnapShotSchema } from '@/schemas/order';
 import { isEqual } from 'lodash-es';
 import { CollectionBeforeChangeHook } from 'payload';
 

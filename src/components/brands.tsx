@@ -6,7 +6,7 @@ type BrandsProps = {
   page: Promise<number>
 }
 
-const PAGE_LIMIT = 25
+const PAGE_LIMIT = 35
 
 export async function Brands({ page: pagePromise }: BrandsProps) {
   const page = await pagePromise

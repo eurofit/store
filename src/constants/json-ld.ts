@@ -1,61 +1,61 @@
-import { LocalBusiness, Organization, WebSite, WithContext } from 'schema-dts';
-import { site } from './site';
+import { LocalBusiness, Organization, WebSite, WithContext } from "schema-dts"
+import { site } from "./site"
 
 // --- Organization (repeatable across site) ---
 export const organization: WithContext<Organization> = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  '@id': `${site.url}/#organization`,
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": `${site.url}/#organization`,
   name: site.name,
   alternateName: site.legalName,
   url: site.url,
   logo: `${site.url}/logo.png`,
   description:
-    'Eurofit Health & Beauty LTD is Kenya’s leading supplier of authentic European supplements, sports nutrition, and skincare products for retail and wholesale.',
+    "Eurofit Health & Beauty LTD is Kenya’s leading supplier of authentic European supplements, sports nutrition, and skincare products for retail and wholesale.",
   contactPoint: [
     {
-      '@type': 'ContactPoint',
-      telephone: site.contact.phone.text.replace(' ', ''),
-      contactType: 'customer service',
-      email: 'info@eurofit.uk',
-      availableLanguage: ['English'],
-      areaServed: 'KE',
+      "@type": "ContactPoint",
+      telephone: site.contact.phone.text.replace(" ", ""),
+      contactType: "customer service",
+      email: "info@eurofit.uk",
+      availableLanguage: ["English"],
+      areaServed: "KE",
     },
   ],
   sameAs: site.socialLinks.map((s) => s.href),
-};
+}
 
 // --- WebSite (search action) ---
 export const website: WithContext<WebSite> = {
-  '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  '@id': `${site.url}/#website`,
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${site.url}/#website`,
   url: site.url,
   name: site.name,
   alternateName: site.legalName,
-  publisher: { '@id': `${site.url}/#organization` },
+  publisher: { "@id": `${site.url}/#organization` },
   potentialAction: {
-    '@type': 'SearchAction',
+    "@type": "SearchAction",
     target: `${site.url}/search?q={search_term_string}`,
     // @ts-expect-error for google
-    'query-input': 'required name=search_term_string',
+    "query-input": "required name=search_term_string",
   },
-};
+}
 
 // --- Local Business (Store) ---
 export const localBusiness: WithContext<LocalBusiness> = {
-  '@context': 'https://schema.org',
-  '@type': 'Store',
-  '@id': `${site.url}/#store`,
+  "@context": "https://schema.org",
+  "@type": "Store",
+  "@id": `${site.url}/#store`,
   name: site.name,
   legalName: site.name,
   url: site.url,
-  telephone: site.contact.phone.text.replace(/\s+/g, ''),
+  telephone: site.contact.phone.text.replace(/\s+/g, ""),
   email: site.contact.email.text,
   description:
-    'Physical and online store for sports nutrition, supplements, and skincare. Wholesale and retail orders available and acceptable.',
+    "Physical and online store for sports nutrition, supplements, and skincare. Wholesale and retail orders available and acceptable.",
   address: {
-    '@type': 'PostalAddress',
+    "@type": "PostalAddress",
     streetAddress: site.address.fullAddress,
     postOfficeBoxNumber: site.address.postalAddress,
     addressLocality: site.address.city,
@@ -64,29 +64,36 @@ export const localBusiness: WithContext<LocalBusiness> = {
     addressCountry: site.address.country,
   },
   geo: {
-    '@type': 'GeoCoordinates',
+    "@type": "GeoCoordinates",
     latitude: -1.274672,
     longitude: 36.8437572,
   },
   openingHoursSpecification: [
     {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-      opens: '09:00',
-      closes: '19:00',
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ],
+      opens: "09:00",
+      closes: "18:00",
     },
     {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: 'Sunday',
-      opens: '10:00',
-      closes: '16:00',
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Sunday",
+      opens: "10:00",
+      closes: "16:00",
     },
   ],
   sameAs: site.socialLinks.map((s) => s.href),
-  paymentAccepted: ['Cash', 'M-Pesa', 'Bank Transfer'],
-  currenciesAccepted: 'KES',
-  hasMap: 'https://maps.app.goo.gl/GBruweVx6PBugsuB6',
-  priceRange: 'KES',
+  paymentAccepted: ["Cash", "M-Pesa", "Bank Transfer"],
+  currenciesAccepted: "KES",
+  hasMap: "https://maps.app.goo.gl/GBruweVx6PBugsuB6",
+  priceRange: "KES",
   // image: `${site.url}/images/store-front.jpg`,
   logo: `${site.url}/logo.png`,
-};
+}

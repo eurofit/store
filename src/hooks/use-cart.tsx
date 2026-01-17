@@ -6,7 +6,7 @@ import {
   removeItemFromCart,
   updateCartItemQuantity,
 } from '@/actions/cart';
-import { Cart, CartItem } from '@/lib/schemas/cart';
+import { Cart, CartItem } from '@/schemas/cart';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 

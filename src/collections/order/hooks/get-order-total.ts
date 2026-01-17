@@ -1,5 +1,5 @@
-import { orderItem } from '@/lib/schemas/order';
 import { Order } from '@/payload-types';
+import { orderItem } from '@/schemas/order';
 import { FieldHook } from 'payload';
 import * as z from 'zod';
 

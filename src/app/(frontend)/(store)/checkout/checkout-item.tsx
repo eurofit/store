@@ -1,30 +1,22 @@
-import { type CartItem } from "@/lib/schemas/cart"
-import { cn } from "@/utils/cn"
-import { formatWithCommas } from "@/utils/format-with-commas"
+import { type CartItem } from '@/schemas/cart';
+import { cn } from '@/utils/cn';
+import { formatWithCommas } from '@/utils/format-with-commas';
 
-import { ImageWithRetry } from "@/components/image-with-retry"
-import { Button } from "@/components/ui/button"
-import { ButtonGroup } from "@/components/ui/button-group"
-import { Input } from "@/components/ui/input"
-import { useCart } from "@/hooks/use-cart"
-import clamp from "lodash-es/clamp"
-import {
-  Ban,
-  CheckCircle,
-  Clock3,
-  ImageOff,
-  Minus,
-  Plus,
-  X,
-} from "lucide-react"
-import * as React from "react"
-import { useDebouncedCallback } from "use-debounce"
+import { ImageWithRetry } from '@/components/image-with-retry';
+import { Button } from '@/components/ui/button';
+import { ButtonGroup } from '@/components/ui/button-group';
+import { Input } from '@/components/ui/input';
+import { useCart } from '@/hooks/use-cart';
+import clamp from 'lodash-es/clamp';
+import { Ban, CheckCircle, Clock3, ImageOff, Minus, Plus, X } from 'lucide-react';
+import * as React from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 
 type CartItemProps = {
-  item: CartItem
-  index: number
-  onPending?: (isPending: boolean) => void
-}
+  item: CartItem;
+  index: number;
+  onPending?: (isPending: boolean) => void;
+};
 
 export function CheckoutItem({
   index,
@@ -33,10 +25,7 @@ export function CheckoutItem({
 }: CartItemProps) {
   const {
     queryResult: { cart, isQueryPending },
-    createCartWithItemMutation: {
-      mutate: createCartWithItem,
-      isPending: isCreatingCart,
-    },
+    createCartWithItemMutation: { mutate: createCartWithItem, isPending: isCreatingCart },
     addItemToCartMutation: { mutate: addItemToCart },
     updateCartItemQuantityMutation: {
       mutate: updateCartItemQuantity,
@@ -47,34 +36,34 @@ export function CheckoutItem({
       isPending: isRemovingCartItem,
     },
     deleteCartMutation: { mutate: deleteCart, isPending: isDeletingCart },
-  } = useCart()
+  } = useCart();
 
-  const cartItem = cart?.items.find((cartItem) => cartItem.id === item.id)
+  const cartItem = cart?.items.find((cartItem) => cartItem.id === item.id);
 
-  const [qty, setQty] = React.useState(0)
+  const [qty, setQty] = React.useState(0);
 
   // Notify parent about pending state
   React.useEffect(() => {
-    if (!onPending) return
+    if (!onPending) return;
 
-    onPending(isCreatingCart || isUpdatingCartItem || isQueryPending)
+    onPending(isCreatingCart || isUpdatingCartItem || isQueryPending);
   }, [
     isCreatingCart,
     isUpdatingCartItem,
     isRemovingCartItem,
     isDeletingCart,
     isQueryPending,
-  ])
+  ]);
 
   // Sync local qty state with cart item quantity
   React.useEffect(() => {
-    if (cartItem && cartItem.quantity === qty) return
-    setQty(cartItem?.quantity ?? 0)
-  }, [cartItem?.quantity])
+    if (cartItem && cartItem.quantity === qty) return;
+    setQty(cartItem?.quantity ?? 0);
+  }, [cartItem?.quantity]);
 
   const commitCartChange = (newQty: number) => {
     // if item has no price, do nothing
-    if (!item.price) return
+    if (!item.price) return;
 
     // if there is no cart, create one with the item
     if (!isQueryPending && !cart) {
@@ -83,8 +72,8 @@ export function CheckoutItem({
         product,
         quantity: newQty,
         price: item.price!,
-      })
-      return
+      });
+      return;
     }
 
     // if there is a cart, but item not in it, add the item
@@ -95,9 +84,9 @@ export function CheckoutItem({
         product,
         quantity: newQty,
         price: item.price!,
-      })
+      });
 
-      return
+      return;
     }
 
     // if there is a cart and item in it, update the item quantity
@@ -113,56 +102,44 @@ export function CheckoutItem({
         product,
         quantity: newQty,
         price: item.price!,
-      })
-      return
+      });
+      return;
     }
 
     // if new quantity is zero, and there are more than 1 items in the cart, remove the item
-    if (
-      !isQueryPending &&
-      cart &&
-      cart?.items.length > 1 &&
-      cartItem &&
-      newQty === 0
-    ) {
+    if (!isQueryPending && cart && cart?.items.length > 1 && cartItem && newQty === 0) {
       removeItemFromCart({
         item: cartItem.id,
-      })
-      return
+      });
+      return;
     }
 
     // if new quantity is zero, and this is the only item in the cart, delete the cart
-    if (
-      !isQueryPending &&
-      cart &&
-      cart?.items.length === 1 &&
-      cartItem &&
-      newQty === 0
-    ) {
-      deleteCart()
-      return
+    if (!isQueryPending && cart && cart?.items.length === 1 && cartItem && newQty === 0) {
+      deleteCart();
+      return;
     }
-  }
+  };
 
-  const debouncedCommitChange = useDebouncedCallback(commitCartChange, 400)
+  const debouncedCommitChange = useDebouncedCallback(commitCartChange, 400);
 
   const handleQtyChange = (newQty: number) => {
-    setQty(newQty)
+    setQty(newQty);
 
-    debouncedCommitChange(newQty)
-  }
+    debouncedCommitChange(newQty);
+  };
 
   const handleIncrement = () => {
-    setQty((qty) => qty + 1)
-    onPending && onPending(true)
-    debouncedCommitChange(clamp(qty + 1, 0, item.stock))
-  }
+    setQty((qty) => qty + 1);
+    onPending && onPending(true);
+    debouncedCommitChange(clamp(qty + 1, 0, item.stock));
+  };
 
   const handleDecrement = () => {
-    setQty((qty) => qty - 1)
-    onPending && onPending(true)
-    debouncedCommitChange(clamp(qty - 1, 0, item.stock))
-  }
+    setQty((qty) => qty - 1);
+    onPending && onPending(true);
+    debouncedCommitChange(clamp(qty - 1, 0, item.stock));
+  };
 
   return (
     <div className="relative space-y-4">
@@ -209,7 +186,7 @@ export function CheckoutItem({
                 <div className="flex items-center space-x-2">
                   <ButtonGroup
                     className={cn({
-                      "border border-amber-500": isUpdatingCartItem,
+                      'border border-amber-500': isUpdatingCartItem,
                     })}
                   >
                     <Button
@@ -231,12 +208,10 @@ export function CheckoutItem({
                       placeholder="0"
                       value={qty}
                       onChange={(e) =>
-                        handleQtyChange(
-                          clamp(Number(e.target.value), 0, item.stock)
-                        )
+                        handleQtyChange(clamp(Number(e.target.value), 0, item.stock))
                       }
-                      className={cn("h-7 w-14 text-center", {
-                        "text-destructive": item.isOutOfStock,
+                      className={cn('h-7 w-14 text-center', {
+                        'text-destructive': item.isOutOfStock,
                       })}
                       readOnly={item.isOutOfStock}
                     />
@@ -305,5 +280,5 @@ export function CheckoutItem({
         </div>
       </article>
     </div>
-  )
+  );
 }

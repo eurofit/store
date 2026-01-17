@@ -1,7 +1,7 @@
 'use server';
 
-import { ResetPasswordData, resetPasswordSchema } from '@/lib/schemas/reset-password';
 import config from '@/payload.config';
+import { ResetPasswordData, resetPasswordSchema } from '@/schemas/reset-password';
 import { isEmpty } from 'lodash-es';
 import { getPayload } from 'payload';
 

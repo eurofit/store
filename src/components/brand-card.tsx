@@ -1,8 +1,10 @@
-import { AspectRatio } from "@/components/ui/aspect-ratio"
-import { Brand } from "@/types"
-import { cn } from "@/utils/cn"
-import { ImageOff } from "lucide-react"
 import Link from "next/link"
+import { Brand } from "@/types"
+import { ImageOff } from "lucide-react"
+
+import { cn } from "@/utils/cn"
+import { AspectRatio } from "@/components/ui/aspect-ratio"
+
 import { ImageWithRetry } from "./image-with-retry"
 import { Skeleton } from "./ui/skeleton"
 
@@ -22,7 +24,7 @@ export function BrandCard({ title, image, slug, index }: BrandCardProps) {
             src={image}
             alt={`${title} logo`}
             fill
-            className="mx-auto object-contain"
+            className="m-auto max-h-11/12 object-contain"
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 33vw, 20vw"
             loading={index > 4 ? "lazy" : "eager"}
             priority={index <= 4}
@@ -32,9 +34,9 @@ export function BrandCard({ title, image, slug, index }: BrandCardProps) {
           <div
             role="img"
             aria-label={`${title} logo not available`}
-            className="bg-muted flex h-full w-full items-center justify-center"
+            className="bg-muted flex size-full relative items-center justify-center"
           >
-            <ImageOff className="text-muted-foreground h-8 w-8" />
+            <ImageOff className="text-muted-foreground/70 size-2/5" />
           </div>
         )}
       </AspectRatio>

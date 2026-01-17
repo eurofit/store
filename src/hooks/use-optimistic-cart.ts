@@ -1,5 +1,5 @@
 import { cartAtom } from '@/atoms/cart';
-import { Cart, CartItem } from '@/lib/schemas/cart';
+import { Cart, CartItem } from '@/schemas/cart';
 import { useAtom } from 'jotai';
 import * as React from 'react';
 

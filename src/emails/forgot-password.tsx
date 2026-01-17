@@ -1,4 +1,5 @@
 import { baseUrl } from '@/constants/base-url';
+import { site } from '@/constants/site';
 import { User } from '@/payload-types';
 import { Button, Link, render, Section, Text } from '@react-email/components';
 import { EmailLayout } from './layout';
@@ -9,12 +10,12 @@ type ForgotPasswordEmailProps = {
 };
 
 export default function ForgotPasswordEmail({ user, token }: ForgotPasswordEmailProps) {
-  const resetPasswordLink = `${baseUrl}/reset-password?token=${token}`;
+  const resetPasswordLink = `${site.url}/reset-password?token=${token}`;
+
+  const preview = `Hi ${user?.firstName ?? 'there'}, here's how to reset your Eurofit password.`;
 
   return (
-    <EmailLayout
-      preview={`Hi ${user?.firstName ?? 'there'}, here's how to reset your Eurofit password.`}
-    >
+    <EmailLayout preview={preview}>
       {/* Body */}
       <Section className="px-6">
         <Text>Hi {user?.firstName ?? 'there'},</Text>

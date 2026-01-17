@@ -1,4 +1,4 @@
-import { SafeUser } from '@/lib/schemas/safe-user';
+import { SafeUser } from '@/schemas/safe-user';
 import { atom } from 'jotai';
 
 const userAtom = atom<SafeUser | null>(null);

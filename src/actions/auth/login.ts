@@ -1,7 +1,7 @@
 'use server';
 
-import { LoginData, loginSchema } from '@/lib/schemas/login';
 import config from '@/payload.config';
+import { LoginData, loginSchema } from '@/schemas/login';
 import { safeUser } from '@/utils/safe-user';
 import { login as payloadLogin } from '@payloadcms/next/auth';
 import { AuthenticationError } from 'payload';

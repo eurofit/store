@@ -74,7 +74,7 @@ function EmailHeader() {
           <Img
             alt="Eurofit logo"
             height="16"
-            src="https://i.postimg.cc/TwKNqZZ5/EUROFIT.png"
+            src={site.url + '/logo.png'}
             className="block"
           />
         </Column>

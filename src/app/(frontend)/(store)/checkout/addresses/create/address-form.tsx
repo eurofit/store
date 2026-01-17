@@ -1,16 +1,16 @@
-"use client"
+'use client';
 
-import { createAddress as createAddressAction } from "@/actions/address"
-import { CurrentUser } from "@/actions/auth/get-current-user"
-import { Button } from "@/components/ui/button"
+import { createAddress as createAddressAction } from '@/actions/address';
+import { CurrentUser } from '@/actions/auth/get-current-user';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
+} from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Field,
   FieldDescription,
@@ -19,30 +19,30 @@ import {
   FieldLabel,
   FieldLegend,
   FieldSet,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Spinner } from "@/components/ui/spinner"
-import { Textarea } from "@/components/ui/textarea"
-import { titles } from "@/constants/titles"
-import { Address, addressSchema } from "@/lib/schemas/address"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation } from "@tanstack/react-query"
-import { useRouter } from "next/navigation"
-import React from "react"
-import { Controller, useForm } from "react-hook-form"
-import { toast } from "sonner"
+} from '@/components/ui/select';
+import { Spinner } from '@/components/ui/spinner';
+import { Textarea } from '@/components/ui/textarea';
+import { titles } from '@/constants/titles';
+import { Address, addressSchema } from '@/schemas/address';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 type AddressFormProps = {
-  user: CurrentUser
-  city?: string | null
-}
+  user: CurrentUser;
+  city?: string | null;
+};
 
 export function AddressForm({ user, city }: AddressFormProps) {
   const {
@@ -51,52 +51,52 @@ export function AddressForm({ user, city }: AddressFormProps) {
     isSuccess: isAddressCreated,
   } = useMutation({
     mutationFn: createAddressAction,
-  })
-  const router = useRouter()
+  });
+  const router = useRouter();
 
   const isThereDefaultAddress =
-    user?.addresses?.some((address) => address.isDefault) ?? false
+    user?.addresses?.some((address) => address.isDefault) ?? false;
 
   const form = useForm<Address>({
     resolver: zodResolver(addressSchema),
     defaultValues: {
       // Contact Information
-      title: "mr",
-      firstName: user?.firstName ?? "",
-      lastName: user?.lastName ?? "",
-      phone: user?.phone ?? "",
-      email: user?.email ?? "",
+      title: 'mr',
+      firstName: user?.firstName ?? '',
+      lastName: user?.lastName ?? '',
+      phone: user?.phone ?? '',
+      email: user?.email ?? '',
       // Address Details
-      line1: "",
-      line2: "",
-      line3: "",
-      postalCode: "",
-      city: city ?? "",
-      county: "",
-      country: "Kenya",
+      line1: '',
+      line2: '',
+      line3: '',
+      postalCode: '',
+      city: city ?? '',
+      county: '',
+      country: 'Kenya',
 
       // Other Details
-      label: "",
-      note: "",
+      label: '',
+      note: '',
       isDefault: !isThereDefaultAddress,
     },
-  })
+  });
 
   function onSubmit(values: Address) {
     toast.promise(createAddress(values), {
-      loading: "Creating address...",
-      success: "Address created successfully!",
-      error: "Failed to create address. Please try again.",
-    })
+      loading: 'Creating address...',
+      success: 'Address created successfully!',
+      error: 'Failed to create address. Please try again.',
+    });
   }
 
   React.useEffect(() => {
-    if (!isAddressCreated) return
+    if (!isAddressCreated) return;
 
-    form.reset()
+    form.reset();
 
-    router.push("/checkout")
-  }, [isAddressCreated, form])
+    router.push('/checkout');
+  }, [isAddressCreated, form]);
 
   return (
     <div className="relative flex items-center justify-center">
@@ -126,7 +126,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
                           field: { onChange, onBlur, ...field },
                           fieldState,
                         }) => {
-                          const id = field.name + React.useId()
+                          const id = field.name + React.useId();
                           return (
                             <Field data-invalid={fieldState.invalid}>
                               <FieldLabel htmlFor={id}>Title</FieldLabel>
@@ -140,10 +140,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
                                 </SelectTrigger>
                                 <SelectContent>
                                   {titles.map((title) => (
-                                    <SelectItem
-                                      key={title.value}
-                                      value={title.value}
-                                    >
+                                    <SelectItem key={title.value} value={title.value}>
                                       {title.label}
                                     </SelectItem>
                                   ))}
@@ -153,7 +150,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
                                 <FieldError errors={[fieldState.error]} />
                               )}
                             </Field>
-                          )
+                          );
                         }}
                       />
                       <div className="grid gap-2 md:grid-cols-2">
@@ -161,7 +158,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
                           control={form.control}
                           name="firstName"
                           render={({ field, fieldState }) => {
-                            const id = field.name + React.useId()
+                            const id = field.name + React.useId();
                             return (
                               <Field data-invalid={fieldState.invalid}>
                                 <FieldLabel htmlFor={id}>First Name</FieldLabel>
@@ -176,14 +173,14 @@ export function AddressForm({ user, city }: AddressFormProps) {
                                   <FieldError errors={[fieldState.error]} />
                                 )}
                               </Field>
-                            )
+                            );
                           }}
                         />
                         <Controller
                           control={form.control}
                           name="lastName"
                           render={({ field, fieldState }) => {
-                            const id = field.name + React.useId()
+                            const id = field.name + React.useId();
                             return (
                               <Field data-invalid={fieldState.invalid}>
                                 <FieldLabel htmlFor={id}>Last Name</FieldLabel>
@@ -198,14 +195,14 @@ export function AddressForm({ user, city }: AddressFormProps) {
                                   <FieldError errors={[fieldState.error]} />
                                 )}
                               </Field>
-                            )
+                            );
                           }}
                         />
                         <Controller
                           control={form.control}
                           name="email"
                           render={({ field, fieldState }) => {
-                            const id = field.name + React.useId()
+                            const id = field.name + React.useId();
                             return (
                               <Field data-invalid={fieldState.invalid}>
                                 <FieldLabel htmlFor={id}>Email</FieldLabel>
@@ -220,14 +217,14 @@ export function AddressForm({ user, city }: AddressFormProps) {
                                   <FieldError errors={[fieldState.error]} />
                                 )}
                               </Field>
-                            )
+                            );
                           }}
                         />
                         <Controller
                           control={form.control}
                           name="phone"
                           render={({ field, fieldState }) => {
-                            const id = field.name + React.useId()
+                            const id = field.name + React.useId();
                             return (
                               <Field data-invalid={fieldState.invalid}>
                                 <FieldLabel htmlFor={id}>Telephone</FieldLabel>
@@ -242,7 +239,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
                                   <FieldError errors={[fieldState.error]} />
                                 )}
                               </Field>
-                            )
+                            );
                           }}
                         />
                       </div>
@@ -259,12 +256,10 @@ export function AddressForm({ user, city }: AddressFormProps) {
                         control={form.control}
                         name="line1"
                         render={({ field, fieldState }) => {
-                          const id = field.name + React.useId()
+                          const id = field.name + React.useId();
                           return (
                             <Field data-invalid={fieldState.invalid}>
-                              <FieldLabel htmlFor={id}>
-                                Address Line 1
-                              </FieldLabel>
+                              <FieldLabel htmlFor={id}>Address Line 1</FieldLabel>
                               <Input
                                 id={id}
                                 {...field}
@@ -273,26 +268,24 @@ export function AddressForm({ user, city }: AddressFormProps) {
                                 autoComplete="shipping address-line1"
                               />
                               <FieldDescription>
-                                Primary address details, e.g: Street name,
-                                building name / Estate name
+                                Primary address details, e.g: Street name, building name /
+                                Estate name
                               </FieldDescription>
                               {fieldState.invalid && (
                                 <FieldError errors={[fieldState.error]} />
                               )}
                             </Field>
-                          )
+                          );
                         }}
                       />
                       <Controller
                         control={form.control}
                         name="line2"
                         render={({ field, fieldState }) => {
-                          const id = field.name + React.useId()
+                          const id = field.name + React.useId();
                           return (
                             <Field data-invalid={fieldState.invalid}>
-                              <FieldLabel htmlFor={id}>
-                                Address Line 2
-                              </FieldLabel>
+                              <FieldLabel htmlFor={id}>Address Line 2</FieldLabel>
                               <Input
                                 id={id}
                                 {...field}
@@ -301,26 +294,24 @@ export function AddressForm({ user, city }: AddressFormProps) {
                                 autoComplete="shipping address-line2"
                               />
                               <FieldDescription>
-                                Additional address details, e.g., unit, floor /
-                                Gate, house no etc.
+                                Additional address details, e.g., unit, floor / Gate,
+                                house no etc.
                               </FieldDescription>
                               {fieldState.invalid && (
                                 <FieldError errors={[fieldState.error]} />
                               )}
                             </Field>
-                          )
+                          );
                         }}
                       />
                       <Controller
                         control={form.control}
                         name="line3"
                         render={({ field, fieldState }) => {
-                          const id = field.name + React.useId()
+                          const id = field.name + React.useId();
                           return (
                             <Field data-invalid={fieldState.invalid}>
-                              <FieldLabel htmlFor={id}>
-                                Address Line 3
-                              </FieldLabel>
+                              <FieldLabel htmlFor={id}>Address Line 3</FieldLabel>
                               <Input
                                 id={id}
                                 {...field}
@@ -333,7 +324,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
                                 <FieldError errors={[fieldState.error]} />
                               )}
                             </Field>
-                          )
+                          );
                         }}
                       />
 
@@ -342,12 +333,10 @@ export function AddressForm({ user, city }: AddressFormProps) {
                           control={form.control}
                           name="postalCode"
                           render={({ field, fieldState }) => {
-                            const id = field.name + React.useId()
+                            const id = field.name + React.useId();
                             return (
                               <Field data-invalid={fieldState.invalid}>
-                                <FieldLabel htmlFor={id}>
-                                  Postal Code
-                                </FieldLabel>
+                                <FieldLabel htmlFor={id}>Postal Code</FieldLabel>
                                 <Input
                                   id={id}
                                   {...field}
@@ -360,19 +349,17 @@ export function AddressForm({ user, city }: AddressFormProps) {
                                   <FieldError errors={[fieldState.error]} />
                                 )}
                               </Field>
-                            )
+                            );
                           }}
-                        />{" "}
+                        />{' '}
                         <Controller
                           control={form.control}
                           name="city"
                           render={({ field, fieldState }) => {
-                            const id = field.name + React.useId()
+                            const id = field.name + React.useId();
                             return (
                               <Field data-invalid={fieldState.invalid}>
-                                <FieldLabel htmlFor={id}>
-                                  City / Town
-                                </FieldLabel>
+                                <FieldLabel htmlFor={id}>City / Town</FieldLabel>
                                 <Input
                                   id={id}
                                   {...field}
@@ -386,14 +373,14 @@ export function AddressForm({ user, city }: AddressFormProps) {
                                   <FieldError errors={[fieldState.error]} />
                                 )}
                               </Field>
-                            )
+                            );
                           }}
                         />
                         <Controller
                           control={form.control}
                           name="county"
                           render={({ field, fieldState }) => {
-                            const id = field.name + React.useId()
+                            const id = field.name + React.useId();
                             return (
                               <Field data-invalid={fieldState.invalid}>
                                 <FieldLabel htmlFor={id}>County</FieldLabel>
@@ -410,14 +397,14 @@ export function AddressForm({ user, city }: AddressFormProps) {
                                   <FieldError errors={[fieldState.error]} />
                                 )}
                               </Field>
-                            )
+                            );
                           }}
                         />
                         <Controller
                           control={form.control}
                           name="country"
                           render={({ field, fieldState }) => {
-                            const id = field.name + React.useId()
+                            const id = field.name + React.useId();
                             return (
                               <Field data-invalid={fieldState.invalid}>
                                 <FieldLabel htmlFor={id}>Country</FieldLabel>
@@ -434,7 +421,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
                                   <FieldError errors={[fieldState.error]} />
                                 )}
                               </Field>
-                            )
+                            );
                           }}
                         />
                       </div>
@@ -444,15 +431,13 @@ export function AddressForm({ user, city }: AddressFormProps) {
               </FieldSet>
               <FieldSet>
                 <FieldLegend>Other Details</FieldLegend>
-                <FieldDescription>
-                  Additional details for your delivery.
-                </FieldDescription>
+                <FieldDescription>Additional details for your delivery.</FieldDescription>
                 <FieldGroup>
                   <Controller
                     control={form.control}
                     name="label"
                     render={({ field, fieldState }) => {
-                      const id = field.name + React.useId()
+                      const id = field.name + React.useId();
                       return (
                         <Field data-invalid={fieldState.invalid}>
                           <FieldLabel htmlFor={id}>Label</FieldLabel>
@@ -463,21 +448,21 @@ export function AddressForm({ user, city }: AddressFormProps) {
                             aria-invalid={fieldState.invalid}
                           />
                           <FieldDescription>
-                            Short name to identify this address. Example: Home,
-                            Work, Shop, Warehouse, Cargo.
+                            Short name to identify this address. Example: Home, Work,
+                            Shop, Warehouse, Cargo.
                           </FieldDescription>
                           {fieldState.invalid && (
                             <FieldError errors={[fieldState.error]} />
                           )}
                         </Field>
-                      )
+                      );
                     }}
                   />
                   <Controller
                     control={form.control}
                     name="note"
                     render={({ field, fieldState }) => {
-                      const id = field.name + React.useId()
+                      const id = field.name + React.useId();
                       return (
                         <Field data-invalid={fieldState.invalid}>
                           <FieldLabel htmlFor={id}>Delivery Note</FieldLabel>
@@ -490,24 +475,21 @@ export function AddressForm({ user, city }: AddressFormProps) {
                             rows={5}
                           />
                           <FieldDescription>
-                            Any special instructions for delivery. Eg: "Call
-                            when you arrive"
+                            Any special instructions for delivery. Eg: "Call when you
+                            arrive"
                           </FieldDescription>
                           {fieldState.invalid && (
                             <FieldError errors={[fieldState.error]} />
                           )}
                         </Field>
-                      )
+                      );
                     }}
                   />
                   <Controller
                     control={form.control}
                     name="isDefault"
-                    render={({
-                      field: { onChange, value, ...field },
-                      fieldState,
-                    }) => {
-                      const id = field.name + React.useId()
+                    render={({ field: { onChange, value, ...field }, fieldState }) => {
+                      const id = field.name + React.useId();
                       return (
                         <Field data-invalid={fieldState.invalid}>
                           <FieldLabel
@@ -527,15 +509,14 @@ export function AddressForm({ user, city }: AddressFormProps) {
                                 Set as default address
                               </p>
                               <p className="text-muted-foreground text-sm">
-                                Use this address as your default for future
-                                orders.
+                                Use this address as your default for future orders.
                               </p>
                             </div>
                           </FieldLabel>
                           {!isThereDefaultAddress && (
                             <FieldDescription>
-                              If there is no default address, this will be set
-                              as default automatically.
+                              If there is no default address, this will be set as default
+                              automatically.
                             </FieldDescription>
                           )}
 
@@ -543,7 +524,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
                             <FieldError errors={[fieldState.error]} />
                           )}
                         </Field>
-                      )
+                      );
                     }}
                   />
                 </FieldGroup>
@@ -553,11 +534,11 @@ export function AddressForm({ user, city }: AddressFormProps) {
           <CardFooter>
             <Button className="w-full" disabled={isCreatingAddress}>
               {isCreatingAddress && <Spinner />}
-              {isCreatingAddress ? "Saving Address..." : "Save Address"}
+              {isCreatingAddress ? 'Saving Address...' : 'Save Address'}
             </Button>
           </CardFooter>
         </Card>
       </form>
     </div>
-  )
+  );
 }

@@ -1,7 +1,7 @@
 'use server';
 
 import { env } from '@/env.mjs';
-import { contactFormSchema } from '@/lib/schemas/contact';
+import { contactFormSchema } from '@/schemas/contact';
 import nodemailer from 'nodemailer';
 
 export async function sendContactEmail(_state: any, formData: FormData) {

@@ -1,4 +1,4 @@
-import { AddressWithId } from '@/lib/schemas/address';
+import { AddressWithId } from '@/schemas/address';
 import parsePhoneNumber from 'libphonenumber-js';
 import React from 'react';
 import { Badge } from './ui/badge';
