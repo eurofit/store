@@ -1,31 +1,56 @@
-"use server"
+'use server';
 
-import config from "@/payload.config"
-import { getPayload } from "payload"
+import { brands } from '@/payload-generated-schema';
+import { buildPrefixTsQuery } from '@/utils/build-prefix-ts-query';
+import config from '@payload-config';
+import { asc, sql } from '@payloadcms/db-postgres/drizzle';
+import { getPayload } from 'payload';
+import { z } from 'zod';
 
-export async function searchBrand(term: string) {
-  const payload = await getPayload({ config })
+export async function searchBrand(q: string) {
+  const query = z.string().min(2).parse(q);
+  const payload = await getPayload({ config });
 
-  const { docs: brands, ...rest } = await payload.find({
-    collection: "brands",
-    where: {
-      title: {
-        like: term,
-      },
-    },
-    select: {
-      title: true,
-      slug: true,
-      srcImage: true,
-    },
-    limit: 10,
-  })
+  const tsQuery = buildPrefixTsQuery(query);
 
-  return {
-    brands: brands.map(({ srcImage, ...b }) => ({
-      ...b,
-      image: srcImage,
-    })),
-    ...rest,
+  if (!tsQuery) {
+    return null;
   }
+
+  // we pass the tsQuery as a bound parameter into to_tsquery('english', $1)
+  const matchCondition = sql`
+    (
+      setweight(to_tsvector('english', coalesce(${brands.title}, '')), 'A')
+    ) @@ to_tsquery('english', ${tsQuery})
+    `;
+
+  const brandsPromise = payload.db.drizzle
+    .select({
+      id: brands.id,
+      slug: brands.slug,
+      title: brands.title,
+      image: brands.srcImage,
+    })
+    .from(brands)
+    .where(matchCondition)
+    .limit(5)
+    .orderBy(asc(brands.title));
+
+  const brandsCountPromise = payload.db.drizzle
+    .select({
+      count: sql<number>`CAST (COUNT(DISTINCT ${brands.id}) AS INTEGER)`,
+    })
+    .from(brands)
+    .where(matchCondition);
+
+  const [matchedBrands, totalCountResult] = await Promise.all([
+    brandsPromise,
+    brandsCountPromise,
+  ]);
+
+  const totalBrands = totalCountResult[0]?.count ?? 0;
+
+  return { brands: matchedBrands, totalBrands };
 }
+
+export type SearchBrandResult = Awaited<ReturnType<typeof searchBrand>>;

@@ -1,11 +1,12 @@
-import * as React from "react"
+import * as React from 'react';
 
-import { Logo } from "@/components/logo"
-import { Nav, NavSkeleton } from "@/components/nav"
-import { SearchBar } from "@/components/searchbar"
+import { Logo } from '@/components/logo';
+import { Nav, NavSkeleton } from '@/components/nav';
+import { SearchBar } from '@/components/searchbar';
 
-import { UserButton, UserButtonSkeleton } from "./auth/user-button"
-import { Cart } from "./cart/cart"
+import { UserButton, UserButtonSkeleton } from './auth/user-button';
+import { Cart } from './cart/cart';
+import { SearchSheet } from './search-sheet';
 
 export function Header() {
   return (
@@ -14,10 +15,12 @@ export function Header() {
       <React.Suspense fallback={<NavSkeleton />}>
         <Nav />
       </React.Suspense>
-      <div className="relative ml-auto flex flex-1 items-center justify-end gap-x-3">
+      <div className="ml-auto flex flex-1 items-center justify-end gap-x-3">
         <React.Suspense fallback={<div className="flex-1" />}>
           <SearchBar />
         </React.Suspense>
+
+        <SearchSheet />
 
         <React.Suspense fallback={<UserButtonSkeleton />}>
           <UserButton />
@@ -30,5 +33,5 @@ export function Header() {
         </Button> */}
       </div>
     </header>
-  )
+  );
 }

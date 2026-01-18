@@ -63,30 +63,3 @@ export type FilterGroup = {
   title: string;
   items: FilterItem[];
 };
-
-// =======================
-// PAYSTACK
-// =======================
-export type PastackFailedResponse = {
-  status: false;
-  message: string;
-};
-
-export type PaystackSuccessResponse = {
-  status: true;
-  message: string;
-  data: {
-    customer_code: string;
-    [key: string]: any;
-  };
-};
-
-export type PaystackResponse = PastackFailedResponse | PaystackSuccessResponse;
-
-export type PaystackCustomer = {
-  email?: string;
-  first_name?: string;
-  last_name?: string;
-  phone?: string;
-  metadata?: Record<string, string | number | boolean>;
-};
