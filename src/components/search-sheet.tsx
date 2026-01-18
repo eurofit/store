@@ -72,9 +72,8 @@ export function SearchSheet() {
 
   // sync search params
   React.useEffect(() => {
-    if (!q) return;
     setQuery(q);
-  }, []);
+  }, [q]);
 
   const debaouncedSearch = useDebouncedCallback(search, 300);
 
@@ -98,7 +97,7 @@ export function SearchSheet() {
   };
 
   return (
-    <div className="md:hidden">
+    <search className="md:hidden">
       <Button variant="outline" size="icon" onClick={setOn} aria-expanded={isOpen}>
         <SearchIcon />
         <span className="sr-only">Search products</span>
@@ -115,23 +114,27 @@ export function SearchSheet() {
               </Button>
             </div>
 
-            <InputGroup>
-              <InputGroupAddon>
-                <SearchIcon />
-              </InputGroupAddon>
-              <InputGroupInput
-                type="search"
-                value={query}
-                onChange={handleSearchChange}
-                placeholder="Search products"
-                autoFocus
-              />
-              {totalProducts > 0 && (
-                <InputGroupAddon align="inline-end">
-                  {totalProducts} {pluralize('result', totalProducts)}
+            <form action="/search">
+              <InputGroup>
+                <InputGroupAddon>
+                  <SearchIcon />
                 </InputGroupAddon>
-              )}
-            </InputGroup>
+                <InputGroupInput
+                  type="search"
+                  name="q"
+                  value={query}
+                  onChange={handleSearchChange}
+                  placeholder="Search products"
+                  autoComplete="off"
+                  autoFocus
+                />
+                {totalProducts > 0 && (
+                  <InputGroupAddon align="inline-end">
+                    {totalProducts} {pluralize('result', totalProducts)}
+                  </InputGroupAddon>
+                )}
+              </InputGroup>
+            </form>
 
             <div>
               {/* SEARCH SKELETON  */}
@@ -154,7 +157,7 @@ export function SearchSheet() {
               {isError && <SearchResultError />}
 
               {/* SEARCH RESULTS */}
-              {!isSearching && !isError && products.length > 0 && (
+              {!isSearching && !isError && query.length > 2 && products.length > 0 && (
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <p>Search results</p>
@@ -208,7 +211,7 @@ export function SearchSheet() {
           </div>
         </PreventScroll>
       )}
-    </div>
+    </search>
   );
 }
 

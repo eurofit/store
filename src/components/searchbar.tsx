@@ -85,9 +85,8 @@ export function SearchBar() {
 
   // sync search params
   React.useEffect(() => {
-    if (!q) return;
     setQuery(q);
-  }, []);
+  }, [q]);
 
   const debouncedSearch = useDebouncedCallback(
     (term: string) => search({ query: term }),
@@ -138,9 +137,6 @@ export function SearchBar() {
           className="relative w-full"
           role="search"
           aria-label="Sitewide"
-          onSubmit={(e) => {
-            if (!trimmedQuery) e.preventDefault();
-          }}
         >
           <InputGroup className="bg-background! opacity-100! has-[[data-slot=input-group-control]:focus-visible]:ring-0! has-[[data-slot][aria-invalid=true]]:ring-0!">
             <InputGroupAddon align="inline-start">

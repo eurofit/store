@@ -61,8 +61,8 @@ export default async function BrandsPage({
               </React.Suspense>
               + top sports nutrition brands.
             </h1>
-            <p className="text-muted-foreground text-pretty">
-              Authentic Global Brands Available at Wholesale & Retail Prices in Kenya.
+            <p className="text-muted-foreground text-pretty capitalize">
+              Authentic Global Brands Available at Unbeatable Prices in Kenya.
             </p>
           </hgroup>
           <BrandSearch />

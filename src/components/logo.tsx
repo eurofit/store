@@ -1,29 +1,29 @@
-import { site } from "@/constants/site"
-import { cn } from "@/utils/cn"
-import { cva, VariantProps } from "class-variance-authority"
-import Link from "next/link"
-import React from "react"
+import { site } from '@/constants/site';
+import { cn } from '@/utils/cn';
+import { cva, VariantProps } from 'class-variance-authority';
+import Link from 'next/link';
+import React from 'react';
 
-const logoVariants = cva("font-montserrat no-underline! uppercase not-italic", {
+const logoVariants = cva('font-montserrat uppercase not-italic no-underline!', {
   variants: {
     variant: {
-      default: "text-2xl font-black",
-      inline: "inline text-base font-medium",
+      default: 'text-xl font-bold',
+      inline: 'inline text-base font-medium',
     },
   },
   defaultVariants: {
-    variant: "default",
+    variant: 'default',
   },
-})
+});
 
 type LogoProps = {
-  rootClass?: string
-  as?: Extract<React.ElementType, "h1" | "span">
+  rootClass?: string;
+  as?: Extract<React.ElementType, 'h1' | 'span'>;
 } & VariantProps<typeof logoVariants> &
-  React.HTMLAttributes<HTMLDivElement>
+  React.HTMLAttributes<HTMLDivElement>;
 
-export function Logo({ variant, rootClass, className, as = "h1" }: LogoProps) {
-  const Comp = as
+export function Logo({ variant, rootClass, className, as = 'h1' }: LogoProps) {
+  const Comp = as;
   return (
     <Link href="/" aria-label={site.name} className={cn(rootClass)}>
       <Comp className={logoVariants({ variant, className })}>
@@ -31,5 +31,5 @@ export function Logo({ variant, rootClass, className, as = "h1" }: LogoProps) {
         <span className="text-red-500">fit</span>
       </Comp>
     </Link>
-  )
+  );
 }
