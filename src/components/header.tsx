@@ -6,12 +6,18 @@ import { SearchBar } from '@/components/searchbar';
 
 import { UserButton, UserButtonSkeleton } from './auth/user-button';
 import { Cart } from './cart/cart';
+import { MenuSheet, MenuSheetSkeleton } from './menu-sheet';
 import { SearchSheet } from './search-sheet';
 
 export function Header() {
   return (
     <header className="bg-background sticky top-0 z-50 flex h-20 items-center justify-between gap-x-6 border-b px-6 md:h-16">
-      <Logo />
+      <div className="flex items-center gap-2">
+        <React.Suspense fallback={<MenuSheetSkeleton />}>
+          <MenuSheet />
+        </React.Suspense>
+        <Logo />
+      </div>
       <React.Suspense fallback={<NavSkeleton />}>
         <Nav />
       </React.Suspense>
