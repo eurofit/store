@@ -20,7 +20,7 @@ export async function getOrders(args: Args) {
   const orders = await payload.find({
     collection: 'orders',
     where: {
-      user: { equals: userId },
+      customer: { equals: userId },
     },
     sort: '-createdAt',
     limit: 20,
