@@ -1,5 +1,5 @@
 import { User } from '@/payload-types';
-import { paystack } from '@/paystact';
+import { paystack } from '@/paystack';
 import { paystackCustomerSchema } from '@/schemas/paystack-customer-code';
 import { APIError, CollectionBeforeChangeHook } from 'payload';
 

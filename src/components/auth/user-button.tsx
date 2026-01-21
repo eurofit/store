@@ -54,7 +54,9 @@ export async function UserButton({ className }: { className?: string }) {
           <DropdownMenuItem asChild>
             <Link href="/account">Account</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>Orders</DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href="/orders">Orders</Link>
+          </DropdownMenuItem>
           <DropdownMenuItem disabled>Stock Alerts</DropdownMenuItem>
           <DropdownMenuItem disabled>Settings</DropdownMenuItem>
         </DropdownMenuGroup>

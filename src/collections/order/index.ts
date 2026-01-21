@@ -1,24 +1,24 @@
-import { orderStatus, paymentStatus } from "@/constants/orders"
-import { autoincrement } from "@/payload-hooks/auto-increment"
-import { CollectionConfig } from "payload"
-import { getOrderTotal } from "./hooks/get-order-total"
-import { getOrderStatus } from "./hooks/status"
-import { validateOrderItems } from "./hooks/validate-order-items"
+import { orderStatus, paymentStatus } from '@/constants/orders';
+import { autoincrement } from '@/payload-hooks/auto-increment';
+import { CollectionConfig } from 'payload';
+import { getOrderTotal } from './hooks/get-order-total';
+import { getOrderStatus } from './hooks/status';
+import { validateOrderItems } from './hooks/validate-order-items';
 
 export const orders: CollectionConfig = {
-  slug: "orders",
+  slug: 'orders',
   labels: {
-    singular: "Order",
-    plural: "Orders",
+    singular: 'Order',
+    plural: 'Orders',
   },
   typescript: {
-    interface: "Order",
+    interface: 'Order',
   },
   fields: [
     {
-      name: "orderIdNumber",
-      label: "Order Id",
-      type: "number",
+      name: 'orderIdNumber',
+      label: 'Order Id',
+      type: 'number',
       required: true,
       admin: {
         hidden: true,
@@ -26,53 +26,53 @@ export const orders: CollectionConfig = {
       unique: true,
     },
     {
-      name: "customer",
-      type: "relationship",
-      relationTo: "users",
+      name: 'customer',
+      type: 'relationship',
+      relationTo: 'users',
       required: true,
     },
     {
-      name: "address",
-      type: "relationship",
-      relationTo: "addresses",
+      name: 'address',
+      type: 'relationship',
+      relationTo: 'addresses',
       required: true,
     },
     {
-      name: "items",
-      type: "array",
+      name: 'items',
+      type: 'array',
       required: true,
       minRows: 1,
       admin: {
         components: {
-          Cell: "@/fields/cart/total-items-cell#CartTotalItemsCell",
+          Cell: '@/fields/cart/total-items-cell#CartTotalItemsCell',
         },
       },
       fields: [
         {
-          name: "productLine",
-          type: "relationship",
-          relationTo: "product-lines",
+          name: 'productLine',
+          type: 'relationship',
+          relationTo: 'product-lines',
           required: true,
         },
         {
-          name: "quantity",
-          type: "number",
+          name: 'quantity',
+          type: 'number',
           required: true,
         },
         {
-          name: "snapshot",
-          type: "json",
+          name: 'snapshot',
+          type: 'json',
           required: true,
           admin: {
-            description: "Snapshot of the product line at the time of purchase",
+            description: 'Snapshot of the product line at the time of purchase',
             hidden: true,
           },
         },
       ],
     },
     {
-      name: "total",
-      type: "number",
+      name: 'total',
+      type: 'number',
       defaultValue: 0,
       virtual: true,
       admin: {
@@ -83,10 +83,10 @@ export const orders: CollectionConfig = {
       },
     },
     {
-      name: "status",
-      type: "select",
+      name: 'status',
+      type: 'select',
       options: orderStatus,
-      defaultValue: "pending",
+      defaultValue: 'pending',
       required: true,
       virtual: true,
       admin: {
@@ -97,26 +97,30 @@ export const orders: CollectionConfig = {
       },
     },
     {
-      name: "paymentStatus",
-      type: "select",
+      name: 'paymentStatus',
+      type: 'select',
       required: true,
-      defaultValue: "unpaid",
+      defaultValue: 'unpaid',
       options: paymentStatus,
     },
     {
-      name: "snapshot",
-      type: "json",
+      name: 'snapshot',
+      type: 'json',
       required: true,
       admin: {
-        description: "Snapshot of the order at the time of purchase",
+        description: 'Snapshot of the order at the time of purchase',
         hidden: true,
       },
     },
+    {
+      name: 'transactions',
+      type: 'join',
+      collection: 'transactions',
+      on: 'order',
+      hasMany: true,
+    },
   ],
   hooks: {
-    beforeChange: [
-      validateOrderItems,
-      autoincrement({ field: "orderIdNumber" }),
-    ],
+    beforeChange: [validateOrderItems, autoincrement({ field: 'orderIdNumber' })],
   },
-}
+};

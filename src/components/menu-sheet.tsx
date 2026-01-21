@@ -10,9 +10,9 @@ export async function MenuSheet() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon-lg" className="md:hidden">
+        <Button variant="ghost" size="icon" className="md:hidden">
           <span className="sr-only">Mobile menu</span>
-          <Menu className="size-5.5" />
+          <Menu className="size-5" />
         </Button>
       </SheetTrigger>
       <SheetContent side="left">

@@ -6,10 +6,6 @@ import { headers as getHeaders } from 'next/headers';
 import { getPayload } from 'payload';
 
 export const getCurrentUser = async () => {
-  // 'use cache: private';
-
-  // cacheLife({ stale: 60 });
-
   const [headers, payload] = await Promise.all([getHeaders(), getPayload({ config })]);
 
   const { user } = await payload.auth({
@@ -17,8 +13,6 @@ export const getCurrentUser = async () => {
   });
 
   if (!user) return null;
-
-  // cacheTag(`user:${user.id}`);
 
   // default address should come first
   return safeUserSchema.parse({

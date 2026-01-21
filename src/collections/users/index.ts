@@ -1,6 +1,7 @@
 import { generateForgotPasswordEmailHTML } from '@/emails/forgot-password';
 import { generateVerificationEmailHTML } from '@/emails/verification';
 import type { CollectionConfig } from 'payload';
+import { getUserFullName } from './hooks/get-user-full-name';
 import { syncToPaystack } from './hooks/sync-to-paystack';
 
 export const users: CollectionConfig = {
@@ -77,6 +78,19 @@ export const users: CollectionConfig = {
         description: 'The last name of the user.',
       },
       index: true,
+    },
+    {
+      name: 'fullName',
+      type: 'text',
+      virtual: true,
+      admin: {
+        position: 'sidebar',
+        description: 'The full name of the user.',
+        readOnly: true,
+      },
+      hooks: {
+        afterRead: [getUserFullName],
+      },
     },
 
     {

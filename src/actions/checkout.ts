@@ -3,7 +3,7 @@
 import { site } from '@/constants/site';
 import { Order } from '@/payload-types';
 import config from '@/payload.config';
-import { paystack } from '@/paystact';
+import { paystack } from '@/paystack';
 import { getPayload } from 'payload';
 import * as z from 'zod';
 
@@ -63,11 +63,12 @@ export async function checkout(unSafeData: CheckoutArgs) {
   const order = await payload.create({
     collection: 'orders',
     data: {
+      // this will be overriden and  auto-incremented in the collection hook
       orderIdNumber: -1,
       customer: user.id,
       address: address.id,
       items: orderItems,
-      status: 'pending',
+      status: 'pending', // this is virtual field
       paymentStatus: 'unpaid',
       snapshot: {
         user: {
@@ -96,7 +97,7 @@ export async function checkout(unSafeData: CheckoutArgs) {
       cancel_action: site.url + '/checkout',
       order_id: order.id,
       snapshot: {
-        items: items,
+        items,
         user: {
           id: user.id,
           fullName: `${user.firstName} ${user.lastName}`,

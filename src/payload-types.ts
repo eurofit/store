@@ -103,6 +103,9 @@ export interface Config {
     categories: {
       products: 'products';
     };
+    orders: {
+      transactions: 'transactions';
+    };
   };
   collectionsSelect: {
     media: MediaSelect<false> | MediaSelect<true>;
@@ -205,6 +208,10 @@ export interface User {
    * The last name of the user.
    */
   lastName: string;
+  /**
+   * The full name of the user.
+   */
+  fullName?: string | null;
   gender: 'male' | 'female';
   /**
    * The birth date of the user.
@@ -697,19 +704,11 @@ export interface Order {
     | number
     | boolean
     | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "order-statuses".
- */
-export interface OrderStatus {
-  id: string;
-  order: string | Order;
-  staff?: (string | null) | User;
-  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
-  visibleToCustomer: boolean;
+  transactions?: {
+    docs?: (string | Transaction)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -723,6 +722,19 @@ export interface Transaction {
   amount: number;
   ref: string;
   provider: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "order-statuses".
+ */
+export interface OrderStatus {
+  id: string;
+  order: string | Order;
+  staff?: (string | null) | User;
+  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  visibleToCustomer: boolean;
   updatedAt: string;
   createdAt: string;
 }
@@ -872,6 +884,7 @@ export interface UsersSelect<T extends boolean = true> {
   firstName?: T;
   middleName?: T;
   lastName?: T;
+  fullName?: T;
   gender?: T;
   birthDate?: T;
   addresses?: T;
@@ -1082,6 +1095,7 @@ export interface OrdersSelect<T extends boolean = true> {
   status?: T;
   paymentStatus?: T;
   snapshot?: T;
+  transactions?: T;
   updatedAt?: T;
   createdAt?: T;
 }

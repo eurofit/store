@@ -6,6 +6,7 @@ export const safeUserSchema = z.object({
   email: z.email(),
   firstName: z.string(),
   lastName: z.string(),
+  fullName: z.string().optional(),
   phone: z.string().optional(),
   addresses: z.array(addressWithIdSchema).optional(),
 });
