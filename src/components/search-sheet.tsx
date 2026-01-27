@@ -3,7 +3,7 @@
 import {
   SearchProductResult,
   searchProductSuggestions,
-} from '@/actions/search-product-suggestions';
+} from '@/actions/search/search-product-suggestions';
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Empty,

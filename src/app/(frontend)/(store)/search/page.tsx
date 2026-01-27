@@ -1,4 +1,4 @@
-import { getSearchProductFilters } from '@/actions/get-search-product-filters';
+import { getSearchProductFilters } from '@/actions/search/get-search-product-filters';
 import { ProductCardSkeleton } from '@/components/product-card';
 import { FilterSkeleton } from '@/components/product-filters';
 import { ProductFilters } from '@/components/products-filters';

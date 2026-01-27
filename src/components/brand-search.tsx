@@ -3,7 +3,7 @@
 import {
   searchBrand as searchBrandAction,
   SearchBrandResult,
-} from '@/actions/search-brand';
+} from '@/actions/search/search-brand';
 import { useToggle } from '@/hooks/use-toggle';
 import { cn } from '@/utils/cn';
 import { useMutation } from '@tanstack/react-query';

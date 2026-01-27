@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { useEffect, useState, useTransition } from 'react';
 import { MailSent as MailSentIcon } from './illustrations/mail-sent';
 
-import { verifyEmail } from '@/actions/verify-email';
+import { verifyEmail } from '@/actions/auth/verify-email';
 import { useSearchParams } from 'next/navigation';
 import { MailSent } from './mail-sent';
 

@@ -1,6 +1,6 @@
 import { getCategory } from "@/actions/categories/get-category"
 import { getTotalProductsByCategory } from "@/actions/categories/get-products-by-category"
-import { getCategoryFilters } from "@/actions/get-category-filters"
+import { getCategoryFilters } from "@/actions/categories/get-category-filters"
 import { CategoryProducts } from "@/components/category-products"
 import { ProductCardSkeleton } from "@/components/product-card"
 import { FilterSkeleton } from "@/components/product-filters"

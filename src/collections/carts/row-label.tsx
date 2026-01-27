@@ -1,6 +1,6 @@
 'use client';
 
-import { getProductLineById } from '@/actions/get-productline-by-id';
+import { getProductLineById } from '@/actions/product-lines/get-productline-by-id';
 import { Cart } from '@/payload-types';
 import { useRowLabel } from '@payloadcms/ui';
 import * as React from 'react';

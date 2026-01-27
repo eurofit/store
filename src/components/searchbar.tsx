@@ -3,7 +3,7 @@
 import {
   SearchProductResult,
   searchProductSuggestions,
-} from '@/actions/search-product-suggestions';
+} from '@/actions/search/search-product-suggestions';
 import { recentSearchesAtom } from '@/atoms/search-bar';
 import {
   InputGroup,
