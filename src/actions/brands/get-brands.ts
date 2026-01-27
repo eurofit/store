@@ -1,8 +1,8 @@
-"use server"
+'use server';
 
-import payloadConfig from "@/payload.config"
-import { getPayload } from "payload"
-import { z } from "zod"
+import payloadConfig from '@/payload.config';
+import { getPayload } from 'payload';
+import { z } from 'zod';
 
 const options = z.object({
   page: z
@@ -13,21 +13,21 @@ const options = z.object({
   limit: z
     .number()
     .optional()
-    .default(25)
+    .default(35)
     .pipe(z.transform((val) => Math.max(1, val))),
-})
+});
 
-type GetBrandsOptions = z.infer<typeof options>
+type GetBrandsOptions = z.input<typeof options>;
 
 export async function getBrands(opts: GetBrandsOptions) {
-  const { page, limit } = options.parse(opts)
+  const { page, limit } = options.parse(opts);
 
-  const payload = await getPayload({ config: payloadConfig })
+  const payload = await getPayload({ config: payloadConfig });
   const { docs: brands, ...r } = await payload.find({
-    collection: "brands",
+    collection: 'brands',
     page,
     limit,
-    sort: "title",
+    sort: 'title',
     select: {
       id: true,
       slug: true,
@@ -35,7 +35,7 @@ export async function getBrands(opts: GetBrandsOptions) {
       srcImage: true,
       updatedAt: true,
     },
-  })
+  });
 
   return {
     brands: brands.map((b) => ({
@@ -46,15 +46,15 @@ export async function getBrands(opts: GetBrandsOptions) {
       updatedAt: b.updatedAt,
     })),
     ...r,
-  }
+  };
 }
 
 export async function getAllBrands() {
-  const config = await payloadConfig
-  const payload = await getPayload({ config })
+  const config = await payloadConfig;
+  const payload = await getPayload({ config });
 
   const { docs: brands, ...r } = await payload.find({
-    collection: "brands",
+    collection: 'brands',
     select: {
       id: true,
       slug: true,
@@ -62,10 +62,10 @@ export async function getAllBrands() {
       srcImage: true,
       updatedAt: true,
     },
-    sort: "title",
+    sort: 'title',
     limit: 0,
     pagination: false,
-  })
+  });
 
   return {
     brands: brands.map((b) => ({
@@ -76,5 +76,5 @@ export async function getAllBrands() {
       updatedAt: b.updatedAt,
     })),
     ...r,
-  }
+  };
 }

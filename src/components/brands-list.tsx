@@ -1,29 +1,25 @@
-"use client"
+'use client';
 
-import { getBrands } from "@/actions/brands/get-brands"
-import { BrandCard, BrandsSkeleton } from "@/components/brand-card"
-import { useInView } from "@/hooks/use-in-view"
-import { useIsMobile } from "@/hooks/use-mobile"
-import { useInfiniteQuery } from "@tanstack/react-query"
-import { CheckCircle, CircleX } from "lucide-react"
-import { useSearchParams } from "next/navigation"
-import * as React from "react"
+import { getBrands } from '@/actions/brands/get-brands';
+import { BrandCard, BrandsSkeleton } from '@/components/brand-card';
+import { useInView } from '@/hooks/use-in-view';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { CheckCircle, CircleX } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import * as React from 'react';
 
 type BrandListProps = {
-  initialData: Awaited<ReturnType<typeof getBrands>>
-  totalBrands: number
-} & React.ComponentProps<"section">
+  initialData: Awaited<ReturnType<typeof getBrands>>;
+  totalBrands: number;
+} & React.ComponentProps<'section'>;
 
-const BRANDS_LIMIT = 25
+const BRANDS_LIMIT = 35;
 
-export function BrandList({
-  initialData,
-  totalBrands,
-  ...props
-}: BrandListProps) {
-  const searchParams = useSearchParams()
+export function BrandList({ initialData, totalBrands, ...props }: BrandListProps) {
+  const searchParams = useSearchParams();
 
-  const page = Math.max(1, Number(searchParams.get("page")) || 1)
+  const page = Math.max(1, Number(searchParams.get('page')) || 1);
 
   const {
     data,
@@ -33,7 +29,7 @@ export function BrandList({
     isFetchingNextPage,
     hasPreviousPage,
   } = useInfiniteQuery({
-    queryKey: ["brands"],
+    queryKey: ['brands'],
     queryFn: ({ pageParam = page }) =>
       getBrands({ page: pageParam, limit: BRANDS_LIMIT }),
     initialPageParam: page,
@@ -42,21 +38,21 @@ export function BrandList({
       pages: [initialData],
       pageParams: [page],
     },
-  })
+  });
 
   const brands = React.useMemo(
     () => data?.pages.flatMap((page) => page.brands) ?? [],
-    [data]
-  )
+    [data],
+  );
 
-  const { ref, isInView } = useInView()
-  const isMobile = useIsMobile()
+  const { ref, isInView } = useInView();
+  const isMobile = useIsMobile();
 
   React.useEffect(() => {
-    if (!isInView || !hasNextPage || isFetchingNextPage) return
+    if (!isInView || !hasNextPage || isFetchingNextPage) return;
 
-    fetchNextPage()
-  }, [isInView])
+    fetchNextPage();
+  }, [isInView]);
 
   return (
     <section {...props}>
@@ -91,10 +87,7 @@ export function BrandList({
       )}
 
       {brands.length == totalBrands && (
-        <div
-          aria-live="polite"
-          className="mt-10 flex items-center justify-center gap-2"
-        >
+        <div aria-live="polite" className="mt-10 flex items-center justify-center gap-2">
           <CheckCircle className="text-green-600" />
           <span>That is it! You have seen all {brands.length} brands.</span>
         </div>
@@ -117,5 +110,5 @@ export function BrandList({
         )}
       </nav>
     </section>
-  )
+  );
 }

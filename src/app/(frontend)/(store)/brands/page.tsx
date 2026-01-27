@@ -26,7 +26,7 @@ type BrandsPageProps = {
 export default async function BrandsPage({
   searchParams: searchParamsPromise,
 }: BrandsPageProps) {
-  const page = searchParamsPromise.then((params) => Number(params.page) || 1);
+  const page = searchParamsPromise.then((params) => Number(params.page) ?? 1);
 
   const { brands } = await getAllBrands();
 
