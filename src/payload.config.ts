@@ -50,9 +50,6 @@ export default buildConfig({
   },
   globals,
   collections,
-  jobs: {
-    // tasks,
-  },
   editor: lexicalEditor(),
   secret: env.PAYLOAD_SECRET,
   typescript: {
