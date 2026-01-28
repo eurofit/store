@@ -1,5 +1,5 @@
 import { CategoryCard } from "@/components/category-card"
-import config from "@/payload.config"
+import config from "@/payload/config"
 import { Metadata } from "next"
 import { getPayload } from "payload"
 

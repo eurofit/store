@@ -9,8 +9,8 @@ import {
   CartProductNotFoundError,
   CartProductOutOfStockError,
 } from "@/errors"
-import { Cart } from "@/payload-types"
-import config from "@/payload.config"
+import { Cart } from "@/payload/types"
+import config from "@/payload/config"
 import { formatCartItems } from "@/utils/format-cart-items"
 import { cookies as getCookies } from "next/headers"
 import { getPayload } from "payload"

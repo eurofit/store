@@ -1,7 +1,7 @@
 "use server"
 
 import { getCurrentUser } from "@/actions/auth/get-current-user"
-import config from "@/payload.config"
+import config from "@/payload/config"
 import { ProductLine } from "@/types"
 import { uniqBy } from "lodash-es"
 import { getPayload } from "payload"

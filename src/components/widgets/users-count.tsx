@@ -1,4 +1,4 @@
-import config from "@/payload.config"
+import config from "@/payload/config"
 import { Card } from "@payloadcms/ui"
 import { getPayload } from "payload"
 

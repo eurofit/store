@@ -19,7 +19,7 @@ const BRANDS_LIMIT = 35;
 export function BrandList({ initialData, totalBrands, ...props }: BrandListProps) {
   const searchParams = useSearchParams();
 
-  const page = Math.max(1, Number(searchParams.get('page')) || 1);
+  const page = Math.max(1, Number(searchParams.get('page')) ?? 1);
 
   const {
     data,

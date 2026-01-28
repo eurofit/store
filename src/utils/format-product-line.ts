@@ -1,4 +1,4 @@
-import { ProductLine } from '@/payload-types';
+import { ProductLine } from '@/payload/types';
 
 export function formatProductLine(productLine: ProductLine) {
   return {

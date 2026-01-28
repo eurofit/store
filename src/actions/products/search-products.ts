@@ -7,10 +7,10 @@ import {
   products,
   products_rels,
   stock_alerts,
-} from "@/payload-generated-schema"
+} from "@/payload/generated-schema"
 import type { Product, ProductLine } from "@/types"
 import { buildPrefixTsQuery } from "@/utils/build-prefix-ts-query"
-import payloadConfig from "@payload-config"
+import payloadConfig from "@/payload/config"
 import { and, asc, desc, eq, or, sql } from "@payloadcms/db-postgres/drizzle"
 import { castArray } from "lodash-es"
 import { getPayload } from "payload"

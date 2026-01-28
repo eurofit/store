@@ -1,8 +1,8 @@
 'use server';
 
 import { site } from '@/constants/site';
-import { Order } from '@/payload-types';
-import config from '@/payload.config';
+import { Order } from '@/payload/types';
+import config from '@/payload/config';
 import { paystack } from '@/paystack';
 import { getPayload } from 'payload';
 import * as z from 'zod';

@@ -1,7 +1,7 @@
 'use server';
 
 import { ProductNotFoundError, UserNotFoundError } from '@/errors';
-import config from '@payload-config';
+import config from '@/payload/config';
 import { getPayload } from 'payload';
 import { z } from 'zod';
 

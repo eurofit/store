@@ -1,6 +1,6 @@
 "use server"
 
-import payloadConfig from "@/payload.config"
+import payloadConfig from "@/payload/config"
 import { FilterGroup, FilterItem } from "@/types"
 import { flatMap, groupBy, sortBy, uniqBy } from "lodash-es"
 import { getPayload } from "payload"

@@ -1,5 +1,5 @@
 import { site } from "@/constants/site"
-import payloadConfig from "@/payload.config"
+import payloadConfig from "@/payload/config"
 import { MetadataRoute } from "next"
 import { getPayload } from "payload"
 

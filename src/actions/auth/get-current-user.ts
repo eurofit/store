@@ -1,7 +1,7 @@
 'use server';
 
 import { safeUserSchema } from '@/schemas/safe-user';
-import config from '@payload-config';
+import config from '@/payload/config';
 import { headers as getHeaders } from 'next/headers';
 import { getPayload } from 'payload';
 

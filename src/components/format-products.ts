@@ -1,4 +1,4 @@
-import { Category, Product, ProductLine } from '@/payload-types';
+import { Category, Product, ProductLine } from '@/payload/types';
 import { formatProductLine } from '@/utils/format-product-line';
 
 export function formatProducts(products?: (string | Product)[]) {

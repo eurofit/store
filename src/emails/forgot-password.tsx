@@ -1,6 +1,6 @@
 import { baseUrl } from '@/constants/base-url';
 import { site } from '@/constants/site';
-import { User } from '@/payload-types';
+import { User } from '@/payload/types';
 import { Button, Link, render, Section, Text } from '@react-email/components';
 import { EmailLayout } from './layout';
 

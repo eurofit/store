@@ -2,7 +2,7 @@ import {
   Cart as PayloadCart,
   ProductLine as PayloadProductLine,
   Product,
-} from '@/payload-types';
+} from '@/payload/types';
 import { CartItem, cartItemSchema } from '@/schemas/cart';
 import { ProductLine } from '@/types';
 import z from 'zod';

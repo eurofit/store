@@ -1,4 +1,4 @@
-import { User } from '@/payload-types';
+import { User } from '@/payload/types';
 import { safeUserSchema, type SafeUser } from '@/schemas/safe-user';
 
 export function safeUser(user: User): SafeUser | null {

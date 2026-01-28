@@ -1,5 +1,5 @@
 import { env } from "@/env.mjs"
-import config from "@/payload.config"
+import config from "@/payload/config"
 import { NextResponse } from "next/server"
 import crypto from "node:crypto"
 import { getPayload } from "payload"

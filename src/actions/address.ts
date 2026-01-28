@@ -1,6 +1,6 @@
 'use server';
 
-import config from '@/payload.config';
+import config from '@/payload/config';
 import { Address, addressSchema } from '@/schemas/address';
 import { getPayload } from 'payload';
 import { getCurrentUser } from './auth/get-current-user';

@@ -6,10 +6,10 @@ import {
   product_lines,
   products,
   products_rels,
-} from "@/payload-generated-schema"
+} from "@/payload/generated-schema"
 import { Brand, Category, FilterGroup, FilterItem } from "@/types"
 import { buildPrefixTsQuery } from "@/utils/build-prefix-ts-query"
-import payloadConfig from "@payload-config"
+import payloadConfig from "@/payload/config"
 import { asc, eq, sql } from "@payloadcms/db-postgres/drizzle"
 import sortBy from "lodash-es/sortBy"
 import uniqBy from "lodash-es/uniqBy"

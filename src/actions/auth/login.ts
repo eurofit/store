@@ -1,6 +1,6 @@
 'use server';
 
-import config from '@/payload.config';
+import config from '@/payload/config';
 import { LoginData, loginSchema } from '@/schemas/login';
 import { safeUser } from '@/utils/safe-user';
 import { login as payloadLogin } from '@payloadcms/next/auth';

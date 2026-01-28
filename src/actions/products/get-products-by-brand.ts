@@ -1,6 +1,6 @@
 "use server"
 
-import payloadConfig from "@/payload.config"
+import payloadConfig from "@/payload/config"
 import { Product, ProductLine } from "@/types"
 import { isEmpty } from "lodash-es"
 import { getPayload } from "payload"
