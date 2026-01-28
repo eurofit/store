@@ -1,27 +1,27 @@
-import { GlobalConfig } from "payload"
+import { GlobalConfig } from 'payload';
 
 export const nav: GlobalConfig = {
-  slug: "nav",
+  slug: 'nav',
   fields: [
     {
-      name: "items",
-      label: "Menu Items",
-      type: "array",
+      name: 'items',
+      label: 'Menu Items',
+      type: 'array',
       required: true,
       admin: {
         components: {
-          RowLabel: "./row-label#RowLabel",
+          RowLabel: '@/payload/globals/nav/row-label#RowLabel',
         },
       },
       fields: [
         {
-          name: "label",
-          type: "text",
+          name: 'label',
+          type: 'text',
           required: true,
         },
         {
-          name: "url",
-          type: "text",
+          name: 'url',
+          type: 'text',
           required: true,
         },
       ],
@@ -30,4 +30,4 @@ export const nav: GlobalConfig = {
   hooks: {
     // afterChange: [revalidateNavTag],
   },
-}
+};
