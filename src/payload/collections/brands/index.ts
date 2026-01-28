@@ -15,13 +15,6 @@ export const brands: CollectionConfig = {
     useAsTitle: 'title',
     listSearchableFields: ['id', 'title', 'slug'],
     defaultColumns: ['srcImage', 'title'],
-    components: {
-      listMenuItems: [
-        {
-          path: '@/payload/list-menu-items/print-button#PrintButton',
-        },
-      ],
-    },
   },
   defaultPopulate: {
     slug: true,
