@@ -1,12 +1,12 @@
 import { Cart } from '@/payload/types';
 import { ArrayFieldClient, DefaultServerCellComponentProps } from 'payload';
 
-type CartTotalItemsCellProps = DefaultServerCellComponentProps<
+type TotalItemsCellProps = DefaultServerCellComponentProps<
   ArrayFieldClient,
   Cart['items']
 >;
 
-export function CartTotalItemsCell({ cellData }: CartTotalItemsCellProps) {
+export function TotalItemsCell({ cellData }: TotalItemsCellProps) {
   const totalItems = cellData.reduce((total, item) => total + item.quantity, 0);
   return <span>{totalItems}</span>;
 }

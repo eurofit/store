@@ -44,7 +44,7 @@ export const orders: CollectionConfig = {
       minRows: 1,
       admin: {
         components: {
-          Cell: '../../fields/cart/total-items-cell#CartTotalItemsCell',
+          Cell: '@/payload/fields/cart/total-items-cell#TotalItemsCell',
         },
       },
       fields: [
