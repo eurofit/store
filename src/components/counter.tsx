@@ -17,15 +17,30 @@ export function Counter({
   onComplete,
   className,
 }: CounterProps) {
-  const [timeValues, setTimeValues] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
-  const [isComplete, setIsComplete] = useState<boolean>(false);
+  const getInitialTimeValues = () => {
+    const start = new Date(startDate).getTime();
+    const end = new Date(endDate).getTime();
+    if (Number.isNaN(start) || Number.isNaN(end)) {
+      return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    }
 
-  if (isComplete) return;
+    const now = Date.now();
+    let difference = down ? end - now : now - start;
+    if (!down && now > end) difference = end - start;
+    if (down ? difference <= 0 : now >= end) {
+      return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    }
+
+    return {
+      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+      minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+      seconds: Math.floor((difference % (1000 * 60)) / 1000),
+    };
+  };
+
+  const [timeValues, setTimeValues] = useState(getInitialTimeValues);
+  const [isComplete, setIsComplete] = useState<boolean>(false);
 
   useEffect(() => {
     // Convert inputs to timestamps
@@ -83,9 +98,6 @@ export function Counter({
       };
     };
 
-    // Initial calculation
-    setTimeValues(calculateTime());
-
     // Update every second
     const timer = setInterval(() => {
       const updatedTime = calculateTime();
@@ -108,6 +120,8 @@ export function Counter({
   const formatNumber = (num: number) => {
     return num.toString().padStart(2, '0');
   };
+
+  if (isComplete) return null;
 
   return (
     <div className={cn('', className)}>

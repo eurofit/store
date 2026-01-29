@@ -53,6 +53,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
     mutationFn: createAddressAction,
   });
   const router = useRouter();
+  const idPrefix = React.useId();
 
   const isThereDefaultAddress =
     user?.addresses?.some((address) => address.isDefault) ?? false;
@@ -96,7 +97,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
     form.reset();
 
     router.push('/checkout');
-  }, [isAddressCreated, form]);
+  }, [isAddressCreated, form, router]);
 
   return (
     <div className="relative flex items-center justify-center">
@@ -126,7 +127,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
                           field: { onChange, onBlur, ...field },
                           fieldState,
                         }) => {
-                          const id = field.name + React.useId();
+                          const id = `${field.name}-${idPrefix}`;
                           return (
                             <Field data-invalid={fieldState.invalid}>
                               <FieldLabel htmlFor={id}>Title</FieldLabel>
@@ -158,7 +159,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
                           control={form.control}
                           name="firstName"
                           render={({ field, fieldState }) => {
-                            const id = field.name + React.useId();
+                            const id = `${field.name}-${idPrefix}`;
                             return (
                               <Field data-invalid={fieldState.invalid}>
                                 <FieldLabel htmlFor={id}>First Name</FieldLabel>
@@ -180,7 +181,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
                           control={form.control}
                           name="lastName"
                           render={({ field, fieldState }) => {
-                            const id = field.name + React.useId();
+                            const id = `${field.name}-${idPrefix}`;
                             return (
                               <Field data-invalid={fieldState.invalid}>
                                 <FieldLabel htmlFor={id}>Last Name</FieldLabel>
@@ -202,7 +203,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
                           control={form.control}
                           name="email"
                           render={({ field, fieldState }) => {
-                            const id = field.name + React.useId();
+                            const id = `${field.name}-${idPrefix}`;
                             return (
                               <Field data-invalid={fieldState.invalid}>
                                 <FieldLabel htmlFor={id}>Email</FieldLabel>
@@ -224,7 +225,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
                           control={form.control}
                           name="phone"
                           render={({ field, fieldState }) => {
-                            const id = field.name + React.useId();
+                            const id = `${field.name}-${idPrefix}`;
                             return (
                               <Field data-invalid={fieldState.invalid}>
                                 <FieldLabel htmlFor={id}>Telephone</FieldLabel>
@@ -256,7 +257,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
                         control={form.control}
                         name="line1"
                         render={({ field, fieldState }) => {
-                          const id = field.name + React.useId();
+                          const id = `${field.name}-${idPrefix}`;
                           return (
                             <Field data-invalid={fieldState.invalid}>
                               <FieldLabel htmlFor={id}>Address Line 1</FieldLabel>
@@ -282,7 +283,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
                         control={form.control}
                         name="line2"
                         render={({ field, fieldState }) => {
-                          const id = field.name + React.useId();
+                          const id = `${field.name}-${idPrefix}`;
                           return (
                             <Field data-invalid={fieldState.invalid}>
                               <FieldLabel htmlFor={id}>Address Line 2</FieldLabel>
@@ -308,7 +309,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
                         control={form.control}
                         name="line3"
                         render={({ field, fieldState }) => {
-                          const id = field.name + React.useId();
+                          const id = `${field.name}-${idPrefix}`;
                           return (
                             <Field data-invalid={fieldState.invalid}>
                               <FieldLabel htmlFor={id}>Address Line 3</FieldLabel>
@@ -333,7 +334,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
                           control={form.control}
                           name="postalCode"
                           render={({ field, fieldState }) => {
-                            const id = field.name + React.useId();
+                            const id = `${field.name}-${idPrefix}`;
                             return (
                               <Field data-invalid={fieldState.invalid}>
                                 <FieldLabel htmlFor={id}>Postal Code</FieldLabel>
@@ -356,7 +357,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
                           control={form.control}
                           name="city"
                           render={({ field, fieldState }) => {
-                            const id = field.name + React.useId();
+                            const id = `${field.name}-${idPrefix}`;
                             return (
                               <Field data-invalid={fieldState.invalid}>
                                 <FieldLabel htmlFor={id}>City / Town</FieldLabel>
@@ -380,7 +381,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
                           control={form.control}
                           name="county"
                           render={({ field, fieldState }) => {
-                            const id = field.name + React.useId();
+                            const id = `${field.name}-${idPrefix}`;
                             return (
                               <Field data-invalid={fieldState.invalid}>
                                 <FieldLabel htmlFor={id}>County</FieldLabel>
@@ -404,7 +405,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
                           control={form.control}
                           name="country"
                           render={({ field, fieldState }) => {
-                            const id = field.name + React.useId();
+                            const id = `${field.name}-${idPrefix}`;
                             return (
                               <Field data-invalid={fieldState.invalid}>
                                 <FieldLabel htmlFor={id}>Country</FieldLabel>
@@ -437,7 +438,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
                     control={form.control}
                     name="label"
                     render={({ field, fieldState }) => {
-                      const id = field.name + React.useId();
+                      const id = `${field.name}-${idPrefix}`;
                       return (
                         <Field data-invalid={fieldState.invalid}>
                           <FieldLabel htmlFor={id}>Label</FieldLabel>
@@ -462,7 +463,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
                     control={form.control}
                     name="note"
                     render={({ field, fieldState }) => {
-                      const id = field.name + React.useId();
+                      const id = `${field.name}-${idPrefix}`;
                       return (
                         <Field data-invalid={fieldState.invalid}>
                           <FieldLabel htmlFor={id}>Delivery Note</FieldLabel>
@@ -475,8 +476,8 @@ export function AddressForm({ user, city }: AddressFormProps) {
                             rows={5}
                           />
                           <FieldDescription>
-                            Any special instructions for delivery. Eg: "Call when you
-                            arrive"
+                            Any special instructions for delivery. Eg: &quot;Call when you
+                            arrive&quot;
                           </FieldDescription>
                           {fieldState.invalid && (
                             <FieldError errors={[fieldState.error]} />
@@ -489,7 +490,7 @@ export function AddressForm({ user, city }: AddressFormProps) {
                     control={form.control}
                     name="isDefault"
                     render={({ field: { onChange, value, ...field }, fieldState }) => {
-                      const id = field.name + React.useId();
+                      const id = `${field.name}-${idPrefix}`;
                       return (
                         <Field data-invalid={fieldState.invalid}>
                           <FieldLabel

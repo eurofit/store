@@ -22,7 +22,7 @@ export function CartHydrate({ cart }: CartHydrateProps) {
     if (cart) {
       setCart(cart);
     }
-  }, [cart, setCart]);
+  }, [cart, setCart, setCartHydrated]);
 
   return null;
 }

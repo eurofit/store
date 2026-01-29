@@ -42,12 +42,12 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
   const cartItem = cart?.items.find((item) => item.id === line.id);
 
   const [qty, setQty] = React.useState(0);
+  const cartQty = cartItem?.quantity ?? 0;
 
   // Sync local qty state with cart item quantity
   React.useEffect(() => {
-    if (cartItem && cartItem.quantity === qty) return;
-    setQty(cartItem?.quantity ?? 0);
-  }, [cartItem?.quantity]);
+    setQty((current) => (current === cartQty ? current : cartQty));
+  }, [cartQty]);
 
   const commitCartChange = (newQty: number) => {
     // if item has no price, do nothing

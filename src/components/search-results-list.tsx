@@ -12,6 +12,7 @@ export function SearchResultsLists({}: SearchResultsList) {
   const intersectionRef = useRef<HTMLDivElement>(null!);
 
   const searchParams = useSearchParams();
+  const searchParamsString = searchParams.toString();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -24,7 +25,7 @@ export function SearchResultsLists({}: SearchResultsList) {
   useEffect(() => {
     if (!(intersection && intersection.intersectionRatio === 1)) return;
 
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParamsString);
     const page = params.get('page');
 
     if (!page) {
@@ -38,7 +39,7 @@ export function SearchResultsLists({}: SearchResultsList) {
     const newUrl = pathname + '?' + params.toString();
 
     router.push(newUrl);
-  }, [intersection]);
+  }, [intersection, pathname, router, searchParamsString]);
   return (
     <div ref={intersectionRef} className="my-6 flex w-full justify-center">
       <Loader2 className="animate-spin" />

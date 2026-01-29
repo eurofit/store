@@ -1,9 +1,9 @@
-"use client"
+'use client';
 
-import { CurrentUser } from "@/actions/auth/get-current-user"
-import { AddressRadioItem } from "@/components/address-radio-item"
-import { Large, Muted } from "@/components/typography"
-import { Button } from "@/components/ui/button"
+import { CurrentUser } from '@/actions/auth/get-current-user';
+import { AddressRadioItem } from '@/components/address-radio-item';
+import { Large, Muted } from '@/components/typography';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardAction,
@@ -12,108 +12,98 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
+} from '@/components/ui/card';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from "@/components/ui/input-group"
+} from '@/components/ui/input-group';
 import {
   Item,
   ItemActions,
   ItemContent,
   ItemDescription,
   ItemTitle,
-} from "@/components/ui/item"
-import { Progress } from "@/components/ui/progress"
-import { RadioGroup } from "@/components/ui/radio-group"
-import { Separator } from "@/components/ui/separator"
-import { Spinner } from "@/components/ui/spinner"
-import { useCart } from "@/hooks/use-cart"
-import { useMounted } from "@/hooks/use-mounted"
-import { useCheckout } from "@/hooks/useCheckout"
-import { formatWithCommas } from "@/utils/format-with-commas"
-import { zodResolver } from "@hookform/resolvers/zod"
+} from '@/components/ui/item';
+import { Progress } from '@/components/ui/progress';
+import { RadioGroup } from '@/components/ui/radio-group';
+import { Separator } from '@/components/ui/separator';
+import { Spinner } from '@/components/ui/spinner';
+import { useCart } from '@/hooks/use-cart';
+import { useMounted } from '@/hooks/use-mounted';
+import { useCheckout } from '@/hooks/useCheckout';
+import { formatWithCommas } from '@/utils/format-with-commas';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import { uniqBy } from "lodash-es"
-import { ChevronRight, Plus } from "lucide-react"
-import Link from "next/link"
-import * as React from "react"
-import { Controller, useForm } from "react-hook-form"
-import { toast } from "sonner"
-import * as z from "zod"
-import { CheckoutItem } from "./checkout-item"
+import { uniqBy } from 'lodash-es';
+import { ChevronRight, Plus } from 'lucide-react';
+import Link from 'next/link';
+import * as React from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import * as z from 'zod';
+import { CheckoutItem } from './checkout-item';
 
 const addressId = z.object({
-  id: z.string().min(1, "Please select a delivery address."),
-})
+  id: z.string().min(1, 'Please select a delivery address.'),
+});
 
 const couponSchema = z.object({
   code: z.string().optional(),
-})
+});
 
 type CartContentProps = {
-  user: CurrentUser
-}
+  user: CurrentUser;
+};
 
 export function CartContent({ user }: CartContentProps) {
-  const defaultAddress = user?.addresses?.find((address) => address.isDefault)
-  const defaultAddressId = React.useRef(
-    user?.addresses?.find((a) => a.isDefault)?.id ?? ""
-  )
-  const [isDisabled, setIsDisabled] = React.useState(false)
-  const { mutate: checkout, isPending: isCheckoutPending } = useCheckout()
+  const defaultAddress = user?.addresses?.find((address) => address.isDefault);
+  const [isDisabled, setIsDisabled] = React.useState(false);
+  const { mutate: checkout, isPending: isCheckoutPending } = useCheckout();
 
-  const isMounted = useMounted()
+  const isMounted = useMounted();
   const {
     queryResult: { cart, isQueryPending },
-  } = useCart()
+  } = useCart();
 
   const totatCartItems = cart
     ? cart.items.reduce((total, item) => total + item.quantity, 0)
-    : 0
+    : 0;
 
   const couponForm = useForm<z.infer<typeof couponSchema>>({
     resolver: zodResolver(couponSchema),
     defaultValues: {
-      code: "",
+      code: '',
     },
-  })
+  });
 
   const addressForm = useForm<z.infer<typeof addressId>>({
     resolver: zodResolver(addressId),
     defaultValues: {
-      id: defaultAddressId.current,
+      id: defaultAddress?.id ?? '',
     },
-  })
+  });
 
   if (!isMounted() || isQueryPending) {
-    return <div>Loading cart items...</div>
+    return <div>Loading cart items...</div>;
   }
 
   const onCouponSubmit = () => {
     toast.promise(new Promise((_, reject) => setTimeout(reject, 2500)), {
-      loading: "Applying coupon...",
-      success: "Coupon applied successfully!",
-      error: "Coupon is invalid or expired.",
-    })
+      loading: 'Applying coupon...',
+      success: 'Coupon applied successfully!',
+      error: 'Coupon is invalid or expired.',
+    });
 
-    couponForm.reset()
-  }
+    couponForm.reset();
+  };
 
   const handleCheckout = () => {
     if (!defaultAddress) {
-      toast.error(
-        "Please select a delivery address before proceeding to payment."
-      )
-      return
+      toast.error('Please select a delivery address before proceeding to payment.');
+      return;
     }
 
     checkout({
@@ -126,9 +116,9 @@ export function CartContent({ user }: CartContentProps) {
             title: item.title,
           },
         })) ?? [],
-      addressId: addressForm.getValues("id"),
-    })
-  }
+      addressId: addressForm.getValues('id'),
+    });
+  };
 
   return (
     <div className="relative mt-6 flex flex-col max-md:gap-20 md:flex-row">
@@ -139,9 +129,7 @@ export function CartContent({ user }: CartContentProps) {
         >
           <ItemContent>
             <ItemTitle>Hold on!</ItemTitle>
-            <ItemDescription>
-              Add $130.04 more for free shipping
-            </ItemDescription>
+            <ItemDescription>Add $130.04 more for free shipping</ItemDescription>
           </ItemContent>
           <ItemActions>
             <span>$369.96 / $500.00</span>
@@ -151,17 +139,13 @@ export function CartContent({ user }: CartContentProps) {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg leading-normal">
-              Checkout Items
-            </CardTitle>
-            <CardDescription>
-              {totatCartItems} items in your bag
-            </CardDescription>
+            <CardTitle className="text-lg leading-normal">Checkout Items</CardTitle>
+            <CardDescription>{totatCartItems} items in your bag</CardDescription>
           </CardHeader>
           <CardContent>
             {cart && cart.items.length > 0 && (
               <div className="scrollbar flex grow flex-col overflow-y-auto">
-                {uniqBy(cart.items, "id").map((item, itemIndex) => (
+                {uniqBy(cart.items, 'id').map((item, itemIndex) => (
                   <React.Fragment key={item.id}>
                     {itemIndex > 0 && itemIndex < cart.items.length && (
                       <Separator className="my-6" />
@@ -243,15 +227,10 @@ export function CartContent({ user }: CartContentProps) {
       <div className="relative grow md:max-w-2/5">
         <Card className="sticky top-22 mx-auto w-full max-w-sm">
           <CardHeader>
-            <CardTitle className="text-lg leading-normal">
-              Order Summary
-            </CardTitle>
+            <CardTitle className="text-lg leading-normal">Order Summary</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            <form
-              className="w-full"
-              onSubmit={couponForm.handleSubmit(onCouponSubmit)}
-            >
+            <form className="w-full" onSubmit={couponForm.handleSubmit(onCouponSubmit)}>
               <Controller
                 control={couponForm.control}
                 name="code"
@@ -276,9 +255,7 @@ export function CartContent({ user }: CartContentProps) {
                         </InputGroupButton>
                       </InputGroupAddon>
                     </InputGroup>
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>
                 )}
               />
@@ -295,9 +272,9 @@ export function CartContent({ user }: CartContentProps) {
                       cart
                         ? cart.items.reduce(
                             (total, item) => total + item.price * item.quantity,
-                            0
+                            0,
                           )
-                        : 0
+                        : 0,
                     )}
                   </p>
                 </dd>
@@ -312,9 +289,9 @@ export function CartContent({ user }: CartContentProps) {
                       cart
                         ? cart.items.reduce(
                             (total, item) => total + item.price * item.quantity,
-                            0
+                            0,
                           )
-                        : 0
+                        : 0,
                     )}
                   </p>
                 </dd>
@@ -332,9 +309,9 @@ export function CartContent({ user }: CartContentProps) {
                       cart
                         ? cart.items.reduce(
                             (total, item) => total + item.price * item.quantity,
-                            0
+                            0,
                           )
-                        : 0
+                        : 0,
                     )}
                   </Large>
                 </dd>
@@ -350,14 +327,10 @@ export function CartContent({ user }: CartContentProps) {
                 onClick={handleCheckout}
               >
                 {isCheckoutPending && <Spinner />}
-                {isCheckoutPending
-                  ? "Processing your order..."
-                  : "Proceed to Payment"}
+                {isCheckoutPending ? 'Processing your order...' : 'Proceed to Payment'}
                 <ChevronRight />
               </Button>
-              <Muted className="text-center">
-                Taxes calculated at checkout
-              </Muted>
+              <Muted className="text-center">Taxes calculated at checkout</Muted>
             </div>
             {/* <Separator className="my-4" />
             <div className="max-w-xs space-y-2 self-start text-sm">
@@ -378,5 +351,5 @@ export function CartContent({ user }: CartContentProps) {
         </Card>
       </div>
     </div>
-  )
+  );
 }

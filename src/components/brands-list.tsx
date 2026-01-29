@@ -52,7 +52,7 @@ export function BrandList({ initialData, totalBrands, ...props }: BrandListProps
     if (!isInView || !hasNextPage || isFetchingNextPage) return;
 
     fetchNextPage();
-  }, [isInView]);
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage, isInView]);
 
   return (
     <section {...props}>

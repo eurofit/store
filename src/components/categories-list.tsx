@@ -488,7 +488,7 @@ export function Component() {
           <div className="grid items-center gap-8 md:grid-cols-2">
             <div>
               <h1 className="font-montserrat mb-4 text-4xl font-bold md:text-5xl">
-                Kenya's Leading Supplier of Genuine European Fitness Products
+                Kenya&apos;s Leading Supplier of Genuine European Fitness Products
               </h1>
               <p className="font-dm-sans mb-6 text-xl text-blue-100">
                 Get authentic supplements, sports nutrition, and skincare products at
@@ -622,7 +622,8 @@ export function Component() {
                 <span className="font-montserrat text-xl font-bold">Eurofit</span>
               </div>
               <p className="font-dm-sans mb-4 text-gray-400">
-                Kenya's biggest and leading supplier of genuine European fitness products.
+                Kenya&apos;s biggest and leading supplier of genuine European fitness
+                products.
               </p>
             </div>
             <div>

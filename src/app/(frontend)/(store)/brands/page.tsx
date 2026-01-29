@@ -7,6 +7,7 @@ import { TotalBrands } from '@/components/total-brands';
 import { site } from '@/constants/site';
 import { getBrandsJsonLd } from '@/utils/brand/get-brand-list-jsonld';
 import { Metadata } from 'next';
+import Image from 'next/image';
 import * as React from 'react';
 
 export const metadata: Metadata = {
@@ -40,10 +41,13 @@ export default async function BrandsPage({
       <JsonLd jsonLd={jsonLds} />
 
       <div className="flex h-[35vh] overflow-visible">
-        <img
+        <Image
           src="/bg-3.png"
           alt="Athlete"
+          width={900}
+          height={900}
           className="hidden h-full w-auto object-contain md:inline"
+          priority
         />
 
         <div className="relative flex h-full grow flex-col items-center justify-center gap-6 max-md:p-6 md:bg-[url('/bg.png')] md:bg-cover md:bg-bottom md:before:absolute md:before:inset-0 md:before:backdrop-blur-md md:before:content-[''] md:after:absolute md:after:left-0 md:after:h-full md:after:w-2 md:after:-translate-x-1/2 md:after:backdrop-blur-xl md:after:content-['']">
