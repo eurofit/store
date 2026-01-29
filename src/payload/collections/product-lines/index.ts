@@ -1,120 +1,120 @@
-import { slugField } from "../../fields/slug"
-import { CollectionConfig } from "payload"
-import { checkIfBackOrder } from "./hooks/check-if-back-ordered"
-import { checkIfLowStock } from "./hooks/check-if-low-stock"
-import { checkIfOutOfStock } from "./hooks/check-if-out-stock"
-import { checkIfNotfiyRequested } from "./hooks/check-notify-requested"
+import { CollectionConfig, slugField } from 'payload';
+import { checkIfBackOrder } from './hooks/check-if-back-ordered';
+import { checkIfLowStock } from './hooks/check-if-low-stock';
+import { checkIfOutOfStock } from './hooks/check-if-out-stock';
+import { checkIfNotfiyRequested } from './hooks/check-notify-requested';
 
 export const productLines: CollectionConfig = {
-  slug: "product-lines",
+  slug: 'product-lines',
   typescript: {
-    interface: "ProductLine",
+    interface: 'ProductLine',
   },
   labels: {
-    singular: "Product Line",
-    plural: "Product Lines",
+    singular: 'Product Line',
+    plural: 'Product Lines',
   },
   admin: {
-    useAsTitle: "title",
-    listSearchableFields: ["sku", "variant", "title", "barcode", "slug"],
-    defaultColumns: ["title", "variant", "sku", "expiryDate", "stock"],
+    useAsTitle: 'title',
+    listSearchableFields: ['sku', 'variant', 'title', 'barcode', 'slug'],
+    defaultColumns: ['title', 'variant', 'sku', 'expiryDate', 'stock'],
   },
   fields: [
     // === Sidebar Fields ===
-    ...slugField("title", {
-      slugOverrides: {
-        admin: {
+    slugField({
+      overrides: (field) => {
+        field.fields[1].admin = {
+          ...field.fields[1].admin,
           description:
             'Used in URLs like "/products/optimum-whey-900g". Auto-generated from the product title but can be edited.',
-        },
+        };
+        return field;
       },
     }),
     {
-      name: "sku",
-      type: "text",
+      name: 'sku',
+      type: 'text',
       required: true,
       unique: true,
-      label: "SKU",
+      label: 'SKU',
       admin: {
-        position: "sidebar",
-        description: "Unique internal ID for managing inventory.",
+        position: 'sidebar',
+        description: 'Unique internal ID for managing inventory.',
       },
     },
     {
-      name: "active",
-      type: "checkbox",
+      name: 'active',
+      type: 'checkbox',
       required: true,
       defaultValue: true,
-      label: "Available for Sale",
+      label: 'Available for Sale',
       admin: {
-        position: "sidebar",
-        description: "Uncheck to hide this product from the store.",
+        position: 'sidebar',
+        description: 'Uncheck to hide this product from the store.',
       },
     },
 
     // === General Information ===
     {
-      type: "collapsible",
-      label: "General Information",
+      type: 'collapsible',
+      label: 'General Information',
       fields: [
         {
-          name: "title",
-          type: "text",
+          name: 'title',
+          type: 'text',
           required: true,
           index: true,
-          label: "Product Title",
+          label: 'Product Title',
           admin: {
             description:
               'Full name of the product, e.g. "Optimum Nutrition Whey 900g Banana".',
           },
         },
         {
-          type: "row",
+          type: 'row',
           fields: [
             {
-              name: "size",
-              type: "text",
-              label: "Size",
+              name: 'size',
+              type: 'text',
+              label: 'Size',
               admin: {
                 description: 'Package size, e.g. "900g".',
               },
             },
             {
-              name: "flavorColor",
-              type: "text",
-              label: "Flavor / Color",
+              name: 'flavorColor',
+              type: 'text',
+              label: 'Flavor / Color',
               admin: {
-                description: "Flavor or color of this product variant.",
+                description: 'Flavor or color of this product variant.',
               },
             },
           ],
         },
         {
-          name: "variant",
-          type: "text",
-          label: "Variant",
+          name: 'variant',
+          type: 'text',
+          label: 'Variant',
           admin: {
-            description:
-              'Display name like "900g / Banana Cream". Auto or manual.',
+            description: 'Display name like "900g / Banana Cream". Auto or manual.',
           },
         },
         {
-          type: "row",
+          type: 'row',
           fields: [
             {
-              name: "product",
-              type: "relationship",
-              relationTo: "products",
+              name: 'product',
+              type: 'relationship',
+              relationTo: 'products',
               required: true,
-              label: "Parent Product",
+              label: 'Parent Product',
               admin: {
-                description: "The main product this variation belongs to.",
+                description: 'The main product this variation belongs to.',
               },
             },
             {
-              name: "category",
-              type: "text",
-              label: "Category",
+              name: 'category',
+              type: 'text',
+              label: 'Category',
               admin: {
                 description: 'Product type like "Protein", "Vitamins".',
               },
@@ -126,19 +126,19 @@ export const productLines: CollectionConfig = {
 
     // === Images ===
     {
-      type: "collapsible",
-      label: "Images",
+      type: 'collapsible',
+      label: 'Images',
       fields: [
         {
-          name: "images",
-          type: "upload",
-          relationTo: "media",
+          name: 'images',
+          type: 'upload',
+          relationTo: 'media',
           hasMany: true,
           maxRows: 6,
-          label: "Product Images",
+          label: 'Product Images',
           admin: {
             description:
-              "Upload up to 6 images for this product. If none, it will use the parent product image.",
+              'Upload up to 6 images for this product. If none, it will use the parent product image.',
           },
         },
       ],
@@ -146,40 +146,40 @@ export const productLines: CollectionConfig = {
 
     // === Pricing ===
     {
-      type: "collapsible",
-      label: "Pricing",
+      type: 'collapsible',
+      label: 'Pricing',
       fields: [
         {
-          name: "srcPrice",
-          type: "number",
-          label: "Source Price (GBP)",
+          name: 'srcPrice',
+          type: 'number',
+          label: 'Source Price (GBP)',
           admin: {
-            description: "Original price from the supplier in GBP.",
+            description: 'Original price from the supplier in GBP.',
           },
         },
         {
-          name: "srcDiscountedPrice",
-          type: "number",
-          label: "Source Discounted Price (GBP)",
+          name: 'srcDiscountedPrice',
+          type: 'number',
+          label: 'Source Discounted Price (GBP)',
           admin: {
-            description: "Discounted supplier price, if any.",
+            description: 'Discounted supplier price, if any.',
           },
         },
         {
-          name: "retailPrice",
-          type: "number",
-          label: "Retail Price (KES)",
+          name: 'retailPrice',
+          type: 'number',
+          label: 'Retail Price (KES)',
           admin: {
             description:
-              "Customer price in KES (calculated from source price, shipping, margin).",
+              'Customer price in KES (calculated from source price, shipping, margin).',
           },
         },
         {
-          name: "wholesalePrice",
-          type: "number",
-          label: "Wholesale Price (KES)",
+          name: 'wholesalePrice',
+          type: 'number',
+          label: 'Wholesale Price (KES)',
           admin: {
-            description: "Bulk buyer price in KES (lower margin).",
+            description: 'Bulk buyer price in KES (lower margin).',
           },
         },
       ],
@@ -187,94 +187,93 @@ export const productLines: CollectionConfig = {
 
     // === Inventory ===
     {
-      type: "collapsible",
-      label: "Inventory",
+      type: 'collapsible',
+      label: 'Inventory',
       fields: [
         {
-          type: "row",
+          type: 'row',
           fields: [
             {
-              name: "stock",
-              type: "number",
+              name: 'stock',
+              type: 'number',
               defaultValue: 0,
               required: true,
-              label: "In-House Stock",
+              label: 'In-House Stock',
               admin: {
-                description: "Units you have on hand.",
+                description: 'Units you have on hand.',
               },
             },
             {
-              name: "srcStock",
-              type: "number",
-              label: "Backup Stock",
+              name: 'srcStock',
+              type: 'number',
+              label: 'Backup Stock',
               admin: {
                 description:
-                  "Units available from manufacturer / distributor or any external source.",
+                  'Units available from manufacturer / distributor or any external source.',
               },
             },
           ],
         },
         {
-          type: "row",
+          type: 'row',
           fields: [
             {
-              name: "onPallet",
-              type: "number",
-              label: "Units per Pallet",
+              name: 'onPallet',
+              type: 'number',
+              label: 'Units per Pallet',
               admin: {
-                description: "How many units fit on one pallet.",
+                description: 'How many units fit on one pallet.',
               },
             },
             {
-              name: "inCase",
-              type: "number",
-              label: "Units per Case",
+              name: 'inCase',
+              type: 'number',
+              label: 'Units per Case',
               admin: {
-                description: "How many units in one box / case.",
+                description: 'How many units in one box / case.',
               },
             },
           ],
         },
         {
-          type: "row",
+          type: 'row',
           fields: [
             {
-              name: "expiryDate",
-              type: "date",
-              label: "Expiry Date",
+              name: 'expiryDate',
+              type: 'date',
+              label: 'Expiry Date',
               admin: {
-                description: "Product expiration (if applies).",
+                description: 'Product expiration (if applies).',
               },
             },
             {
-              name: "weight",
-              type: "number",
-              label: "Weight (Kg)",
+              name: 'weight',
+              type: 'number',
+              label: 'Weight (Kg)',
               admin: {
-                description: "Used for shipping cost calc.",
+                description: 'Used for shipping cost calc.',
               },
             },
           ],
         },
         {
-          type: "row",
+          type: 'row',
           fields: [
             {
-              name: "servingSizePerContainer",
-              type: "number",
-              label: "Total Servings",
+              name: 'servingSizePerContainer',
+              type: 'number',
+              label: 'Total Servings',
               admin: {
                 description:
-                  "How much product is in the pack (helps predict how long it lasts).",
+                  'How much product is in the pack (helps predict how long it lasts).',
               },
             },
             {
-              name: "servingSize",
-              type: "number",
-              label: "Daily Serving",
+              name: 'servingSize',
+              type: 'number',
+              label: 'Daily Serving',
               admin: {
-                description:
-                  "Recommended daily amount. Used to estimate finish date.",
+                description: 'Recommended daily amount. Used to estimate finish date.',
               },
             },
           ],
@@ -284,46 +283,46 @@ export const productLines: CollectionConfig = {
 
     // === Codes ===
     {
-      type: "collapsible",
-      label: "Codes & Compliance",
+      type: 'collapsible',
+      label: 'Codes & Compliance',
       fields: [
         {
-          name: "srcProductCode",
-          type: "text",
-          label: "Source Product Code",
+          name: 'srcProductCode',
+          type: 'text',
+          label: 'Source Product Code',
           admin: {
-            description: "Supplier’s product code.",
+            description: 'Supplier’s product code.',
           },
         },
         {
-          name: "barcode",
-          type: "text",
-          label: "Barcode",
+          name: 'barcode',
+          type: 'text',
+          label: 'Barcode',
           admin: {
-            description: "Retail scan code (EAN/UPC).",
+            description: 'Retail scan code (EAN/UPC).',
           },
           index: true,
         },
         {
-          name: "exportCommodityCode",
-          type: "text",
-          label: "Export Commodity Code",
+          name: 'exportCommodityCode',
+          type: 'text',
+          label: 'Export Commodity Code',
           admin: {
-            description: "Customs / HS code for export.",
+            description: 'Customs / HS code for export.',
           },
         },
       ],
     },
     {
-      name: "isNotifyRequested",
-      type: "checkbox",
+      name: 'isNotifyRequested',
+      type: 'checkbox',
       defaultValue: false,
       required: true,
       virtual: true,
       admin: {
         hidden: true,
         description:
-          "Indicates if a customer has requested notification for back-in-stock status. Managed programmatically.  ",
+          'Indicates if a customer has requested notification for back-in-stock status. Managed programmatically.  ',
       },
       hooks: {
         afterRead: [checkIfNotfiyRequested],
@@ -331,30 +330,30 @@ export const productLines: CollectionConfig = {
     },
 
     {
-      name: "isLowStock",
-      type: "checkbox",
+      name: 'isLowStock',
+      type: 'checkbox',
       defaultValue: false,
       required: true,
       virtual: true,
       admin: {
         hidden: true,
         description:
-          "Indicates if the product stock is below the low stock threshold. Managed programmatically.",
+          'Indicates if the product stock is below the low stock threshold. Managed programmatically.',
       },
       hooks: {
         afterRead: [checkIfLowStock],
       },
     },
     {
-      name: "isOutOfStock",
-      type: "checkbox",
+      name: 'isOutOfStock',
+      type: 'checkbox',
       defaultValue: true,
       required: true,
       virtual: true,
       admin: {
         hidden: true,
         description:
-          "Indicates if the product is out of stock. Managed programmatically.",
+          'Indicates if the product is out of stock. Managed programmatically.',
       },
       hooks: {
         afterRead: [checkIfOutOfStock],
@@ -362,30 +361,30 @@ export const productLines: CollectionConfig = {
     },
 
     {
-      name: "isBackorder",
-      type: "checkbox",
+      name: 'isBackorder',
+      type: 'checkbox',
       defaultValue: false,
       required: true,
       virtual: true,
       admin: {
         hidden: true,
         description:
-          "Indicates if the product is back-orderable. Managed programmatically.",
+          'Indicates if the product is back-orderable. Managed programmatically.',
       },
       hooks: {
         afterRead: [checkIfBackOrder],
       },
     },
     {
-      name: "inventory",
-      type: "join",
-      collection: "inventory",
-      on: "item",
+      name: 'inventory',
+      type: 'join',
+      collection: 'inventory',
+      on: 'item',
       hasMany: false,
     },
     {
-      name: "inventoryStock",
-      type: "number",
+      name: 'inventoryStock',
+      type: 'number',
       virtual: true,
       defaultValue: 0,
     },
@@ -394,4 +393,4 @@ export const productLines: CollectionConfig = {
   hooks: {
     // afterChange: [revalidateProductLineCache],
   },
-}
+};

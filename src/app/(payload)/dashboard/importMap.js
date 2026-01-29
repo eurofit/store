@@ -1,4 +1,4 @@
-import { Slug as Slug_efd234531eacad4ed60ccea93a5f39ee } from '@/payload/fields/slug/slug'
+import { SlugField as SlugField_3817bf644402e67bfe6577f60ef982de } from '@payloadcms/ui'
 import { ImageCell as ImageCell_5f72c840f1660eba96ea6c4810e2351e } from '@/payload/fields/image-cell'
 import { TotalItemsCell as TotalItemsCell_ec30532c6a2c92fc6c3e955ceb7407fb } from '@/payload/fields/cart/total-items-cell'
 import { RowLabel as RowLabel_136f5c07131edccd38c6dc479a848911 } from '@/payload/globals/nav/row-label'
@@ -9,7 +9,7 @@ import { UsersCount as UsersCount_5fef82ed03041c021d62c54e18eea35b } from '@/com
 import { CollectionCards as CollectionCards_ab83ff7e88da8d3530831f296ec4756a } from '@payloadcms/ui/rsc'
 
 export const importMap = {
-  "@/payload/fields/slug/slug#Slug": Slug_efd234531eacad4ed60ccea93a5f39ee,
+  "@payloadcms/ui#SlugField": SlugField_3817bf644402e67bfe6577f60ef982de,
   "@/payload/fields/image-cell#ImageCell": ImageCell_5f72c840f1660eba96ea6c4810e2351e,
   "@/payload/fields/cart/total-items-cell#TotalItemsCell": TotalItemsCell_ec30532c6a2c92fc6c3e955ceb7407fb,
   "@/payload/globals/nav/row-label#RowLabel": RowLabel_136f5c07131edccd38c6dc479a848911,

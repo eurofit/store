@@ -370,10 +370,13 @@ export interface Cart {
 export interface ProductLine {
   id: string;
   /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  /**
    * Used in URLs like "/products/optimum-whey-900g". Auto-generated from the product title but can be edited.
    */
   slug: string;
-  slugLock: boolean;
   /**
    * Unique internal ID for managing inventory.
    */
@@ -513,8 +516,11 @@ export interface Product {
    * A descriptive title for the product, used for display purposes.
    */
   title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
   slug: string;
-  slugLock: boolean;
   /**
    * Specify the origin of the product, such as country or region.
    */
@@ -571,8 +577,11 @@ export interface Brand {
    * The name of the brand, used for display and identification.
    */
   title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
   slug: string;
-  slugLock: boolean;
   /**
    * The main image like logo of the brand. This is used as the primary image for the brand. If you have specified the image, this will be used as a fallback.
    */
@@ -600,8 +609,11 @@ export interface Brand {
  */
 export interface Category {
   id: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
   slug: string;
-  slugLock: boolean;
   /**
    * Enter the name of the category.
    */
@@ -940,8 +952,8 @@ export interface AddressesSelect<T extends boolean = true> {
  */
 export interface BrandsSelect<T extends boolean = true> {
   title?: T;
+  generateSlug?: T;
   slug?: T;
-  slugLock?: T;
   srcImage?: T;
   logo?: T;
   srcUrl?: T;
@@ -958,8 +970,8 @@ export interface ProductsSelect<T extends boolean = true> {
   active?: T;
   brand?: T;
   title?: T;
+  generateSlug?: T;
   slug?: T;
-  slugLock?: T;
   origin?: T;
   images?: T;
   srcImage?: T;
@@ -989,8 +1001,8 @@ export interface ProductsSelect<T extends boolean = true> {
  * via the `definition` "product-lines_select".
  */
 export interface ProductLinesSelect<T extends boolean = true> {
+  generateSlug?: T;
   slug?: T;
-  slugLock?: T;
   sku?: T;
   active?: T;
   title?: T;
@@ -1029,8 +1041,8 @@ export interface ProductLinesSelect<T extends boolean = true> {
  * via the `definition` "categories_select".
  */
 export interface CategoriesSelect<T extends boolean = true> {
+  generateSlug?: T;
   slug?: T;
-  slugLock?: T;
   title?: T;
   type?: T;
   description?: T;

@@ -1,5 +1,4 @@
-import { CollectionConfig } from 'payload';
-import { slugField } from '../../fields/slug';
+import { CollectionConfig, slugField } from 'payload';
 import { getRelatedProducts } from './hooks/get-related-products';
 
 export const products: CollectionConfig = {
@@ -49,7 +48,7 @@ export const products: CollectionConfig = {
       },
       required: true,
     },
-    ...slugField('title'),
+    slugField(),
     {
       name: 'origin',
       type: 'text',

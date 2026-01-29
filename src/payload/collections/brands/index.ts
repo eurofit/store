@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload';
-import { slugField } from '../../fields/slug';
+import { slugField } from 'payload';
 
 export const brands: CollectionConfig = {
   slug: 'brands',
@@ -34,7 +34,7 @@ export const brands: CollectionConfig = {
       },
       index: true,
     },
-    ...slugField(),
+    slugField(),
 
     {
       name: 'srcImage',

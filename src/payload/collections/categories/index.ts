@@ -1,6 +1,5 @@
-import { slugField } from '../../fields/slug';
 import { createBreadcrumbsField } from '@payloadcms/plugin-nested-docs';
-import { CollectionConfig } from 'payload';
+import { CollectionConfig, slugField } from 'payload';
 
 export const categories: CollectionConfig = {
   slug: 'categories',
@@ -21,7 +20,7 @@ export const categories: CollectionConfig = {
     slug: true,
   },
   fields: [
-    ...slugField('title'),
+    slugField(),
     {
       name: 'title',
       type: 'text',
