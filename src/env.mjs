@@ -6,6 +6,7 @@ export const env = createEnv({
   server: {
     NODE_ENV: z.enum(['development', 'test', 'production']),
     DATABASE_URI: z.string().min(1),
+    PAYLOAD_CONFIG_PATH: z.string().min(1),
     PAYLOAD_SECRET: z.string().min(1),
     GMAIL_PASSWORD: z.string().min(1),
     GMAIL: z.email(),
@@ -29,6 +30,7 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     DATABASE_URI: process.env.DATABASE_URI,
+    PAYLOAD_CONFIG_PATH: process.env.PAYLOAD_CONFIG_PATH,
     PAYLOAD_SECRET: process.env.PAYLOAD_SECRET,
     GMAIL: process.env.GMAIL,
     GMAIL_PASSWORD: process.env.GMAIL_PASSWORD,
