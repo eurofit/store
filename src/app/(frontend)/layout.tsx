@@ -1,16 +1,16 @@
-import { dmSans } from "@/app/fonts/dm-sans"
-import { montserrat } from "@/app/fonts/montserrat"
-import "@/app/globals.css"
-import { JsonLd } from "@/components/json-ld"
-import { TailwindIndicator } from "@/components/tailwind-indicator"
-import { Toaster } from "@/components/ui/sonner"
-import { localBusiness, organization, website } from "@/constants/json-ld"
-import { site } from "@/constants/site"
-import { JotaiProvider } from "@/providers/jotai"
-import { ReactQueryProvider } from "@/providers/react-query"
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
-import type { Metadata, Viewport } from "next"
-import NextTopLoader from "nextjs-toploader"
+import '@/app/globals.css';
+import { JsonLd } from '@/components/json-ld';
+import { TailwindIndicator } from '@/components/tailwind-indicator';
+import { Toaster } from '@/components/ui/sonner';
+import { localBusiness, organization, website } from '@/constants/json-ld';
+import { site } from '@/constants/site';
+import { dmSans } from '@/fonts/dm-sans';
+import { montserrat } from '@/fonts/montserrat';
+import { JotaiProvider } from '@/providers/jotai';
+import { ReactQueryProvider } from '@/providers/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import type { Metadata, Viewport } from 'next';
+import NextTopLoader from 'nextjs-toploader';
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -20,18 +20,18 @@ export const metadata: Metadata = {
   },
   description: site.description,
   other: {
-    "apple-mobile-web-app-title": site.name,
+    'apple-mobile-web-app-title': site.name,
   },
-}
+};
 
 export const viewport: Viewport = {
-  themeColor: "#FFFFFF",
-}
+  themeColor: '#FFFFFF',
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="en">
@@ -58,5 +58,5 @@ export default function RootLayout({
         </JotaiProvider>
       </body>
     </html>
-  )
+  );
 }
