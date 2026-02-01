@@ -1,0 +1,20 @@
+'use client';
+
+import { Order } from '@/types';
+import { CellContext } from '@tanstack/react-table';
+import Link from 'next/link';
+
+type IdCellProps = CellContext<Order, unknown>;
+
+export function IdCell({ getValue }: IdCellProps) {
+  const value = getValue<number>();
+
+  return (
+    <Link
+      href={`/orders/` + value.toString()}
+      className="text-red-600 hover:underline hover:underline-offset-4"
+    >
+      #{value.toString()}
+    </Link>
+  );
+}

@@ -1,11 +1,11 @@
-import { getAllBrands } from '@/actions/brands/get-brands';
+import { getBrands } from '@/actions/brands/get-brands';
 import { BrandsSkeleton } from '@/components/brand-card';
 import { BrandSearch } from '@/components/brand-search';
 import { Brands } from '@/components/brands';
 import { JsonLd } from '@/components/json-ld';
 import { TotalBrands } from '@/components/total-brands';
 import { site } from '@/constants/site';
-import { getBrandsJsonLd } from '@/utils/brand/get-brand-list-jsonld';
+import { getBrandListJsonLd } from '@/utils/brand/get-brand-list-jsonld';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import * as React from 'react';
@@ -18,6 +18,8 @@ export const metadata: Metadata = {
   },
 };
 
+const BRANDS_LIMIT = 35;
+
 type BrandsPageProps = {
   searchParams: Promise<{
     page?: string;
@@ -27,13 +29,29 @@ type BrandsPageProps = {
 export default async function BrandsPage({
   searchParams: searchParamsPromise,
 }: BrandsPageProps) {
-  const page = searchParamsPromise.then((params) => Number(params.page) || 1);
+  const searchParams = await searchParamsPromise;
+  const page = Number(searchParams.page) || 1;
 
-  const { brands } = await getAllBrands();
+  const {
+    brands,
+    totalBrands,
+    pagingCounter,
+    hasNextPage,
+    hasPrevPage,
+    nextPage,
+    prevPage,
+  } = await getBrands({ page, limit: BRANDS_LIMIT });
 
   // --- JSON LD'S ---
-  const jsonLds = getBrandsJsonLd({
+  const jsonLds = getBrandListJsonLd({
     brands,
+    totalBrands,
+    page,
+    pagingCounter,
+    hasNextPage,
+    hasPrevPage,
+    nextPage,
+    prevPage,
   });
 
   return (

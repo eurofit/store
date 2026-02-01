@@ -17,6 +17,7 @@ export type Brand = {
   slug: string;
   title: string;
   image?: string | null;
+  updatedAt?: string;
 };
 
 export type ProductLine = {
@@ -46,6 +47,17 @@ export type Category = {
   id: string;
   slug: string;
   title: string;
+};
+
+// =======================
+// ORDERS
+// =======================
+
+export type Order = {
+  id: number;
+  createdAt: string;
+  total?: number | null;
+  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
 };
 
 // =======================

@@ -680,8 +680,7 @@ export interface StockAlert {
  * via the `definition` "orders".
  */
 export interface Order {
-  id: string;
-  orderIdNumber: number;
+  id: number;
   customer: string | User;
   address: string | Address;
   items: {
@@ -730,7 +729,7 @@ export interface Order {
  */
 export interface Transaction {
   id: string;
-  order: string | Order;
+  order: number | Order;
   amount: number;
   ref: string;
   provider: string;
@@ -743,8 +742,8 @@ export interface Transaction {
  */
 export interface OrderStatus {
   id: string;
-  order: string | Order;
-  staff?: (string | null) | User;
+  order: number | Order;
+  staff: string | User;
   status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
   visibleToCustomer: boolean;
   updatedAt: string;
@@ -808,7 +807,7 @@ export interface PayloadLockedDocument {
       } | null)
     | ({
         relationTo: 'orders';
-        value: string | Order;
+        value: number | Order;
       } | null)
     | ({
         relationTo: 'order-statuses';
@@ -1092,7 +1091,7 @@ export interface CartsSelect<T extends boolean = true> {
  * via the `definition` "orders_select".
  */
 export interface OrdersSelect<T extends boolean = true> {
-  orderIdNumber?: T;
+  id?: T;
   customer?: T;
   address?: T;
   items?:

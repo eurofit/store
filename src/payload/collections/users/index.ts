@@ -59,6 +59,7 @@ export const users: CollectionConfig = {
         description: 'The first name of the user.',
       },
       index: true,
+      saveToJWT: true,
     },
     {
       name: 'middleName',
@@ -78,6 +79,7 @@ export const users: CollectionConfig = {
         description: 'The last name of the user.',
       },
       index: true,
+      saveToJWT: true,
     },
     {
       name: 'fullName',
@@ -91,6 +93,7 @@ export const users: CollectionConfig = {
       hooks: {
         afterRead: [getUserFullName],
       },
+      saveToJWT: true,
     },
 
     {

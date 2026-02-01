@@ -7,7 +7,7 @@ import React from 'react';
 const logoVariants = cva('font-montserrat uppercase not-italic no-underline!', {
   variants: {
     variant: {
-      default: 'text-xl font-bold',
+      default: 'text-xl font-black',
       inline: 'inline text-base font-medium',
     },
   },

@@ -1,28 +1,24 @@
-import { getBrands } from "@/actions/brands/get-brands"
-import { BrandList } from "./brands-list"
-import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "./ui/empty"
+import { getBrands } from '@/actions/brands/get-brands';
+import { BrandList } from './brands-list';
+import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from './ui/empty';
 
 type BrandsProps = {
-  page: Promise<number>
-}
+  page: number;
+};
 
-const PAGE_LIMIT = 35
+const BRANDS_LIMIT = 35;
 
-export async function Brands({ page: pagePromise }: BrandsProps) {
-  const page = await pagePromise
-
+export async function Brands({ page }: BrandsProps) {
   const initialData = await getBrands({
     page,
-    limit: PAGE_LIMIT,
-  })
+    limit: BRANDS_LIMIT,
+  });
 
-  if (!initialData.totalDocs) {
-    return <EmptyBrands />
+  if (!initialData.totalBrands) {
+    return <EmptyBrands />;
   }
 
-  return (
-    <BrandList initialData={initialData} totalBrands={initialData.totalDocs} />
-  )
+  return <BrandList initialData={initialData} totalBrands={initialData.totalBrands} />;
 }
 
 function EmptyBrands() {
@@ -31,10 +27,10 @@ function EmptyBrands() {
       <EmptyHeader>
         <EmptyTitle>Empty Brands</EmptyTitle>
         <EmptyDescription>
-          We are currently fixing a technical issue where our available brands
-          are not showing.
+          We are currently fixing a technical issue where our available brands are not
+          showing.
         </EmptyDescription>
       </EmptyHeader>
     </Empty>
-  )
+  );
 }

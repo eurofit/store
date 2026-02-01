@@ -1,17 +1,17 @@
-"use server"
+'use server';
 
-import payloadConfig from "@/payload/config"
-import { getPayload } from "payload"
+import payloadConfig from '@/payload/config';
+import { getPayload } from 'payload';
 
 type GetBrandArgs = {
-  slug: string
-}
+  slug: string;
+};
 
 export async function getBrand({ slug }: GetBrandArgs) {
-  const payload = await getPayload({ config: payloadConfig })
+  const payload = await getPayload({ config: payloadConfig });
 
   const { docs: brands } = await payload.find({
-    collection: "brands",
+    collection: 'brands',
     where: {
       slug: {
         equals: slug,
@@ -23,7 +23,12 @@ export async function getBrand({ slug }: GetBrandArgs) {
     },
     limit: 1,
     pagination: false,
-  })
+  });
 
-  return brands[0] ?? null
+  const { srcImage, ...brand } = brands[0];
+
+  return {
+    image: srcImage ?? undefined,
+    ...brand,
+  };
 }

@@ -2,18 +2,18 @@ import { Order } from '@/payload/types';
 import { FieldHook } from 'payload';
 
 export const getOrderStatus: FieldHook<Order, Order['status'], Order> = async ({
-  data: currentOrder,
+  data,
   req,
 }) => {
-  // get latest order status from order-statuses collection
   const { docs: orderStatuses } = await req.payload.find({
     collection: 'order-statuses',
     where: {
       order: {
-        equals: currentOrder?.id,
+        equals: data?.id,
       },
     },
     sort: '-createdAt',
+    depth: 0, // Never increment depth to avoid infinite loop
     limit: 1,
     pagination: false,
   });

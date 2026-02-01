@@ -5,7 +5,7 @@ import { Nav, NavSkeleton } from '@/components/nav';
 import { SearchBar } from '@/components/searchbar';
 
 import { UserButton, UserButtonSkeleton } from './auth/user-button';
-import { Cart } from './cart/cart';
+import { Cart } from './cart';
 import { MenuSheet, MenuSheetSkeleton } from './menu-sheet';
 import { SearchSheet } from './search-sheet';
 
@@ -25,18 +25,11 @@ export function Header() {
         <React.Suspense fallback={<div className="flex-1" />}>
           <SearchBar />
         </React.Suspense>
-
         <SearchSheet />
-
         <React.Suspense fallback={<UserButtonSkeleton />}>
           <UserButton />
         </React.Suspense>
-
         <Cart />
-
-        {/* <Button className="md:hidden" variant="outline" size="icon">
-          <Menu />
-        </Button> */}
       </div>
     </header>
   );

@@ -23,7 +23,11 @@ export async function getBrands(opts: GetBrandsOptions) {
   const { page, limit } = options.parse(opts);
 
   const payload = await getPayload({ config: payloadConfig });
-  const { docs: brands, ...r } = await payload.find({
+  const {
+    docs: brands,
+    totalDocs: totalBrands,
+    ...r
+  } = await payload.find({
     collection: 'brands',
     page,
     limit,
@@ -45,6 +49,7 @@ export async function getBrands(opts: GetBrandsOptions) {
       image: b.srcImage,
       updatedAt: b.updatedAt,
     })),
+    totalBrands,
     ...r,
   };
 }

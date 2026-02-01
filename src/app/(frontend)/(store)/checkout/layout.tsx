@@ -1,6 +1,6 @@
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { getCart } from '@/actions/cart';
-import { Heading, Lead } from '@/components/typography';
+import { PageHeading } from '@/components/page-heading';
 import { notFound, redirect } from 'next/navigation';
 import * as React from 'react';
 
@@ -20,12 +20,12 @@ export default async function CheckoutLayout({ children }: CheckoutLayoutProps) 
   }
 
   return (
-    <div>
-      <hgroup className="mb-10 max-w-md">
-        <Heading>Secure Checkout</Heading>
+    <div className="space-y-6 md:space-y-12">
+      <PageHeading
+        title="Secure Checkout"
+        description="Complete your purchase securely and efficiently."
+      />
 
-        <Lead>Complete your purchase securely and efficiently.</Lead>
-      </hgroup>
       {children}
     </div>
   );

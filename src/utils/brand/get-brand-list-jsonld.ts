@@ -1,72 +1,118 @@
-import { site } from "@/constants/site"
-import type { Brand } from "@/types"
+import { site } from '@/constants/site';
+import { Brand } from '@/types';
 import {
-  Brand as BrandSchema,
   BreadcrumbList,
+  ItemList,
+  ListItem,
   Thing,
   WebPage,
   WithContext,
-} from "schema-dts"
+} from 'schema-dts';
 
 type BrandListJsonLdOptions = {
-  brands: Brand[]
-}
+  brands: Brand[];
+  totalBrands: number;
+  page?: number;
+  pagingCounter: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+  nextPage?: number | null;
+  prevPage?: number | null;
+};
 
-export function getBrandsJsonLd({
+export function getBrandListJsonLd({
   brands,
+  totalBrands,
+  page = 1,
+  pagingCounter,
+  hasNextPage,
+  hasPrevPage,
+  nextPage,
+  prevPage,
 }: BrandListJsonLdOptions): WithContext<Thing>[] {
-  const brandsUrl = `${site.url}/brands`
+  const brandsUrl = `${site.url}/brands`;
+  const pageUrl = page > 1 ? `${brandsUrl}?page=${page}` : brandsUrl;
 
   // --- Breadcrumbs ---
-  const breadcrumbId = `${brandsUrl}#breadcrumb`
+  const breadcrumbId = `${pageUrl}#breadcrumb`;
 
   const breadcrumb: WithContext<BreadcrumbList> = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "@id": breadcrumbId,
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    '@id': breadcrumbId,
     itemListElement: [
       {
-        "@type": "ListItem",
+        '@type': 'ListItem',
         position: 1,
-        name: "Home",
+        name: 'Home',
         item: site.url,
       },
       {
-        "@type": "ListItem",
+        '@type': 'ListItem',
         position: 2,
-        name: "Shop By Brand",
+        name: 'Shop by Brand',
         item: brandsUrl,
       },
     ],
-  }
+  };
+
+  // --- Paginated ItemList ---
+  const itemListId = `${pageUrl}#brand-list`;
+
+  const brandItemList: WithContext<ItemList> = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    '@id': itemListId,
+    name: `Sports Nutrition Brands In Kenya Available at ${site.name}`,
+    description: `Paginated list of sports nutrition and supplement brands available in Kenya at ${site.name}.`,
+    itemListOrder: 'https://schema.org/ItemListOrderAlphabetical',
+    numberOfItems: totalBrands,
+    itemListElement: brands.map<ListItem>((brand, index) => {
+      const brandUrl = `${site.url}/brands/${brand.slug}`;
+
+      return {
+        '@type': 'ListItem',
+        position: pagingCounter + index,
+        item: {
+          '@type': 'Brand',
+          '@id': `${brandUrl}#brand`,
+          name: brand.title,
+          url: brandUrl,
+          logo: brand.image ?? undefined,
+        },
+      };
+    }),
+
+    ...(hasNextPage && nextPage
+      ? {
+          nextItem: {
+            '@id': `${brandsUrl}?page=${nextPage}#brand-list`,
+          },
+        }
+      : {}),
+
+    ...(hasPrevPage && prevPage
+      ? {
+          previousItem: {
+            '@id': `${brandsUrl}?page=${prevPage}#brand-list`,
+          },
+        }
+      : {}),
+  };
 
   // --- WebPage ---
   const webpage: WithContext<WebPage> = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "@id": `${brandsUrl}#webpage`,
-    url: brandsUrl,
-    name: "Shop by Brands",
-    description:
-      "Explore our wide range of brands and find your favorites. Discover top sports nutrition brands at unbeatable prices, available in Kenya.",
-    isPartOf: { "@id": `${site.url}/#website` },
-    about: { "@id": `${site.url}/#organization` },
-    breadcrumb: { "@id": breadcrumbId },
-  }
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `${pageUrl}#webpage`,
+    url: pageUrl,
+    name: 'Shop by Brands',
+    description: 'Browse our collection of sports nutrition brands available in Kenya.',
+    isPartOf: { '@id': `${site.url}/#website` },
+    about: { '@id': `${site.url}/#organization` },
+    breadcrumb: { '@id': breadcrumbId },
+    mainEntity: { '@id': itemListId },
+  };
 
-  // --- Brand nodes ---
-  const brandNodes: WithContext<BrandSchema>[] = brands.map((brand) => {
-    const brandUrl = `${site.url}/brands/${brand.slug}`
-    return {
-      "@context": "https://schema.org",
-      "@type": "Brand",
-      "@id": `${brandUrl}#brand`,
-      name: brand.title,
-      url: brandUrl,
-      logo: brand.image ?? undefined,
-      description: `${brand.title} is available in Kenya from ${site.name}.`,
-    }
-  })
-
-  return [breadcrumb, webpage, ...brandNodes]
+  return [breadcrumb, webpage, brandItemList];
 }

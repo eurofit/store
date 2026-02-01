@@ -1,8 +1,8 @@
 'use server';
 
 import { site } from '@/constants/site';
-import { Order } from '@/payload/types';
 import config from '@/payload/config';
+import { Order } from '@/payload/types';
 import { paystack } from '@/paystack';
 import { getPayload } from 'payload';
 import * as z from 'zod';
@@ -63,8 +63,6 @@ export async function checkout(unSafeData: CheckoutArgs) {
   const order = await payload.create({
     collection: 'orders',
     data: {
-      // this will be overriden and  auto-incremented in the collection hook
-      orderIdNumber: -1,
       customer: user.id,
       address: address.id,
       items: orderItems,
@@ -86,13 +84,12 @@ export async function checkout(unSafeData: CheckoutArgs) {
   if (!order.total) throw new Error('Order total is missing');
 
   // init paystack
-
   const res = await paystack.transaction.initialize({
-    reference: order.orderIdNumber.toString(),
+    reference: order.id.toString(),
     email: user.email,
     // convert to cents
     amount: (order.total * 100).toString(),
-    callback_url: site.url + '/thank-you/' + order.orderIdNumber,
+    callback_url: site.url + '/thank-you/' + order.id,
     metadata: {
       cancel_action: site.url + '/checkout',
       order_id: order.id,
@@ -100,7 +97,7 @@ export async function checkout(unSafeData: CheckoutArgs) {
         items,
         user: {
           id: user.id,
-          fullName: `${user.firstName} ${user.lastName}`,
+          fullName: user.fullName,
           email: user.email,
         },
         address: addressWithIdSchema.parse(address),

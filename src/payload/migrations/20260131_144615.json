@@ -744,18 +744,18 @@
           "primaryKey": false,
           "notNull": true
         },
+        "generate_slug": {
+          "name": "generate_slug",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
         "slug": {
           "name": "slug",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
-        },
-        "slug_lock": {
-          "name": "slug_lock",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": true
         },
         "src_image": {
           "name": "src_image",
@@ -823,7 +823,7 @@
               "nulls": "last"
             }
           ],
-          "isUnique": false,
+          "isUnique": true,
           "concurrently": false,
           "method": "btree",
           "with": {}
@@ -925,18 +925,18 @@
           "primaryKey": false,
           "notNull": true
         },
+        "generate_slug": {
+          "name": "generate_slug",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
         "slug": {
           "name": "slug",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
-        },
-        "slug_lock": {
-          "name": "slug_lock",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": true
         },
         "origin": {
           "name": "origin",
@@ -1009,7 +1009,7 @@
               "nulls": "last"
             }
           ],
-          "isUnique": false,
+          "isUnique": true,
           "concurrently": false,
           "method": "btree",
           "with": {}
@@ -1242,18 +1242,18 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
+        "generate_slug": {
+          "name": "generate_slug",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
         "slug": {
           "name": "slug",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
-        },
-        "slug_lock": {
-          "name": "slug_lock",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": true
         },
         "sku": {
           "name": "sku",
@@ -1421,7 +1421,7 @@
               "nulls": "last"
             }
           ],
-          "isUnique": false,
+          "isUnique": true,
           "concurrently": false,
           "method": "btree",
           "with": {}
@@ -1886,18 +1886,18 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
+        "generate_slug": {
+          "name": "generate_slug",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
         "slug": {
           "name": "slug",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
-        },
-        "slug_lock": {
-          "name": "slug_lock",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": true
         },
         "title": {
           "name": "title",
@@ -1956,7 +1956,7 @@
               "nulls": "last"
             }
           ],
-          "isUnique": false,
+          "isUnique": true,
           "concurrently": false,
           "method": "btree",
           "with": {}
@@ -2301,7 +2301,7 @@
         },
         "_parent_id": {
           "name": "_parent_id",
-          "type": "uuid",
+          "type": "numeric",
           "primaryKey": false,
           "notNull": true
         },
@@ -2417,15 +2417,8 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "order_id_number": {
-          "name": "order_id_number",
           "type": "numeric",
-          "primaryKey": false,
+          "primaryKey": true,
           "notNull": true
         },
         "customer_id": {
@@ -2470,21 +2463,6 @@
         }
       },
       "indexes": {
-        "orders_order_id_number_idx": {
-          "name": "orders_order_id_number_idx",
-          "columns": [
-            {
-              "expression": "order_id_number",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "orders_customer_idx": {
           "name": "orders_customer_idx",
           "columns": [
@@ -2593,7 +2571,7 @@
         },
         "order_id": {
           "name": "order_id",
-          "type": "uuid",
+          "type": "numeric",
           "primaryKey": false,
           "notNull": true
         },
@@ -2742,7 +2720,7 @@
         },
         "order_id": {
           "name": "order_id",
-          "type": "uuid",
+          "type": "numeric",
           "primaryKey": false,
           "notNull": true
         },
@@ -3347,7 +3325,7 @@
         },
         "orders_id": {
           "name": "orders_id",
-          "type": "uuid",
+          "type": "numeric",
           "primaryKey": false,
           "notNull": false
         },
@@ -4288,6 +4266,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "b88e8121-f66b-47b5-a1b5-9f08025f65c7",
+  "id": "e9d2fd86-8896-469f-9831-41508e2b730c",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }

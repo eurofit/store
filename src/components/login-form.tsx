@@ -55,14 +55,14 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
       toast.error(
         error instanceof Error ? error.message : 'An unexpected error occurred.',
       );
-      form.setError('email', {
-        type: 'custom',
-        message: 'Credentials do not exist.',
-      });
-      form.setError('password', {
-        type: 'custom',
-        message: 'Credentials do not exist.',
-      });
+      // form.setError('email', {
+      //   type: 'custom',
+      //   message: 'Credentials do not exist.',
+      // });
+      // form.setError('password', {
+      //   type: 'custom',
+      //   message: 'Credentials do not exist.',
+      // });
     },
   });
 

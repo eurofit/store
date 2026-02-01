@@ -1,23 +1,37 @@
 import { getBrand } from '@/actions/brands/get-brand';
+import { site } from '@/constants/site';
+import { Brand as BrandSchema, WithContext } from 'schema-dts';
+import { JsonLd } from './json-ld';
 import { Skeleton } from './ui/skeleton';
 
 type BrandHeaderProps = {
   slug: Promise<string>;
 };
 
-export async function BrandHeader({ slug }: BrandHeaderProps) {
-  const brand = await getBrand({ slug: await slug });
+export async function BrandHeader({ slug: slugPromise }: BrandHeaderProps) {
+  const slug = await slugPromise;
+  const brand = await getBrand({ slug });
+
+  const brandUrl = `${site.url}/brands/${slug}`;
+
+  const brandJsonLd: WithContext<BrandSchema> = {
+    '@context': 'https://schema.org',
+    '@type': 'Brand',
+    '@id': `${brandUrl}#brand`,
+    name: brand.title,
+    url: brandUrl,
+    logo: brand.image,
+  };
 
   return (
-    <div>
+    <>
+      <JsonLd jsonLd={brandJsonLd} />
       <div className="flex items-start gap-4">
-        {/* TODO: add brand logo  */}
-
         <h1 className="text-balanced scroll-m-20 text-4xl font-extrabold tracking-tight">
           {brand.title}
         </h1>
       </div>
-    </div>
+    </>
   );
 }
 

@@ -14,6 +14,31 @@ import { headers as getHeaders } from 'next/headers';
 import Link from 'next/link';
 import { LogoutButton } from '../logout';
 
+type MenuItem = {
+  label: string;
+  href: string;
+  disabled?: boolean;
+};
+
+const menuItems: MenuItem[] = [
+  {
+    label: 'Account',
+    href: '/account',
+  },
+  {
+    label: 'Orders',
+    href: '/account/orders',
+  },
+  {
+    label: 'Stock Alerts',
+    href: '/account/stock-alerts',
+  },
+  {
+    label: 'Wishlist',
+    href: '/account/wishlist',
+  },
+];
+
 export async function UserButton({ className }: { className?: string }) {
   const [headers, user] = await Promise.all([getHeaders(), getCurrentUser()]);
   const pathname = headers.get('x-pathname') ?? '/';
@@ -51,17 +76,13 @@ export async function UserButton({ className }: { className?: string }) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem asChild>
-            <Link href="/account">Account</Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link href="/orders">Orders</Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem disabled>Stock Alerts</DropdownMenuItem>
-          <DropdownMenuItem disabled>Settings</DropdownMenuItem>
+          {menuItems.map((item) => (
+            <DropdownMenuItem key={item.href} asChild disabled={item.disabled}>
+              <Link href={item.href}>{item.label}</Link>
+            </DropdownMenuItem>
+          ))}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-
         <LogoutButton />
       </DropdownMenuContent>
     </DropdownMenu>

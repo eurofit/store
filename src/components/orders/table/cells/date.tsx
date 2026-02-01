@@ -1,0 +1,15 @@
+'use client';
+
+import { Order } from '@/types';
+import { CellContext } from '@tanstack/react-table';
+import { format } from 'date-fns';
+
+type DateCellProps = CellContext<Order, unknown>;
+
+export function DateCell({ getValue }: DateCellProps) {
+  const value = getValue<string>();
+
+  const formattedDate = format(new Date(value), 'MMM dd, yyyy');
+
+  return <time dateTime={value}>{formattedDate}</time>;
+}

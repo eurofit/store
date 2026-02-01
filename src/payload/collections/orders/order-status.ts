@@ -1,43 +1,41 @@
-import { orderStatus as orderStatusOptions } from "@/constants/orders"
-import { CollectionConfig } from "payload"
+import { orderStatus as orderStatusOptions } from '@/constants/orders';
+import { CollectionConfig } from 'payload';
 
 export const orderStatus: CollectionConfig = {
-  slug: "order-statuses",
+  slug: 'order-statuses',
   labels: {
-    singular: "Order Status",
-    plural: "Order Statuses",
+    singular: 'Order Status',
+    plural: 'Order Statuses',
   },
   typescript: {
-    interface: "OrderStatus",
-  },
-  admin: {
-    hidden: true,
+    interface: 'OrderStatus',
   },
   fields: [
     {
-      name: "order",
-      type: "relationship",
-      relationTo: "orders",
+      name: 'order',
+      type: 'relationship',
+      relationTo: 'orders',
       required: true,
     },
     {
-      name: "staff",
-      type: "relationship",
-      relationTo: "users",
+      name: 'staff',
+      type: 'relationship',
+      relationTo: 'users',
+      required: true,
     },
     {
-      name: "status",
-      type: "select",
+      name: 'status',
+      type: 'select',
       options: orderStatusOptions,
-      defaultValue: "pending",
+      defaultValue: 'pending',
       required: true,
     },
     {
-      name: "visibleToCustomer",
-      label: "Visible to customer",
-      type: "checkbox",
+      name: 'visibleToCustomer',
+      label: 'Visible to customer',
+      type: 'checkbox',
       defaultValue: true,
       required: true,
     },
   ],
-}
+};

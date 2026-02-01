@@ -16,7 +16,7 @@ export const orders: CollectionConfig = {
   },
   fields: [
     {
-      name: 'orderIdNumber',
+      name: 'id',
       label: 'Order Id',
       type: 'number',
       required: true,
@@ -90,7 +90,7 @@ export const orders: CollectionConfig = {
       required: true,
       virtual: true,
       admin: {
-        hidden: true,
+        readOnly: true,
       },
       hooks: {
         afterRead: [getOrderStatus],
@@ -121,6 +121,6 @@ export const orders: CollectionConfig = {
     },
   ],
   hooks: {
-    beforeChange: [validateOrderItems, autoincrement({ field: 'orderIdNumber' })],
+    beforeChange: [validateOrderItems, autoincrement({ field: 'id' })],
   },
 };
