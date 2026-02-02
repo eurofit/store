@@ -1,5 +1,5 @@
-import { getCurrentUser } from "@/actions/auth/get-current-user"
-import { getProductsByCategory } from "@/actions/categories/get-products-by-category"
+import { getCurrentUser } from '@/actions/auth/get-current-user';
+import { getProductsByCategory } from '@/actions/categories/get-products-by-category';
 import {
   Pagination,
   PaginationContent,
@@ -7,29 +7,29 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination"
-import pluralize from "pluralize-esm"
-import { EmptyProducts } from "./empty-products"
-import { ProductCard } from "./product-card"
-import { ProductSort } from "./product-sort"
+} from '@/components/ui/pagination';
+import pluralize from 'pluralize-esm';
+import { EmptyProducts } from './empty-products';
+import { ProductCard } from './product-card';
+import { ProductSort } from './product-sort';
 
 type CategoryProductsListProps = {
-  slug: Promise<string>
+  slug: Promise<string>;
   searchParams: Promise<{
-    page: number
-    brand: string[]
-    sort: string
-    size: string[]
-    flavourColour: string[]
-  }>
-}
+    page: number;
+    brand: string[];
+    sort: string;
+    size: string[];
+    flavourColour: string[];
+  }>;
+};
 
-const PRODUCTS_PER_PAGE = 15
+const PRODUCTS_PER_PAGE = 15;
 
 const PRODUCT_SORT_OPTIONS = [
-  { label: "Product Name: A-Z", value: "asc" },
-  { label: "Product Name: Z-A", value: "desc" },
-]
+  { label: 'Product Name: A-Z', value: 'asc' },
+  { label: 'Product Name: Z-A', value: 'desc' },
+];
 
 export async function CategoryProducts({
   slug: slugPromise,
@@ -39,9 +39,9 @@ export async function CategoryProducts({
     slugPromise,
     searchParamsPromise,
     getCurrentUser(),
-  ])
+  ]);
 
-  const { page, brand, sort, size, flavourColour } = searchParams
+  const { page, brand, sort, size, flavourColour } = searchParams;
 
   const { products, totalProducts, totalPages, hasNextPage, hasPrevPage } =
     await getProductsByCategory({
@@ -52,10 +52,10 @@ export async function CategoryProducts({
       sort,
       size,
       flavourColour,
-    })
+    });
 
   if (!totalProducts) {
-    return <EmptyProducts />
+    return <EmptyProducts />;
   }
 
   return (
@@ -64,10 +64,10 @@ export async function CategoryProducts({
         <ProductSort
           className="ml-auto"
           options={PRODUCT_SORT_OPTIONS}
-          defaultValue={sort == "asc" ? "asc" : "desc"}
+          defaultValue={sort == 'asc' ? 'asc' : 'desc'}
         />
         <span className="text-sm">
-          {totalProducts} {pluralize("Product", totalProducts)} found
+          {totalProducts} {pluralize('Product', totalProducts)} found
         </span>
       </div>
 
@@ -85,21 +85,16 @@ export async function CategoryProducts({
             .fill(null)
             .map((_, index) => (
               <PaginationItem key={`page-${index + 1}`}>
-                <PaginationLink
-                  href={`?page=${index + 1}`}
-                  isActive={page === index + 1}
-                >
+                <PaginationLink href={`?page=${index + 1}`} isActive={page === index + 1}>
                   {index + 1}
                 </PaginationLink>
               </PaginationItem>
             ))}
           <PaginationItem>
-            <PaginationNext
-              href={hasNextPage ? `?page=${page + 1}` : undefined}
-            />
+            <PaginationNext href={hasNextPage ? `?page=${page + 1}` : undefined} />
           </PaginationItem>
         </PaginationContent>
       </Pagination>
     </div>
-  )
+  );
 }

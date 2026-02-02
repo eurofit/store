@@ -8,6 +8,8 @@ const config = [
       // Payload-generated files (handled by Payload generators)
       'src/payload/generated-schema.ts',
       'src/payload/types.ts',
+      // .next directory
+      '.next/**',
     ],
   },
 ];

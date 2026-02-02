@@ -42,16 +42,13 @@ interface SettingsLayoutProps {
 export default function SettingsLayout({ children }: SettingsLayoutProps) {
   return (
     <div className="space-y-6">
-      <PageHeading
-        title="Account"
-        description="Manage your account settings and set e-mail preferences."
-      />
+      <PageHeading title="Account" description="Manage your account settings." />
       <Separator className="my-6" />
       <div className="flex flex-col space-y-8 lg:flex-row lg:space-y-0 lg:space-x-12">
         <aside className="w-1/5">
           <SidebarNav items={sidebarNavItems} />
         </aside>
-        <div className="flex-1">{children}</div>
+        <div className="flex-1 lg:max-w-2xl">{children}</div>
       </div>
     </div>
   );

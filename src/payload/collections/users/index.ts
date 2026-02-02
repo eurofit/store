@@ -69,6 +69,7 @@ export const users: CollectionConfig = {
         description: 'The middle name of the user.',
       },
       index: true,
+      saveToJWT: true,
     },
     {
       name: 'lastName',

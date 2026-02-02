@@ -1,20 +1,20 @@
-import { env } from "@/env.mjs"
-import config from "@/payload/config"
-import { NextResponse } from "next/server"
-import crypto from "node:crypto"
-import { getPayload } from "payload"
+import { env } from '@/env.mjs';
+import config from '@/payload/config';
+import { NextResponse } from 'next/server';
+import crypto from 'node:crypto';
+import { getPayload } from 'payload';
 
-const secret = env.PAYSTACK_SECRET_KEY
+const secret = env.PAYSTACK_SECRET_KEY;
 
 export async function POST(req: Request) {
-  const body = await req.json()
+  const body = await req.json();
 
   const hash = crypto
-    .createHmac("sha512", secret)
+    .createHmac('sha512', secret)
     .update(JSON.stringify(body))
-    .digest("hex")
+    .digest('hex');
 
-  const signature = req.headers.get("x-paystack-signature")
+  const signature = req.headers.get('x-paystack-signature');
 
   if (hash != signature) {
     return Response.json(
@@ -23,38 +23,30 @@ export async function POST(req: Request) {
       },
       {
         status: 401,
-      }
-    )
+      },
+    );
   }
 
   const payload = await getPayload({
     config,
-  })
+  });
 
-  if (body.event == "charge.success") {
-    const orders = await payload.find({
-      collection: "orders",
-      where: {
-        orderIdNumber: {
-          equals: body.data.reference,
-        },
-      },
-      limit: 0,
-      pagination: false,
-    })
-
-    const order = orders.docs[0]
+  if (body.event == 'charge.success') {
+    const order = await payload.findByID({
+      collection: 'orders',
+      id: body.data.reference,
+    });
 
     await payload.create({
-      collection: "transactions",
+      collection: 'transactions',
       data: {
         order: order.id,
         ref: body.data.reference,
         amount: body.data.amount / 100,
-        provider: "paystack",
+        provider: 'paystack',
       },
       draft: false,
-    })
+    });
   }
 
   return NextResponse.json(
@@ -63,6 +55,6 @@ export async function POST(req: Request) {
     },
     {
       status: 200,
-    }
-  )
+    },
+  );
 }

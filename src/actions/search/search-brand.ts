@@ -1,8 +1,8 @@
 'use server';
 
+import config from '@/payload/config';
 import { brands } from '@/payload/generated-schema';
 import { buildPrefixTsQuery } from '@/utils/build-prefix-ts-query';
-import config from '@/payload/config';
 import { asc, sql } from '@payloadcms/db-postgres/drizzle';
 import { getPayload } from 'payload';
 import { z } from 'zod';

@@ -1,19 +1,16 @@
-"use server"
+'use server';
 
-import { getCurrentUser } from "@/actions/auth/get-current-user"
-import config from "@/payload/config"
-import { ProductLine } from "@/types"
-import { uniqBy } from "lodash-es"
-import { getPayload } from "payload"
+import { getCurrentUser } from '@/actions/auth/get-current-user';
+import config from '@/payload/config';
+import { ProductLine } from '@/types';
+import { uniqBy } from 'lodash-es';
+import { getPayload } from 'payload';
 
 export async function getProductBySlug(slug: string) {
-  const [payload, user] = await Promise.all([
-    getPayload({ config }),
-    getCurrentUser(),
-  ])
+  const [payload, user] = await Promise.all([getPayload({ config }), getCurrentUser()]);
 
   const { docs } = await payload.find({
-    collection: "products",
+    collection: 'products',
     where: {
       slug: { equals: slug },
     },
@@ -29,7 +26,7 @@ export async function getProductBySlug(slug: string) {
       relatedProducts: true,
     },
     populate: {
-      "product-lines": {
+      'product-lines': {
         sku: true,
         slug: true,
         title: true,
@@ -47,7 +44,7 @@ export async function getProductBySlug(slug: string) {
     joins: {
       productLines: {
         limit: 0,
-        sort: "title",
+        sort: 'title',
         where: {
           active: {
             equals: true,
@@ -60,36 +57,36 @@ export async function getProductBySlug(slug: string) {
     },
     pagination: false,
     limit: 1,
-  })
+  });
 
-  if (!docs.length) return null
+  if (!docs.length) return null;
 
-  const product = docs[0]
-  const { srcImage, productLines, categories, ...p } = product
+  const product = docs[0];
+  const { srcImage, productLines, categories, ...p } = product;
 
   const formattedCategories = uniqBy(
     (categories ?? [])
-      .filter((c) => typeof c === "object" && "slug" in c && "title" in c)
+      .filter((c) => typeof c === 'object' && 'slug' in c && 'title' in c)
       .map(({ slug, title }) => ({ slug, title })),
-    "slug"
-  )
+    'slug',
+  );
 
   const formattedProductLines = (productLines.docs
-    ?.filter((pl) => typeof pl === "object")
+    ?.filter((pl) => typeof pl === 'object')
     .map((productLine) => {
-      const { srcStock, retailPrice, ...pl } = productLine
+      const { srcStock, retailPrice, ...pl } = productLine;
 
       return {
         ...pl,
         stock: pl.stock || (srcStock ?? 0),
         price: retailPrice ?? null,
-      }
-    }) || []) as unknown as ProductLine[]
+      };
+    }) || []) as unknown as ProductLine[];
 
   return {
     ...p,
     categories: formattedCategories,
     image: srcImage || null,
     productLines: formattedProductLines,
-  }
+  };
 }

@@ -1,3 +1,3 @@
-import { nav } from "./nav"
+import { nav } from './nav';
 
-export const globals = [nav]
+export const globals = [nav];

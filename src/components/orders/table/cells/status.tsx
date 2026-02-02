@@ -1,23 +1,21 @@
 'use client';
 
-import { Badge } from '@/components/ui/badge';
 import { orderStatus } from '@/constants/orders';
 import { Order } from '@/types';
-import { cn } from '@/utils/cn';
 import { CellContext } from '@tanstack/react-table';
 
 type StatusCellProps = CellContext<Order, unknown>;
 
-export function StatusCell({ getValue }: StatusCellProps) {
-  const value = getValue<
-    'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
-  >();
+export function StatusCell({ getValue, row }: StatusCellProps) {
+  const value = getValue<Order['status']>();
+  const paymentStatus = row.original.paymentStatus;
 
   const status = orderStatus.find((status) => status.value === value);
 
-  return (
-    <Badge variant="outline" className={cn(status?.color.bg, status?.color.text)}>
-      {status?.label}
-    </Badge>
-  );
+  if (!status) return null;
+
+  const formattedStatus =
+    status.value === 'pending' && paymentStatus === 'unpaid' ? 'Unpaid' : status.label;
+
+  return <p>{formattedStatus}</p>;
 }

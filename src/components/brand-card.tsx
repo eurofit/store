@@ -1,22 +1,22 @@
-import Link from "next/link"
-import { Brand } from "@/types"
-import { ImageOff } from "lucide-react"
+import { Brand } from '@/types';
+import { ImageOff } from 'lucide-react';
+import Link from 'next/link';
 
-import { cn } from "@/utils/cn"
-import { AspectRatio } from "@/components/ui/aspect-ratio"
+import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { cn } from '@/utils/cn';
 
-import { ImageWithRetry } from "./image-with-retry"
-import { Skeleton } from "./ui/skeleton"
+import { ImageWithRetry } from './image-with-retry';
+import { Skeleton } from './ui/skeleton';
 
 type BrandCardProps = Brand & {
-  index: number
-}
+  index: number;
+};
 
 export function BrandCard({ title, image, slug, index }: BrandCardProps) {
   return (
     <article
       aria-labelledby={slug}
-      className="group hover:outline hover:outline-red-500 transition-color duration-300 relative overflow-hidden rounded-lg"
+      className="group transition-color relative overflow-hidden rounded-lg duration-300 hover:outline hover:outline-red-500"
     >
       <AspectRatio ratio={4 / 3}>
         {image && (
@@ -26,7 +26,7 @@ export function BrandCard({ title, image, slug, index }: BrandCardProps) {
             fill
             className="m-auto max-h-11/12 object-contain"
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 33vw, 20vw"
-            loading={index > 4 ? "lazy" : "eager"}
+            loading={index > 4 ? 'lazy' : 'eager'}
             priority={index <= 4}
           />
         )}
@@ -34,7 +34,7 @@ export function BrandCard({ title, image, slug, index }: BrandCardProps) {
           <div
             role="img"
             aria-label={`${title} logo not available`}
-            className="bg-muted flex size-full relative items-center justify-center"
+            className="bg-muted relative flex size-full items-center justify-center"
           >
             <ImageOff className="text-muted-foreground/70 size-2/5" />
           </div>
@@ -52,7 +52,7 @@ export function BrandCard({ title, image, slug, index }: BrandCardProps) {
         className="absolute inset-0"
       />
     </article>
-  )
+  );
 }
 
 export function BrandSkeleton() {
@@ -60,12 +60,12 @@ export function BrandSkeleton() {
     <div>
       <Skeleton className="aspect-square max-w-xs" />
     </div>
-  )
+  );
 }
 
-type BrandsSkeletonProps = React.ComponentPropsWithRef<"div"> & {
-  length?: number
-}
+type BrandsSkeletonProps = React.ComponentPropsWithRef<'div'> & {
+  length?: number;
+};
 
 export function BrandsSkeleton({
   length = 10,
@@ -75,8 +75,8 @@ export function BrandsSkeleton({
   return (
     <div
       className={cn(
-        "grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-10 lg:grid-cols-4 xl:grid-cols-5",
-        className
+        'grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-10 lg:grid-cols-4 xl:grid-cols-5',
+        className,
       )}
       {...props}
     >
@@ -84,5 +84,5 @@ export function BrandsSkeleton({
         <BrandSkeleton key={`brand-skeleton-${i}`} />
       ))}
     </div>
-  )
+  );
 }

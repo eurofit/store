@@ -1,9 +1,9 @@
-import { getCurrentUser } from "@/actions/auth/get-current-user"
-import { getProductBySlug } from "@/actions/products/get-product-by-slug"
-import { ImageWithRetry } from "@/components/image-with-retry"
-import { ProductLine } from "@/components/product-line"
-import { Heading } from "@/components/typography"
-import { Badge } from "@/components/ui/badge"
+import { getCurrentUser } from '@/actions/auth/get-current-user';
+import { getProductBySlug } from '@/actions/products/get-product-by-slug';
+import { ImageWithRetry } from '@/components/image-with-retry';
+import { ProductLine } from '@/components/product-line';
+import { Heading } from '@/components/typography';
+import { Badge } from '@/components/ui/badge';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -11,53 +11,52 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { ChevronRight, ImageOff } from "lucide-react"
-import { Metadata } from "next"
-import Link from "next/link"
-import { notFound } from "next/navigation"
-import pluralize from "pluralize-esm"
-import * as React from "react"
-import { titleCase } from "title-case"
+} from '@/components/ui/breadcrumb';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { ChevronRight, ImageOff } from 'lucide-react';
+import { Metadata } from 'next';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import pluralize from 'pluralize-esm';
+import * as React from 'react';
+import { titleCase } from 'title-case';
 
 type ProductPageProps = {
   params: Promise<{
-    slug: string
-  }>
-}
+    slug: string;
+  }>;
+};
 
 export async function generateMetadata({
   params: paramsPromise,
 }: ProductPageProps): Promise<Metadata> {
-  const { slug } = await paramsPromise
-  const product = await getProductBySlug(slug)
+  const { slug } = await paramsPromise;
+  const product = await getProductBySlug(slug);
 
   if (!product) {
-    notFound()
+    notFound();
   }
 
   return {
     title: {
       absolute: titleCase(product.title),
     },
-  }
+  };
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const [{ slug }, user] = await Promise.all([params, getCurrentUser()])
+  const [{ slug }, user] = await Promise.all([params, getCurrentUser()]);
 
-  const product = await getProductBySlug(slug)
+  const product = await getProductBySlug(slug);
 
-  if (!product) notFound()
+  if (!product) notFound();
 
-  const { id, image, title, productLines, categories, relatedProducts } =
-    product
+  const { id, image, title, productLines, categories, relatedProducts } = product;
 
   const categoryParams = categories
     .map((cat) => `category=${encodeURIComponent(cat.slug)}`)
-    .join("&")
+    .join('&');
 
   return (
     <div className="space-y-10">
@@ -86,7 +85,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 {image && (
                   <ImageWithRetry
                     src={image}
-                    alt={title + " image"}
+                    alt={title + ' image'}
                     fill
                     className="m-auto max-h-11/12 max-w-11/12 object-contain"
                     sizes="(max-width: 768px) 100vw, 350px"
@@ -103,8 +102,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold">Choose Options</h3>
                   <Badge variant="outline">
-                    {product.productLines.length}{" "}
-                    {pluralize("option", product.productLines.length)}
+                    {product.productLines.length}{' '}
+                    {pluralize('option', product.productLines.length)}
                   </Badge>
                 </div>
                 <div className="space-y-3">
@@ -131,7 +130,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <h3 className="font-medium">Similar Products</h3>
                 {relatedProducts.total > 5 && (
                   <Button variant="link" size="sm" asChild>
-                    <Link href={"/products" + "?" + categoryParams}>
+                    <Link href={'/products' + '?' + categoryParams}>
                       See all
                       <ChevronRight className="size-4" />
                     </Link>
@@ -142,7 +141,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 {relatedProducts.products.map((rp) => (
                   <li key={rp.slug}>
                     <Link
-                      href={"/products/" + rp.slug}
+                      href={'/products/' + rp.slug}
                       className="hover:bg-accent/50 flex items-center gap-3 rounded-md p-1"
                     >
                       <div className="relative size-12 shrink-0 overflow-hidden rounded-md border bg-white">
@@ -162,9 +161,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                         )}
                       </div>
 
-                      <h4 className="line-clamp-2 text-sm leading-tight">
-                        {rp.title}
-                      </h4>
+                      <h4 className="line-clamp-2 text-sm leading-tight">{rp.title}</h4>
                     </Link>
                   </li>
                 ))}
@@ -174,5 +171,5 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </aside>
       </div>
     </div>
-  )
+  );
 }

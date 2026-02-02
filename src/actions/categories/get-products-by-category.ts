@@ -1,14 +1,14 @@
-"use server"
+'use server';
 
-import payloadConfig from "@/payload/config"
-import { Product, ProductLine } from "@/types"
-import { isEmpty } from "lodash-es"
-import { getPayload } from "payload"
-import { z } from "zod"
-import { getCurrentUser } from "../auth/get-current-user"
+import payloadConfig from '@/payload/config';
+import { Product, ProductLine } from '@/types';
+import { isEmpty } from 'lodash-es';
+import { getPayload } from 'payload';
+import { z } from 'zod';
+import { getCurrentUser } from '../auth/get-current-user';
 
-const DEFAULT_PRODUCTS_PER_PAGE = 20
-const DEFAULT_PAGE = 1
+const DEFAULT_PRODUCTS_PER_PAGE = 20;
+const DEFAULT_PAGE = 1;
 
 const optionsSchema = z.object({
   slug: z.string(),
@@ -26,36 +26,36 @@ const optionsSchema = z.object({
   brand: z.array(z.string()).optional().nullable(),
   size: z.array(z.string()).optional().nullable(),
   flavourColour: z.array(z.string()).optional().nullable(),
-})
+});
 
-type GetProductsByCategory = z.infer<typeof optionsSchema>
+type GetProductsByCategory = z.infer<typeof optionsSchema>;
 
 export async function getProductsByCategory(opts: GetProductsByCategory) {
   const { slug, page, limit, sort, brand, size, flavourColour } =
-    optionsSchema.parse(opts)
+    optionsSchema.parse(opts);
 
   const [user, payload] = await Promise.all([
     getCurrentUser(),
     getPayload({
       config: payloadConfig,
     }),
-  ])
+  ]);
 
   const {
     docs: products,
     totalDocs: totalProducts,
     ...rest
   } = await payload.find({
-    collection: "products",
+    collection: 'products',
     where: {
-      "categories.slug": {
+      'categories.slug': {
         equals: slug,
       },
       or: [
         ...(!isEmpty(brand)
           ? [
               {
-                "brand.slug": {
+                'brand.slug': {
                   in: brand,
                 },
               },
@@ -64,7 +64,7 @@ export async function getProductsByCategory(opts: GetProductsByCategory) {
         ...(!isEmpty(size)
           ? [
               {
-                "productLines.size": {
+                'productLines.size': {
                   in: size,
                 },
               },
@@ -73,7 +73,7 @@ export async function getProductsByCategory(opts: GetProductsByCategory) {
         ...(!isEmpty(flavourColour)
           ? [
               {
-                "productLines.flavorColor": {
+                'productLines.flavorColor': {
                   in: flavourColour,
                 },
               },
@@ -90,12 +90,12 @@ export async function getProductsByCategory(opts: GetProductsByCategory) {
     },
     joins: {
       productLines: {
-        sort: sort === "desc" ? "-title" : "title",
+        sort: sort === 'desc' ? '-title' : 'title',
         limit: 0,
       },
     },
     populate: {
-      "product-lines": {
+      'product-lines': {
         sku: true,
         slug: true,
         title: true,
@@ -109,48 +109,48 @@ export async function getProductsByCategory(opts: GetProductsByCategory) {
         isNotifyRequested: true,
       },
     },
-    sort: sort === "desc" ? "-title" : "title",
+    sort: sort === 'desc' ? '-title' : 'title',
     user: user?.id,
     page,
     limit,
-  })
+  });
 
   const formattedProducts = products.map((product) => {
-    const { srcImage, ...p } = product
+    const { srcImage, ...p } = product;
     return {
       ...p,
       image: srcImage ?? null,
       productLines: (product.productLines.docs
-        ?.filter((pl) => typeof pl === "object")
+        ?.filter((pl) => typeof pl === 'object')
         .map((productLine) => {
-          const { srcStock, retailPrice, ...pl } = productLine
+          const { srcStock, retailPrice, ...pl } = productLine;
 
           return {
             ...pl,
             stock: pl.stock || (srcStock ?? 0),
             price: retailPrice ?? null,
-          }
+          };
         }) || []) as ProductLine[],
-    }
-  }) as Product[]
+    };
+  }) as Product[];
 
   return {
     products: formattedProducts,
     totalProducts,
     ...rest,
-  }
+  };
 }
 
 export async function getTotalProductsByCategory(slug: string) {
-  const payload = await getPayload({ config: payloadConfig })
+  const payload = await getPayload({ config: payloadConfig });
   const { totalDocs: totalProducts } = await payload.count({
-    collection: "products",
+    collection: 'products',
     where: {
-      "categories.slug": {
+      'categories.slug': {
         equals: slug,
       },
     },
-  })
+  });
 
-  return totalProducts
+  return totalProducts;
 }

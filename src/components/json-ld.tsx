@@ -1,8 +1,8 @@
-import { Thing, WithContext } from "schema-dts"
+import { Thing, WithContext } from 'schema-dts';
 
 type JsonLdProps = {
-  jsonLd: WithContext<Thing> | WithContext<Thing>[]
-}
+  jsonLd: WithContext<Thing> | WithContext<Thing>[];
+};
 
 export function JsonLd({ jsonLd }: JsonLdProps) {
   if (Array.isArray(jsonLd)) {
@@ -16,7 +16,7 @@ export function JsonLd({ jsonLd }: JsonLdProps) {
           />
         ))}
       </>
-    )
+    );
   }
 
   return (
@@ -24,5 +24,5 @@ export function JsonLd({ jsonLd }: JsonLdProps) {
       type="application/ld+json"
       dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
     />
-  )
+  );
 }

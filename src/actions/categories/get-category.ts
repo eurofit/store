@@ -1,17 +1,17 @@
-"use server"
+'use server';
 
-import payloadConfig from "@/payload/config"
-import { getPayload } from "payload"
+import payloadConfig from '@/payload/config';
+import { getPayload } from 'payload';
 
 type GetCategoryArgs = {
-  slug: string
-}
+  slug: string;
+};
 
 export async function getCategory({ slug }: GetCategoryArgs) {
-  const payload = await getPayload({ config: payloadConfig })
+  const payload = await getPayload({ config: payloadConfig });
 
   const { docs: categories } = await payload.find({
-    collection: "categories",
+    collection: 'categories',
     where: {
       slug: {
         equals: slug,
@@ -22,7 +22,7 @@ export async function getCategory({ slug }: GetCategoryArgs) {
     },
     limit: 1,
     pagination: false,
-  })
+  });
 
-  return categories[0] ?? null
+  return categories[0] ?? null;
 }

@@ -1,13 +1,13 @@
-"use client"
+'use client';
 
-import { Button } from "@/components/ui/button"
-import { ChevronRight } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
-import { ComponentProps } from "react"
-import { Badge } from "./ui/badge"
+import { Button } from '@/components/ui/button';
+import { ChevronRight } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { ComponentProps } from 'react';
+import { Badge } from './ui/badge';
 
-type TopBrandsCarouselProps = {}
+type TopBrandsCarouselProps = {};
 
 export function TopBrandsCarousel({}: TopBrandsCarouselProps) {
   return (
@@ -30,23 +30,23 @@ export function TopBrandsCarousel({}: TopBrandsCarouselProps) {
         </Button>
       </div>
     </section>
-  )
+  );
 }
 
-type BrandSlideProps = {} & ComponentProps<"div">
+type BrandSlideProps = {} & ComponentProps<'div'>;
 
 function BrandSlide({ className }: BrandSlideProps) {
   return (
     <div
       className="group relative flex size-full overflow-hidden rounded-lg p-4"
       style={{
-        backgroundColor: "#599140",
+        backgroundColor: '#599140',
       }}
     >
       <div
         className="absolute -top-1/2 -right-1/4 size-40 -translate-x-1/2 translate-y-1/2 rounded-full"
         style={{
-          backgroundColor: "#84b76c",
+          backgroundColor: '#84b76c',
         }}
       />
       <div className="flex flex-1 flex-col justify-center gap-y-6">
@@ -72,7 +72,7 @@ function BrandSlide({ className }: BrandSlideProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 /* 

@@ -12,7 +12,7 @@ export function IdCell({ getValue }: IdCellProps) {
   return (
     <Link
       href={`/orders/` + value.toString()}
-      className="text-red-600 hover:underline hover:underline-offset-4"
+      className="hover:underline hover:underline-offset-4"
     >
       #{value.toString()}
     </Link>

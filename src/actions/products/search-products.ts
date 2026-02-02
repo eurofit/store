@@ -1,5 +1,6 @@
-"use server"
+'use server';
 
+import payloadConfig from '@/payload/config';
 import {
   brands,
   categories,
@@ -7,18 +8,17 @@ import {
   products,
   products_rels,
   stock_alerts,
-} from "@/payload/generated-schema"
-import type { Product, ProductLine } from "@/types"
-import { buildPrefixTsQuery } from "@/utils/build-prefix-ts-query"
-import payloadConfig from "@/payload/config"
-import { and, asc, desc, eq, or, sql } from "@payloadcms/db-postgres/drizzle"
-import { castArray } from "lodash-es"
-import { getPayload } from "payload"
-import { z } from "zod"
-import { getCurrentUser } from "../auth/get-current-user"
+} from '@/payload/generated-schema';
+import type { Product, ProductLine } from '@/types';
+import { buildPrefixTsQuery } from '@/utils/build-prefix-ts-query';
+import { and, asc, desc, eq, or, sql } from '@payloadcms/db-postgres/drizzle';
+import { castArray } from 'lodash-es';
+import { getPayload } from 'payload';
+import { z } from 'zod';
+import { getCurrentUser } from '../auth/get-current-user';
 
-const DEFAULT_PRODUCTS_PER_PAGE = 20
-const DEFAULT_PAGE = 1
+const DEFAULT_PRODUCTS_PER_PAGE = 20;
+const DEFAULT_PAGE = 1;
 
 const optionsSchema = z.object({
   page: z
@@ -36,27 +36,27 @@ const optionsSchema = z.object({
   category: z.array(z.string()).optional().nullable(),
   size: z.array(z.string()).optional().nullable(),
   flavourColour: z.array(z.string()).optional().nullable(),
-})
+});
 
-type SearchProductsOptions = z.infer<typeof optionsSchema>
+type SearchProductsOptions = z.infer<typeof optionsSchema>;
 
 export async function searchProducts(q: string, opts: SearchProductsOptions) {
-  const query = z.string().optional().parse(q)
+  const query = z.string().optional().parse(q);
 
-  if (!query) return { products: [] as Product[], totalProducts: 0 }
+  if (!query) return { products: [] as Product[], totalProducts: 0 };
 
   const { page, limit, sort, brand, category, size, flavourColour } =
-    optionsSchema.parse(opts)
+    optionsSchema.parse(opts);
 
   const [payload, user] = await Promise.all([
     getPayload({ config: payloadConfig }),
     getCurrentUser(),
-  ])
+  ]);
 
-  const tsQuery = buildPrefixTsQuery(query)
+  const tsQuery = buildPrefixTsQuery(query);
   if (!tsQuery) {
     // nothing useful to search for — return empty set
-    return { products: [] as Product[], totalProducts: 0 }
+    return { products: [] as Product[], totalProducts: 0 };
   }
 
   // we pass the tsQuery as a bound parameter into to_tsquery('english', $1)
@@ -71,7 +71,7 @@ export async function searchProducts(q: string, opts: SearchProductsOptions) {
     setweight(to_tsvector('english', coalesce(${product_lines.flavorColor}, '')), 'C') ||
     setweight(to_tsvector('english', coalesce(${product_lines.size}, '')), 'C')
     ) @@ to_tsquery('english', ${tsQuery})
-    `
+    `;
 
   // safe SQL fragment for 'isNotifyRequested'
   const notifySql = user?.id
@@ -81,39 +81,39 @@ export async function searchProducts(q: string, opts: SearchProductsOptions) {
              WHERE ${stock_alerts.user} = ${user.id}
                AND ${stock_alerts.productLine} = ${product_lines.id}
            )`
-    : sql`false`
+    : sql`false`;
 
   // --- NORMALIZE filter inputs (always arrays) ---
-  const brandList = castArray(brand ?? [])
-  const categoryList = castArray(category ?? [])
-  const sizeList = castArray(size ?? [])
-  const flavourColourList = castArray(flavourColour ?? [])
+  const brandList = castArray(brand ?? []);
+  const categoryList = castArray(category ?? []);
+  const sizeList = castArray(size ?? []);
+  const flavourColourList = castArray(flavourColour ?? []);
 
   // build ARRAY[...] SQL from a JS string array (safe param binding)
   const sqlArrayFromStrings = (arr: string[]) =>
     arr && arr.length
       ? sql`ARRAY[${sql.join(
           arr.map((v) => sql`${v}`),
-          sql`,`
+          sql`,`,
         )}]`
-      : undefined
+      : undefined;
 
   // Build explicit SQL conditions that use = ANY(ARRAY[...]) so Postgres receives an actual array.
   // We avoid any helper that might expand into `IN ($n)` with a scalar param.
   const brandFilter =
     brandList.length > 0
       ? sql`${brands.slug} = ANY(${sqlArrayFromStrings(brandList)})`
-      : undefined
+      : undefined;
 
   const sizeFilter =
     sizeList.length > 0
       ? sql`${product_lines.size} = ANY(${sqlArrayFromStrings(sizeList)})`
-      : undefined
+      : undefined;
 
   const flavourColourFilter =
     flavourColourList.length > 0
       ? sql`${product_lines.flavorColor} = ANY(${sqlArrayFromStrings(flavourColourList)})`
-      : undefined
+      : undefined;
 
   const categoryFilter =
     categoryList.length > 0
@@ -126,7 +126,7 @@ export async function searchProducts(q: string, opts: SearchProductsOptions) {
             AND c.slug = ANY(${sqlArrayFromStrings(categoryList)})
         )
       `
-      : undefined
+      : undefined;
 
   // Only keep defined filters so we don't generate or(undefined, ...) in the where clause
   const appliedFilters = [
@@ -134,7 +134,7 @@ export async function searchProducts(q: string, opts: SearchProductsOptions) {
     sizeFilter,
     flavourColourFilter,
     categoryFilter,
-  ].filter(Boolean)
+  ].filter(Boolean);
 
   // build the main matched products query (no category join)
   const matchedProductsPromise = payload.db.drizzle
@@ -188,9 +188,9 @@ export async function searchProducts(q: string, opts: SearchProductsOptions) {
     .innerJoin(product_lines, eq(product_lines.product, products.id))
     .where(and(matchCondition, or(...appliedFilters)))
     .groupBy(products.id)
-    .orderBy(sort === "desc" ? desc(products.title) : asc(products.title))
+    .orderBy(sort === 'desc' ? desc(products.title) : asc(products.title))
     .limit(limit)
-    .offset((page - 1) * limit)
+    .offset((page - 1) * limit);
 
   // count query (same filters; no category join in main query — use same EXISTS for category)
   const totalMatchedProductsPromise = payload.db.drizzle
@@ -199,18 +199,18 @@ export async function searchProducts(q: string, opts: SearchProductsOptions) {
     .innerJoin(brands, eq(brands.id, products.brand))
     .innerJoin(product_lines, eq(product_lines.product, products.id))
     .where(and(matchCondition, or(...appliedFilters)))
-    .then((result) => result[0]?.count ?? 0)
+    .then((result) => result[0]?.count ?? 0);
 
   const [matchedProducts, totalMatchedProducts] = await Promise.all([
     matchedProductsPromise,
     totalMatchedProductsPromise,
-  ])
+  ]);
 
   return {
     // results are unique per product due to GROUP BY products.id and no category join
     products: matchedProducts as Product[],
     totalProducts: totalMatchedProducts,
-  }
+  };
 }
 
-export type SearchProductResult = Awaited<ReturnType<typeof searchProducts>>
+export type SearchProductResult = Awaited<ReturnType<typeof searchProducts>>;

@@ -1,5 +1,5 @@
-import { getCurrentUser } from "@/actions/auth/get-current-user"
-import { searchProducts } from "@/actions/products/search-products"
+import { getCurrentUser } from '@/actions/auth/get-current-user';
+import { searchProducts } from '@/actions/products/search-products';
 import {
   Pagination,
   PaginationContent,
@@ -7,44 +7,41 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination"
-import { notFound } from "next/navigation"
-import { ProductSort } from "./product-sort"
+} from '@/components/ui/pagination';
+import { notFound } from 'next/navigation';
+import { ProductSort } from './product-sort';
 
-import { truncate } from "lodash-es"
-import { ProductCard } from "./product-card"
+import { truncate } from 'lodash-es';
+import { ProductCard } from './product-card';
 
 type SearchProductsListProps = {
   searchParams: Promise<{
-    q?: string
-    page: number
-    brand?: string[]
-    category: string[]
-    sort: string
-    size: string[]
-    flavourColour: string[]
-  }>
-}
+    q?: string;
+    page: number;
+    brand?: string[];
+    category: string[];
+    sort: string;
+    size: string[];
+    flavourColour: string[];
+  }>;
+};
 
-const PRODUCTS_PER_PAGE = 15
+const PRODUCTS_PER_PAGE = 15;
 
 const PRODUCT_SORT_OPTIONS = [
-  { label: "Product Name: A-Z", value: "asc" },
-  { label: "Product Name: Z-A", value: "desc" },
-]
+  { label: 'Product Name: A-Z', value: 'asc' },
+  { label: 'Product Name: Z-A', value: 'desc' },
+];
 
 export async function SearchProducts({
   searchParams: searchParamsPromise,
 }: SearchProductsListProps) {
-  const [searchParams, user] = await Promise.all([
-    searchParamsPromise,
-    getCurrentUser(),
-  ])
+  const [searchParams, user] = await Promise.all([searchParamsPromise, getCurrentUser()]);
 
-  const { q, page, brand, category, sort, size, flavourColour } = searchParams
+  const { q, page, brand, category, sort, size, flavourColour } = searchParams;
 
   if (!q) {
-    notFound()
+    notFound();
   }
 
   const { products, totalProducts } = await searchProducts(q, {
@@ -55,10 +52,10 @@ export async function SearchProducts({
     category,
     size,
     flavourColour,
-  })
+  });
 
-  const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE)
-  const hasNextPage = page < totalPages
+  const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
+  const hasNextPage = page < totalPages;
 
   return (
     <div className="flex flex-col space-y-10">
@@ -78,10 +75,10 @@ export async function SearchProducts({
           <ProductSort
             className="ml-auto"
             options={PRODUCT_SORT_OPTIONS}
-            defaultValue={sort == "asc" ? "asc" : "desc"}
+            defaultValue={sort == 'asc' ? 'asc' : 'desc'}
           />
           <span className="text-sm lining-nums">
-            {totalProducts} Product{totalProducts !== 1 ? "s" : ""}
+            {totalProducts} Product{totalProducts !== 1 ? 's' : ''}
           </span>
         </div>
       )}
@@ -98,9 +95,7 @@ export async function SearchProducts({
         <Pagination>
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious
-                href={page ? `?page=${page - 1}` : undefined}
-              />
+              <PaginationPrevious href={page ? `?page=${page - 1}` : undefined} />
             </PaginationItem>
             {Array()
               .fill(null)
@@ -115,13 +110,11 @@ export async function SearchProducts({
                 </PaginationItem>
               ))}
             <PaginationItem>
-              <PaginationNext
-                href={hasNextPage ? `?page=${page + 1}` : undefined}
-              />
+              <PaginationNext href={hasNextPage ? `?page=${page + 1}` : undefined} />
             </PaginationItem>
           </PaginationContent>
         </Pagination>
       )}
     </div>
-  )
+  );
 }

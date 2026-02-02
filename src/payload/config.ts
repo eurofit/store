@@ -1,9 +1,6 @@
-import { collections } from './collections';
-import { users } from './collections/users';
 import { NAMESPACE } from '@/constants/keys';
 import { site } from '@/constants/site';
 import { env } from '@/env.mjs';
-import { globals } from './globals';
 import { postgresAdapter } from '@payloadcms/db-postgres';
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer';
 import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs';
@@ -13,6 +10,9 @@ import path from 'path';
 import { buildConfig } from 'payload';
 import sharp from 'sharp';
 import { fileURLToPath } from 'url';
+import { collections } from './collections';
+import { users } from './collections/users';
+import { globals } from './globals';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);

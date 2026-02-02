@@ -1,24 +1,19 @@
-"use client"
+'use client';
 
-import { ScrollArea as ScrollAreaPrimitive } from "radix-ui"
-import * as React from "react"
+import { ScrollArea as ScrollAreaPrimitive } from 'radix-ui';
+import * as React from 'react';
 
-import { cn } from "@/utils/cn"
+import { cn } from '@/utils/cn';
 
 type ScrollAreaProps = React.ComponentProps<typeof ScrollAreaPrimitive.Root> & {
-  viewportRef?: React.RefObject<HTMLDivElement>
-}
+  viewportRef?: React.RefObject<HTMLDivElement>;
+};
 
-function ScrollArea({
-  className,
-  children,
-  viewportRef,
-  ...props
-}: ScrollAreaProps) {
+function ScrollArea({ className, children, viewportRef, ...props }: ScrollAreaProps) {
   return (
     <ScrollAreaPrimitive.Root
       data-slot="scroll-area"
-      className={cn("relative", className)}
+      className={cn('relative', className)}
       {...props}
     >
       <ScrollAreaPrimitive.Viewport
@@ -31,12 +26,12 @@ function ScrollArea({
       <ScrollBar />
       <ScrollAreaPrimitive.Corner />
     </ScrollAreaPrimitive.Root>
-  )
+  );
 }
 
 function ScrollBar({
   className,
-  orientation = "vertical",
+  orientation = 'vertical',
   ...props
 }: React.ComponentProps<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>) {
   return (
@@ -45,17 +40,17 @@ function ScrollBar({
       data-orientation={orientation}
       orientation={orientation}
       className={cn(
-        "data-horizontal:h-2.5 data-horizontal:flex-col data-horizontal:border-t data-horizontal:border-t-transparent data-vertical:h-full data-vertical:w-2.5 data-vertical:border-l data-vertical:border-l-transparent flex touch-none p-px transition-colors select-none",
-        className
+        'flex touch-none p-px transition-colors select-none data-horizontal:h-2.5 data-horizontal:flex-col data-horizontal:border-t data-horizontal:border-t-transparent data-vertical:h-full data-vertical:w-2.5 data-vertical:border-l data-vertical:border-l-transparent',
+        className,
       )}
       {...props}
     >
       <ScrollAreaPrimitive.ScrollAreaThumb
         data-slot="scroll-area-thumb"
-        className="rounded-full bg-border relative flex-1"
+        className="bg-border relative flex-1 rounded-full"
       />
     </ScrollAreaPrimitive.ScrollAreaScrollbar>
-  )
+  );
 }
 
-export { ScrollArea, ScrollBar }
+export { ScrollArea, ScrollBar };

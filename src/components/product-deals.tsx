@@ -29,7 +29,7 @@ export function ProductDeals({}: ProductDealsProps) {
           <ChevronRight className="size-4" />
         </Link>
       </div>
-      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 py-2">
+      <div className="grid gap-6 py-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         <Product />
         <Product />
         <Product />

@@ -26,6 +26,7 @@ export async function getOrders(args: Args): Promise<Order[]> {
     select: {
       items: true,
       status: true,
+      paymentStatus: true,
       total: true,
       createdAt: true,
     },

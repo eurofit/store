@@ -1,15 +1,15 @@
-import { ImageWithRetry } from "@/components/image-with-retry"
-import { ImageOff } from "lucide-react"
-import Link from "next/link"
-import { DefaultCellComponentProps } from "payload"
+import { ImageWithRetry } from '@/components/image-with-retry';
+import { ImageOff } from 'lucide-react';
+import Link from 'next/link';
+import { DefaultCellComponentProps } from 'payload';
 
 export function ImageCell({ cellData, rowData }: DefaultCellComponentProps) {
-  if (!cellData) return null
+  if (!cellData) return null;
 
   return (
     <Link
       href={`/dashboard/collections/brands/${rowData.id}`}
-      className="relative size-12  shrink-0 overflow-hidden rounded-md border bg-white"
+      className="relative size-12 shrink-0 overflow-hidden rounded-md border bg-white"
     >
       {cellData ? (
         <ImageWithRetry
@@ -26,5 +26,5 @@ export function ImageCell({ cellData, rowData }: DefaultCellComponentProps) {
         />
       )}
     </Link>
-  )
+  );
 }

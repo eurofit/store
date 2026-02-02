@@ -1,6 +1,7 @@
 import { Order, Transaction } from '@/payload/types';
 import { CollectionAfterChangeHook } from 'payload';
 
+// TODO: make it transactional, do not create a new transaction if the order is already paid or refunded or if the amount is not correct
 export const markOrderPaid: CollectionAfterChangeHook<Transaction> = async ({
   operation,
   req,
@@ -12,7 +13,7 @@ export const markOrderPaid: CollectionAfterChangeHook<Transaction> = async ({
 
   // verify the correct amount was paid
   const isOrderPopulated = typeof doc.order === 'object' && doc.order !== null;
-  const orderId = typeof doc.order === 'string' ? doc.order : doc.order.id;
+  const orderId = typeof doc.order === 'number' ? doc.order : (doc.order as Order).id;
 
   let order: Order;
 

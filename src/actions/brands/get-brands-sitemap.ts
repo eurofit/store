@@ -1,17 +1,17 @@
-import { site } from "@/constants/site"
-import payloadConfig from "@/payload/config"
-import { MetadataRoute } from "next"
-import { getPayload } from "payload"
+import { site } from '@/constants/site';
+import payloadConfig from '@/payload/config';
+import { MetadataRoute } from 'next';
+import { getPayload } from 'payload';
 
 export async function getBrandsSitemap(): Promise<MetadataRoute.Sitemap> {
-  const config = await payloadConfig
+  const config = await payloadConfig;
   const payload = await getPayload({
     config,
-  })
+  });
 
   // select active brands with atleast one product.
   const { docs: brandsWithProducts } = await payload.find({
-    collection: "brands",
+    collection: 'brands',
     where: {
       and: [
         {
@@ -31,13 +31,13 @@ export async function getBrandsSitemap(): Promise<MetadataRoute.Sitemap> {
       srcImage: true,
       updatedAt: true,
     },
-    sort: "slug",
+    sort: 'slug',
     limit: 0,
-  })
+  });
 
   return brandsWithProducts.map(({ slug, srcImage: image, updatedAt }) => ({
     url: `${site.url}/brands/${slug}`,
     lastModified: updatedAt,
-    images: typeof image === "string" ? [image] : [],
-  }))
+    images: typeof image === 'string' ? [image] : [],
+  }));
 }

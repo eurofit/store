@@ -1,7 +1,7 @@
 'use server';
 
-import { safeUserSchema } from '@/schemas/safe-user';
 import config from '@/payload/config';
+import { safeUserSchema } from '@/schemas/safe-user';
 import { headers as getHeaders } from 'next/headers';
 import { getPayload } from 'payload';
 
@@ -14,9 +14,10 @@ export const getCurrentUser = async () => {
 
   if (!user) return null;
 
-  // default address should come first
   return safeUserSchema.parse({
     ...user,
+    isVerified: user._verified ?? false,
+    // default address should come first
     addresses:
       user.addresses?.docs
         ?.filter((a) => typeof a !== 'string')

@@ -1,64 +1,64 @@
-"use client"
+'use client';
 
-import { Carousel } from "@/components/ui/carousel"
-import { useToggle } from "@/hooks/use-toggle"
-import { useIdle } from "react-use"
+import { Carousel } from '@/components/ui/carousel';
+import { useToggle } from '@/hooks/use-toggle';
+import { useIdle } from 'react-use';
 
 const slides = [
   {
     id: 1,
-    title: "Gold Standard 100% Whey ",
-    subtitle: "Best deals online on Sports nutrition",
-    discount: "UP to 80% OFF",
+    title: 'Gold Standard 100% Whey ',
+    subtitle: 'Best deals online on Sports nutrition',
+    discount: 'UP to 80% OFF',
     price: {
       current: 49.99,
       original: 89.99,
     },
     rating: 4.8,
     reviews: 2456,
-    image: "/supplements.png",
-    badge: "BESTSELLER",
-    color: "bg-gradient-to-r from-amber-50 to-amber-100",
+    image: '/supplements.png',
+    badge: 'BESTSELLER',
+    color: 'bg-gradient-to-r from-amber-50 to-amber-100',
   },
   {
     id: 2,
-    title: "Combat Protein Powder",
-    subtitle: "Premium muscle building formula",
-    discount: "SAVE 65% TODAY",
+    title: 'Combat Protein Powder',
+    subtitle: 'Premium muscle building formula',
+    discount: 'SAVE 65% TODAY',
     price: {
       current: 39.99,
       original: 79.99,
     },
     rating: 4.6,
     reviews: 1872,
-    image: "/supplements.png", // Using the same image as placeholder
-    badge: "NEW ARRIVAL",
-    color: "bg-gradient-to-r from-blue-50 to-blue-100",
+    image: '/supplements.png', // Using the same image as placeholder
+    badge: 'NEW ARRIVAL',
+    color: 'bg-gradient-to-r from-blue-50 to-blue-100',
   },
   {
     id: 3,
-    title: "Serious Mass Gainer",
-    subtitle: "Maximum calorie formula for mass",
-    discount: "SPECIAL OFFER 70% OFF",
+    title: 'Serious Mass Gainer',
+    subtitle: 'Maximum calorie formula for mass',
+    discount: 'SPECIAL OFFER 70% OFF',
     price: {
       current: 54.99,
       original: 99.99,
     },
     rating: 4.7,
     reviews: 1345,
-    image: "/supplements.png",
-    badge: "TRENDING",
-    color: "bg-gradient-to-r from-green-50 to-green-100",
+    image: '/supplements.png',
+    badge: 'TRENDING',
+    color: 'bg-gradient-to-r from-green-50 to-green-100',
   },
-]
+];
 
-type StoreCarouselProps = React.ComponentProps<typeof Carousel>
+type StoreCarouselProps = React.ComponentProps<typeof Carousel>;
 
 export function StoreCarousel({ className }: StoreCarouselProps) {
-  const isIdle = useIdle()
-  const { value: isActive, toggle, setOn, setOff } = useToggle(!isIdle)
+  const isIdle = useIdle();
+  const { value: isActive, toggle, setOn, setOff } = useToggle(!isIdle);
 
-  return <div></div>
+  return <div></div>;
 }
 
 /* 

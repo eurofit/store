@@ -4,23 +4,23 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import type { Product } from "@/types"
+} from '@/components/ui/card';
+import type { Product } from '@/types';
 
-import { ImageOff } from "lucide-react"
-import Link from "next/link"
-import pluralize from "pluralize-esm"
-import React from "react"
-import { ImageWithRetry } from "./image-with-retry"
-import { ProductLine } from "./product-line"
-import { Separator } from "./ui/separator"
-import { Skeleton } from "./ui/skeleton"
+import { ImageOff } from 'lucide-react';
+import Link from 'next/link';
+import pluralize from 'pluralize-esm';
+import React from 'react';
+import { ImageWithRetry } from './image-with-retry';
+import { ProductLine } from './product-line';
+import { Separator } from './ui/separator';
+import { Skeleton } from './ui/skeleton';
 
 type ProductCardProps = React.ComponentProps<typeof Card> & {
-  product: Product
-  userId?: string | null
-  href?: string
-}
+  product: Product;
+  userId?: string | null;
+  href?: string;
+};
 
 //TODO: fix mobile view
 
@@ -74,7 +74,7 @@ export function ProductCard({
               <span className="border-gray-300 text-xs text-gray-600">
                 {productLines.length}
                 &nbsp;
-                {pluralize("Option", productLines.length)}
+                {pluralize('Option', productLines.length)}
               </span>
             </div>
 
@@ -94,7 +94,7 @@ export function ProductCard({
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 export function ProductCardSkeleton() {
@@ -120,5 +120,5 @@ export function ProductCardSkeleton() {
         </div>
       </div>
     </div>
-  )
+  );
 }

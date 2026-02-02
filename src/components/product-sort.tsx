@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import {
   Select,
@@ -8,48 +8,44 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { cn } from "@/utils/cn"
-import { usePathname, useSearchParams } from "next/navigation"
-import { useRouter } from "nextjs-toploader/app"
+} from '@/components/ui/select';
+import { cn } from '@/utils/cn';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 
 type Option = {
-  label: string
-  value: string
-}
+  label: string;
+  value: string;
+};
 
 type ProductSortProps = {
-  className?: string
-  defaultValue?: string
-  options: Option[]
-}
+  className?: string;
+  defaultValue?: string;
+  options: Option[];
+};
 
-export function ProductSort({
-  className,
-  defaultValue,
-  options,
-}: ProductSortProps) {
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
+export function ProductSort({ className, defaultValue, options }: ProductSortProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const handleChange = (value: string) => {
-    const params = new URLSearchParams(searchParams.toString())
+    const params = new URLSearchParams(searchParams.toString());
 
-    if (value === "asc") {
-      params.delete("title")
+    if (value === 'asc') {
+      params.delete('title');
     } else {
-      params.set("title", value)
+      params.set('title', value);
     }
 
-    params.sort()
+    params.sort();
 
-    router.replace(`${pathname}?${params.toString()}`)
-  }
+    router.replace(`${pathname}?${params.toString()}`);
+  };
 
   return (
     <Select defaultValue={defaultValue} onValueChange={handleChange}>
-      <SelectTrigger size="sm" className={cn("w-45", className)}>
+      <SelectTrigger size="sm" className={cn('w-45', className)}>
         <SelectValue placeholder="Select a fruit" />
       </SelectTrigger>
       <SelectContent>
@@ -63,5 +59,5 @@ export function ProductSort({
         </SelectGroup>
       </SelectContent>
     </Select>
-  )
+  );
 }

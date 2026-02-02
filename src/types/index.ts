@@ -58,6 +58,7 @@ export type Order = {
   createdAt: string;
   total?: number | null;
   status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  paymentStatus: 'unpaid' | 'paid' | 'refunded';
 };
 
 // =======================

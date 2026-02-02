@@ -1,6 +1,6 @@
-import { getCurrentUser } from "@/actions/auth/get-current-user"
+import { getCurrentUser } from '@/actions/auth/get-current-user';
 
-import { getProductsByBrand } from "@/actions/products/get-products-by-brand"
+import { getProductsByBrand } from '@/actions/products/get-products-by-brand';
 import {
   Pagination,
   PaginationContent,
@@ -8,29 +8,29 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination"
-import pluralize from "pluralize-esm"
-import { EmptyProducts } from "./empty-products"
-import { ProductCard } from "./product-card"
-import { ProductSort } from "./product-sort"
+} from '@/components/ui/pagination';
+import pluralize from 'pluralize-esm';
+import { EmptyProducts } from './empty-products';
+import { ProductCard } from './product-card';
+import { ProductSort } from './product-sort';
 
 type BrandProductsListProps = {
-  slug: Promise<string>
+  slug: Promise<string>;
   searchParams: Promise<{
-    page: number
-    category: string[]
-    title: string
-    size: string[]
-    flavourColour: string[]
-  }>
-}
+    page: number;
+    category: string[];
+    title: string;
+    size: string[];
+    flavourColour: string[];
+  }>;
+};
 
-const PRODUCTS_PER_PAGE = 15
+const PRODUCTS_PER_PAGE = 15;
 
 const PRODUCT_SORT_OPTIONS = [
-  { label: "Product Name: A-Z", value: "asc" },
-  { label: "Product Name: Z-A", value: "desc" },
-]
+  { label: 'Product Name: A-Z', value: 'asc' },
+  { label: 'Product Name: Z-A', value: 'desc' },
+];
 
 export async function BrandProducts({
   slug: slugPromise,
@@ -40,38 +40,37 @@ export async function BrandProducts({
     slugPromise,
     searchParamsPromise,
     getCurrentUser(),
-  ])
+  ]);
 
-  const { page, category, title, size, flavourColour } = searchParams
+  const { page, category, title, size, flavourColour } = searchParams;
 
-  const { products, totalProducts, totalPages, hasNextPage } =
-    await getProductsByBrand({
-      slug,
-      page,
-      limit: PRODUCTS_PER_PAGE,
-      category,
-      title: title,
-      size,
-      flavourColour,
-    })
+  const { products, totalProducts, totalPages, hasNextPage } = await getProductsByBrand({
+    slug,
+    page,
+    limit: PRODUCTS_PER_PAGE,
+    category,
+    title: title,
+    size,
+    flavourColour,
+  });
 
   if (totalProducts === 0) {
-    return <EmptyProducts />
+    return <EmptyProducts />;
   }
 
   return (
     <div className="flex flex-col space-y-6">
-      <div className="flex  items-center  gap-6">
+      <div className="flex items-center gap-6">
         <ProductSort
           className="ml-auto"
           options={PRODUCT_SORT_OPTIONS}
-          defaultValue={title == "asc" ? "asc" : "desc"}
+          defaultValue={title == 'asc' ? 'asc' : 'desc'}
         />
         <span className="text-sm">
-          {totalProducts} {pluralize("Product", totalProducts)} found
+          {totalProducts} {pluralize('Product', totalProducts)} found
         </span>
       </div>
-      <div className=" space-y-10">
+      <div className="space-y-10">
         <section id="brand-products-list" className="grid gap-8 md:gap-10">
           {products.map((product) => (
             <ProductCard key={product.id} product={product} userId={user?.id} />
@@ -81,9 +80,7 @@ export async function BrandProducts({
         <Pagination>
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious
-                href={page ? `?page=${page - 1}` : undefined}
-              />
+              <PaginationPrevious href={page ? `?page=${page - 1}` : undefined} />
             </PaginationItem>
             {Array(totalPages)
               .fill(null)
@@ -98,13 +95,11 @@ export async function BrandProducts({
                 </PaginationItem>
               ))}
             <PaginationItem>
-              <PaginationNext
-                href={hasNextPage ? `?page=${page + 1}` : undefined}
-              />
+              <PaginationNext href={hasNextPage ? `?page=${page + 1}` : undefined} />
             </PaginationItem>
           </PaginationContent>
         </Pagination>
       </div>
     </div>
-  )
+  );
 }
