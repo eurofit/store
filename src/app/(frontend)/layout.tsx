@@ -42,6 +42,7 @@ export default function RootLayout({
             // @ts-ignore
             '@graph': [organization, website, localBusiness],
           }}
+          strategy="beforeInteractive"
         />
         <TailwindIndicator />
         <Toaster richColors duration={8000} closeButton />
