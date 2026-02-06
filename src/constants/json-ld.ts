@@ -48,7 +48,7 @@ export const localBusiness: WithContext<LocalBusiness> = {
   '@type': 'Store',
   '@id': `${site.url}/#store`,
   name: site.name,
-  legalName: site.name,
+  legalName: site.legalName,
   url: site.url,
   telephone: site.contact.phone.text.replace(/\s+/g, ''),
   email: site.contact.email.text,
