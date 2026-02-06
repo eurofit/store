@@ -36,7 +36,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${dmSans.variable} ${montserrat.variable} antialiased`}>
-        <JsonLd jsonLd={[organization, website, localBusiness]} />
+        <JsonLd
+          jsonLd={{
+            '@context': 'https://schema.org',
+            // @ts-ignore
+            '@graph': [organization, website, localBusiness],
+          }}
+        />
         <TailwindIndicator />
         <Toaster richColors duration={8000} closeButton />
         <NextTopLoader
