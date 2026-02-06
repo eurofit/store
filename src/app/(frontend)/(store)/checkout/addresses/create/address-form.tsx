@@ -65,7 +65,6 @@ export function AddressForm({ user, city }: AddressFormProps) {
       title: 'mr',
       firstName: user?.firstName ?? '',
       lastName: user?.lastName ?? '',
-      phone: user?.phone ?? '',
       email: user?.email ?? '',
       // Address Details
       line1: '',
