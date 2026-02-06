@@ -130,7 +130,7 @@ export function SearchSheet() {
               </InputGroup>
             </form>
 
-<Button variant="outline" size="icon" onClick={setOff} className="ml-auto">
+<Button variant="ghost" onClick={setOff} className="ml-auto">
                 Cancel
               </Button>
             </div>
