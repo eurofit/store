@@ -5,7 +5,7 @@ type JsonLdProps = {
   jsonLd: WithContext<Thing> | WithContext<Thing>[];
 } & React.ComponentProps<typeof Script>;
 
-export function JsonLd({ jsonLd }: JsonLdProps) {
+export function JsonLd({ jsonLd, strategy }: JsonLdProps) {
   if (Array.isArray(jsonLd)) {
     return (
       <>
@@ -15,6 +15,7 @@ export function JsonLd({ jsonLd }: JsonLdProps) {
             key={`json-ld-${index}`}
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(item) }}
+            strategy={strategy}
           />
         ))}
       </>
