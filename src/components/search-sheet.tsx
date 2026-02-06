@@ -108,7 +108,7 @@ export function SearchSheet() {
           <div className="bg-background absolute inset-x-0 top-0 z-50 h-dvh space-y-6 p-6">
             <div className="flex gap-2">
       
-            <form action="/search">
+            <form action="/search" className="grow">
               <InputGroup>
                 <InputGroupAddon>
                   <SearchIcon />
@@ -131,8 +131,7 @@ export function SearchSheet() {
             </form>
 
 <Button variant="outline" size="icon" onClick={setOff} className="ml-auto">
-                <X />
-                <span className="sr-only">Close search</span>
+                Cancel
               </Button>
             </div>
 
