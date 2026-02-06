@@ -8,7 +8,7 @@ export const safeUserSchema = z.object({
   middleName: z.string().optional().nullable(),
   lastName: z.string(),
   fullName: z.string().optional(),
-  phone: z.string().optional(),
+  accountNumber: z.number(),
   isVerified: z.boolean(),
   addresses: z.array(addressWithIdSchema).optional(),
 });

@@ -64,9 +64,10 @@ export async function checkout(unSafeData: CheckoutArgs) {
     collection: 'orders',
     data: {
       customer: user.id,
-      address: address.id,
+      shippingAddress: address.id,
+      billingAddress: address.id,
       items: orderItems,
-      status: 'pending', // this is virtual field
+      status: 'pending',
       paymentStatus: 'unpaid',
       snapshot: {
         user: {
@@ -84,15 +85,15 @@ export async function checkout(unSafeData: CheckoutArgs) {
   if (!order.total) throw new Error('Order total is missing');
 
   // init paystack
+
   const res = await paystack.transaction.initialize({
     reference: order.id.toString(),
     email: user.email,
-    // convert to cents
-    amount: (order.total * 100).toString(),
+    amount: (order.total * 100).toString(), // convert to cents
     callback_url: site.url + '/thank-you/' + order.id,
     metadata: {
       cancel_action: site.url + '/checkout',
-      order_id: order.id,
+      order_id: order.id.toString(),
       snapshot: {
         items,
         user: {
@@ -108,6 +109,5 @@ export async function checkout(unSafeData: CheckoutArgs) {
   if ('data' in res && res.data === null) {
     throw new Error('Failed to initialize payment');
   }
-
   return res;
 }

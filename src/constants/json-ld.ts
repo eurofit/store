@@ -59,7 +59,7 @@ export const localBusiness: WithContext<LocalBusiness> = {
     streetAddress: site.address.fullAddress,
     postOfficeBoxNumber: site.address.postalAddress,
     addressLocality: site.address.city,
-    addressRegion: site.address.state,
+    addressRegion: site.address.county,
     postalCode: site.address.postalCode,
     addressCountry: site.address.country,
   },

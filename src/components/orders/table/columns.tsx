@@ -1,5 +1,6 @@
 import { Order } from '@/types';
 import { ColumnDef } from '@tanstack/react-table';
+import { ActionsCell } from './cells/actions';
 import { CurrencyCell } from './cells/currency';
 import { DateCell } from './cells/date';
 import { IdCell } from './cells/id';
@@ -25,5 +26,9 @@ export const columns: ColumnDef<Order>[] = [
     accessorKey: 'status',
     header: 'Status',
     cell: StatusCell,
+  },
+  {
+    id: 'actions',
+    cell: ActionsCell,
   },
 ];

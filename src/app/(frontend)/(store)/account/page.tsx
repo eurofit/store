@@ -45,8 +45,9 @@ export default async function AccountPage() {
         </ItemMedia>
         <ItemContent>
           {user.isVerified && (
-            <ItemTitle className="gap-0">
-              Your verified email is:&nbsp;<strong>{user.email}</strong>.
+            <ItemTitle className="flex gap-0">
+              Your verified email is:&nbsp;
+              <strong>{user.email}</strong>.
             </ItemTitle>
           )}
 

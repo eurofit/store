@@ -18,13 +18,16 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
 
   return (
     <nav
-      className={cn('flex space-x-2 lg:flex-col lg:space-y-1 lg:space-x-0', className)}
+      className={cn(
+        'flex w-full space-x-2 overflow-x-auto max-md:py-2 lg:flex-col lg:space-y-1 lg:space-x-0',
+        className,
+      )}
       {...props}
     >
       {items.map((item) => {
         const isActive = pathname === item.href;
         return (
-          <Button key={item.href} asChild variant="ghost">
+          <Button key={item.href} variant="ghost" asChild>
             <Link
               href={item.href}
               className={cn('justify-start', {

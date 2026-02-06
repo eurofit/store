@@ -197,6 +197,10 @@ export interface Media {
 export interface User {
   id: string;
   /**
+   * The account number of the user.
+   */
+  accountNumber: number;
+  /**
    * The first name of the user.
    */
   firstName: string;
@@ -270,7 +274,7 @@ export interface Address {
   /**
    * User who owns this address.
    */
-  user: string | User;
+  user?: (string | null) | User;
   title: 'mr' | 'ms' | 'mrs' | 'dr' | 'prof';
   /**
    * First name of the person receiving the delivery, if different from the account owner.
@@ -682,7 +686,8 @@ export interface StockAlert {
 export interface Order {
   id: number;
   customer: string | User;
-  address: string | Address;
+  shippingAddress: string | Address;
+  billingAddress: string | Address;
   items: {
     productLine: string | ProductLine;
     quantity: number;
@@ -892,6 +897,7 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  accountNumber?: T;
   firstName?: T;
   middleName?: T;
   lastName?: T;
@@ -1093,7 +1099,8 @@ export interface CartsSelect<T extends boolean = true> {
 export interface OrdersSelect<T extends boolean = true> {
   id?: T;
   customer?: T;
-  address?: T;
+  shippingAddress?: T;
+  billingAddress?: T;
   items?:
     | T
     | {

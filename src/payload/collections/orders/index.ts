@@ -32,7 +32,13 @@ export const orders: CollectionConfig = {
       required: true,
     },
     {
-      name: 'address',
+      name: 'shippingAddress',
+      type: 'relationship',
+      relationTo: 'addresses',
+      required: true,
+    },
+    {
+      name: 'billingAddress',
       type: 'relationship',
       relationTo: 'addresses',
       required: true,

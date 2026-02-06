@@ -79,10 +79,10 @@ export const site = {
     line1: 'Unit 111, 1st Floor, 6th Street Tower',
     line2: '6th Street, Eastleigh',
     city: 'Nairobi',
-    state: 'Nairobi',
+    county: 'Nairobi County',
     country: 'Kenya',
     postalCode: '00610',
-    postalAddress: 'P.O BOX 8047, 00610',
+    postalAddress: 'P.O BOX 8047-00610',
     fullAddress:
       'Unit 111, 1st Floor, 6th Street Tower, 6th Street, Eastleigh, Nairobi, Kenya',
     href: 'https://maps.app.goo.gl/7NVhwGcWDW8UQeqD9',

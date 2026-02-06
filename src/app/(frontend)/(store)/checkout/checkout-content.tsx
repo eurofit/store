@@ -112,7 +112,7 @@ export function CartContent({ user }: CartContentProps) {
           id: item.id,
           quantity: item.quantity,
           snapshot: {
-            price: item.price,
+            price: item.snapshot.retailPrice,
             title: item.title,
           },
         })) ?? [],

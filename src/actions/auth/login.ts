@@ -29,6 +29,7 @@ export async function login(unSafeData: LoginData) {
     if (error instanceof UnverifiedEmail) {
       throw new Error('Please verify your email to login.');
     }
+
     throw new Error('Something went wrong. Please try again later.');
   }
 }

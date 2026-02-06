@@ -2,11 +2,11 @@ import type { CollectionBeforeChangeHook } from 'payload';
 
 type Args = {
   field: string;
-  defaultNumber?: number;
+  startFrom?: number;
 };
 export function autoincrement({
   field,
-  defaultNumber = 1000,
+  startFrom: defaultNumber = 1000,
 }: Args): CollectionBeforeChangeHook {
   return async ({ req, operation, collection, data }) => {
     if (operation !== 'create') return data;

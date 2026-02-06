@@ -23,7 +23,6 @@ export const addresses: CollectionConfig = {
       name: 'user',
       type: 'relationship',
       relationTo: 'users',
-      required: true,
       admin: {
         description: 'User who owns this address.',
       },

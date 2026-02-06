@@ -1,5 +1,6 @@
 import { generateForgotPasswordEmailHTML } from '@/emails/forgot-password';
 import { generateVerificationEmailHTML } from '@/emails/verification';
+import { autoincrement } from '@/payload/hooks/auto-increment';
 import type { CollectionConfig } from 'payload';
 import { getUserFullName } from './hooks/get-user-full-name';
 import { syncToPaystack } from './hooks/sync-to-paystack';
@@ -38,6 +39,10 @@ export const users: CollectionConfig = {
     },
   },
   disableDuplicate: true,
+  forceSelect: {
+    firstName: true,
+    lastName: true,
+  },
   fields: [
     {
       name: 'email',
@@ -49,6 +54,17 @@ export const users: CollectionConfig = {
         description: 'The email address of the user. This will be used for login.',
       },
       index: true,
+    },
+    {
+      name: 'accountNumber',
+      label: 'Account Number',
+      type: 'number',
+      required: true,
+      admin: {
+        description: 'The account number of the user.',
+      },
+      index: true,
+      saveToJWT: true,
     },
     {
       name: 'firstName',
@@ -162,6 +178,9 @@ export const users: CollectionConfig = {
     },
   ],
   hooks: {
-    beforeChange: [syncToPaystack],
+    beforeChange: [
+      syncToPaystack,
+      autoincrement({ field: 'accountNumber', startFrom: 324842 }),
+    ],
   },
 };
