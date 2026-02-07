@@ -7,11 +7,12 @@ export const organization: WithContext<Organization> = {
   '@type': 'Organization',
   '@id': `${site.url}/#organization`,
   name: site.name,
+  legalName: site.legalName,
   alternateName: site.legalName,
   url: site.url,
   logo: `${site.url}/logo.png`,
   description:
-    'Eurofit Health & Beauty LTD is Kenya’s leading supplier of authentic European supplements, sports nutrition, and skincare products for retail and wholesale.',
+    'Eurofit also known as Eurofit Health & Beauty LTD is Kenya’s leading supplier of authentic European supplements, sports nutrition, and skincare products for retail and wholesale.',
   contactPoint: [
     {
       '@type': 'ContactPoint',

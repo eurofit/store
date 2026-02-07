@@ -1,16 +1,7 @@
 import { getCurrentUser } from '@/actions/auth/get-current-user';
-import { Button } from '@/components/ui/button';
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemDescription,
-  ItemMedia,
-  ItemTitle,
-} from '@/components/ui/item';
+import { Item, ItemContent, ItemMedia, ItemTitle } from '@/components/ui/item';
 import { BadgeCheckIcon, Clock } from 'lucide-react';
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { AccountForm } from './form';
 
@@ -35,37 +26,27 @@ export default async function AccountPage() {
         <h3 className="text-lg font-medium">Account</h3>
         <p className="text-muted-foreground text-sm">Update your account settings.</p>
       </hgroup>
-      <Item variant="outline" size="sm">
-        <ItemMedia>
-          {user.isVerified ? (
+      {user.isVerified && (
+        <Item variant="outline" size="sm" className="bg-green-50 text-green-700">
+          <ItemMedia>
             <BadgeCheckIcon className="size-5" />
-          ) : (
+          </ItemMedia>
+          <ItemContent>
+            <ItemTitle>Your verified email is: {user?.email}</ItemTitle>
+          </ItemContent>
+        </Item>
+      )}
+      {!user.isVerified && (
+        <Item variant="outline" size="sm" className="bg-blue-50 text-blue-700">
+          <ItemMedia>
             <Clock className="size-5" />
-          )}
-        </ItemMedia>
-        <ItemContent>
-          {user.isVerified && (
-            <ItemTitle className="flex gap-0">
-              Your verified email is:&nbsp;
-              <strong>{user.email}</strong>.
-            </ItemTitle>
-          )}
+          </ItemMedia>
+          <ItemContent>
+            <ItemTitle>Your email is not verified</ItemTitle>
+          </ItemContent>
+        </Item>
+      )}
 
-          {!user.isVerified && (
-            <>
-              <ItemTitle>Email Not Verified</ItemTitle>
-              <ItemDescription>{user.email} is not verified.</ItemDescription>
-            </>
-          )}
-        </ItemContent>
-        {!user.isVerified && (
-          <ItemActions>
-            <Button variant="outline" size="sm" asChild>
-              <Link href="/verify">Verify now</Link>
-            </Button>
-          </ItemActions>
-        )}
-      </Item>
       <AccountForm user={user} />
     </div>
   );

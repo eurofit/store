@@ -6,7 +6,7 @@ import { sampleInvoice } from '../data';
 import { InvoiceDocument } from './invoice-document';
 
 export async function PdfViewer() {
-  const qr = await QrCode.toDataURL('https://share.google/84Zpx44Yhx0tfIhfP', {
+  const qr = await QrCode.toDataURL('https://g.page/r/CS7vpFfn8OgQEAE/review', {
     margin: 0,
   });
   return (

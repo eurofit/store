@@ -22,7 +22,8 @@ export interface InvoiceData {
     shippedVia: string;
   };
   items: Array<{
-    no: number;
+    sku: string;
+    bbe: string;
     qty: number;
     description: string;
     price: number;

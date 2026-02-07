@@ -6,23 +6,14 @@ import {
 } from '@/actions/search/search-product-suggestions';
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from '@/components/ui/empty';
-import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from '@/components/ui/input-group';
-import { Skeleton } from '@/components/ui/skeleton';
 import { useToggle } from '@/hooks/use-toggle';
 import { cn } from '@/utils/cn';
 import { useMutation } from '@tanstack/react-query';
-import { truncate } from 'lodash-es';
-import { ChevronRight, ImageOff, SearchIcon, X, XCircle } from 'lucide-react';
+import { ChevronRight, ImageOff, SearchIcon, X } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import pluralize from 'pluralize-esm';
@@ -30,6 +21,9 @@ import * as React from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import { ImageWithRetry } from './image-with-retry';
 import { PreventScroll } from './prevent-scroll';
+import { EmptySearchResult } from './searchbar/empty-search-result';
+import { SearchResultError } from './searchbar/search-error';
+import { SearchListItemSkeleton } from './searchbar/search-skeleton';
 
 const SEARCH_RESULT_LIMIT = 7;
 
@@ -212,55 +206,5 @@ export function SearchSheet() {
         </PreventScroll>
       )}
     </search>
-  );
-}
-
-function SearchListItemSkeleton() {
-  return (
-    <div className="flex items-center space-x-4">
-      <Skeleton className="size-10 rounded-md" />
-      <div className="space-y-2">
-        <Skeleton className="h-2.5 w-62.5" />
-        <Skeleton className="h-2.5 w-50" />
-      </div>
-    </div>
-  );
-}
-
-type EmptySearchResultProps = {
-  query: string;
-};
-
-function EmptySearchResult({ query }: EmptySearchResultProps) {
-  return (
-    <Empty>
-      <EmptyHeader>
-        <EmptyMedia>
-          <SearchIcon />
-        </EmptyMedia>
-        <EmptyTitle>No products found</EmptyTitle>
-        <EmptyDescription className="line-clamp-3 wrap-break-word whitespace-normal">
-          We couldn&apos;t find any products for{' '}
-          <strong>&quot;{truncate(query)}&quot;</strong>.
-        </EmptyDescription>
-        <EmptyDescription>
-          Please try different keywords or check your spelling.
-        </EmptyDescription>
-      </EmptyHeader>
-    </Empty>
-  );
-}
-
-function SearchResultError() {
-  return (
-    <div className="flex flex-col space-y-2 p-8 text-center">
-      <div className="mx-auto flex items-center gap-2">
-        <XCircle className="text-destructive size-4" />
-        <p className="text-muted-foreground text-sm">Something went wrong</p>
-      </div>
-      <p className="text-muted-foreground mt-1 text-xs">
-        An error occurred while searching. Please try again.
-      </p>
-    </div>
   );
 }

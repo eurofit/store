@@ -7,8 +7,9 @@ function generateBarcodeBase64(value: string, options?: JsBarcode.BaseOptions) {
     format: 'CODE128',
     width: 2,
     height: 50,
-    displayValue: false,
+    displayValue: true,
     margin: 0,
+    textAlign: 'right',
     ...options,
   });
   return canvas.toDataURL('image/png');
