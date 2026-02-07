@@ -1,6 +1,6 @@
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { Item, ItemContent, ItemMedia, ItemTitle } from '@/components/ui/item';
-import { BadgeCheckIcon, Clock } from 'lucide-react';
+import { BadgeCheck, Clock } from 'lucide-react';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { AccountForm } from './form';
@@ -29,7 +29,7 @@ export default async function AccountPage() {
       {user.isVerified && (
         <Item variant="outline" size="sm" className="bg-green-50 text-green-700">
           <ItemMedia>
-            <BadgeCheckIcon className="size-5" />
+            <BadgeCheck className="size-5" />
           </ItemMedia>
           <ItemContent>
             <ItemTitle>Your verified email is: {user?.email}</ItemTitle>

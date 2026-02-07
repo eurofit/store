@@ -1,0 +1,15 @@
+# Browsers that we support
+# Modern browsers with ES2019+ support
+# This removes unnecessary polyfills for Array.prototype.at, flat, flatMap, etc.
+
+Chrome >= 90
+Edge >= 90
+Firefox >= 88
+Safari >= 14.1
+iOS >= 14.5
+Samsung >= 14
+Opera >= 76
+not dead
+not IE 11
+not op_mini all
+> 0.2%

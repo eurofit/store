@@ -2,7 +2,7 @@
 
 import config from '@/payload/config';
 import { LoginData, loginSchema } from '@/schemas/login';
-import { safeUser } from '@/utils/safe-user';
+import { safeUserSchema } from '@/schemas/safe-user';
 import { login as payloadLogin } from '@payloadcms/next/auth';
 import { AuthenticationError, UnverifiedEmail } from 'payload';
 
@@ -17,8 +17,19 @@ export async function login(unSafeData: LoginData) {
       password,
     });
 
+    if (!result.user) {
+      throw new Error('Login failed');
+    }
+
     const res = {
-      user: safeUser({ ...result.user, addresses: result.user.addresses?.docs ?? [] })!,
+      user: safeUserSchema.parse({
+        ...result.user,
+        isVerified: result.user._verified ?? false,
+        addresses:
+          result.user.addresses?.docs
+            ?.filter((a) => typeof a !== 'string')
+            .sort((a, b) => (b.isDefault ? 1 : 0) - (a.isDefault ? 1 : 0)) ?? [],
+      }),
     };
 
     return res;

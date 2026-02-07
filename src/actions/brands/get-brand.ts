@@ -1,13 +1,14 @@
 'use server';
 
 import payloadConfig from '@/payload/config';
+import { cache } from 'react';
 import { getPayload } from 'payload';
 
 type GetBrandArgs = {
   slug: string;
 };
 
-export async function getBrand({ slug }: GetBrandArgs) {
+export const getBrand = cache(async ({ slug }: GetBrandArgs) => {
   const payload = await getPayload({ config: payloadConfig });
 
   const { docs: brands } = await payload.find({
@@ -31,4 +32,4 @@ export async function getBrand({ slug }: GetBrandArgs) {
     image: srcImage ?? undefined,
     ...brand,
   };
-}
+});

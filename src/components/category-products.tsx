@@ -11,7 +11,7 @@ import {
 import pluralize from 'pluralize-esm';
 import { EmptyProducts } from './empty-products';
 import { ProductCard } from './product-card';
-import { ProductSort } from './product-sort';
+import { ProductSortSuspense } from './product-sort-suspense';
 
 type CategoryProductsListProps = {
   slug: Promise<string>;
@@ -61,7 +61,7 @@ export async function CategoryProducts({
   return (
     <div className="flex flex-col space-y-6">
       <div className="flex min-h-8 items-center gap-6">
-        <ProductSort
+        <ProductSortSuspense
           className="ml-auto"
           options={PRODUCT_SORT_OPTIONS}
           defaultValue={sort == 'asc' ? 'asc' : 'desc'}

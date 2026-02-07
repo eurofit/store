@@ -5,6 +5,12 @@ import { SendHorizonal } from 'lucide-react';
 import Link from 'next/link';
 import { Logo } from './logo';
 
+const QUICK_LINKS = ['Products', 'About Us', 'Store Locator', 'Careers', 'Contact', 'FAQ'];
+const CUSTOMER_SERVICE = ['Shipping Info', 'Returns', 'Order Tracking', 'Size Guide', 'Gift Cards', 'Help Center'];
+const RESOURCES = ['Blog', 'Fitness Tips', 'Nutrition Guide', 'Workout Plans', 'Product Reviews', 'Community'];
+const COMPANY = ['Our Story', 'Wholesale', 'Partnerships', 'Sustainability', 'Press Kit', 'Affiliates'];
+const LEGAL = ['Terms of Service', 'Privacy Policy', 'Cookie Policy', 'Returns Policy'];
+
 export async function Footer() {
   return (
     <footer className="no-italic border-t px-6 py-12 md:py-16">
@@ -44,30 +50,21 @@ export async function Footer() {
         {/* Quick Links */}
         <div className="grid gap-2">
           <h3 className="text-sm font-semibold">Quick Links</h3>
-          {['Products', 'About Us', 'Store Locator', 'Careers', 'Contact', 'FAQ'].map(
-            (item, index) => (
-              <Link
-                key={`quick-links-${index}`}
-                href="#"
-                className="animated-underline text-muted-foreground hover:text-primary w-fit text-sm transition-colors"
-                prefetch={false}
-              >
-                {item}
-              </Link>
-            ),
-          )}
+          {QUICK_LINKS.map((item, index) => (
+            <Link
+              key={`quick-links-${index}`}
+              href="#"
+              className="animated-underline text-muted-foreground hover:text-primary w-fit text-sm transition-colors"
+              prefetch={false}
+            >
+              {item}
+            </Link>
+          ))}
         </div>
         {/* Customer Service */}
         <div className="grid gap-2">
           <h3 className="text-sm font-semibold">Customer Service</h3>
-          {[
-            'Shipping Info',
-            'Returns',
-            'Order Tracking',
-            'Size Guide',
-            'Gift Cards',
-            'Help Center',
-          ].map((item, index) => (
+          {CUSTOMER_SERVICE.map((item, index) => (
             <Link
               key={`customer-service-${index}`}
               href="#"
@@ -81,14 +78,7 @@ export async function Footer() {
         {/* Resources */}
         <div className="grid gap-2">
           <h3 className="text-sm font-semibold">Resources</h3>
-          {[
-            'Blog',
-            'Fitness Tips',
-            'Nutrition Guide',
-            'Workout Plans',
-            'Product Reviews',
-            'Community',
-          ].map((item, index) => (
+          {RESOURCES.map((item, index) => (
             <Link
               key={`resources-${index}`}
               href="#"
@@ -102,14 +92,7 @@ export async function Footer() {
         {/* Company */}
         <div className="grid gap-2">
           <h3 className="text-sm font-semibold">Company</h3>
-          {[
-            'Our Story',
-            'Wholesale',
-            'Partnerships',
-            'Sustainability',
-            'Press Kit',
-            'Affiliates',
-          ].map((item, index) => (
+          {COMPANY.map((item, index) => (
             <Link
               key={`company-${index}`}
               href="#"
@@ -150,18 +133,16 @@ export async function Footer() {
           <p>VAT: EU123456789</p>
         </div>
         <nav className="flex flex-wrap justify-center gap-x-4 gap-y-2">
-          {['Terms of Service', 'Privacy Policy', 'Cookie Policy', 'Returns Policy'].map(
-            (item) => (
-              <Link
-                key={item}
-                href="#"
-                className="hover:text-primary divide-x-2 divide-red-700 transition-colors"
-                prefetch={false}
-              >
-                {item}
-              </Link>
-            ),
-          )}
+          {LEGAL.map((item) => (
+            <Link
+              key={item}
+              href="#"
+              className="hover:text-primary divide-x-2 divide-red-700 transition-colors"
+              prefetch={false}
+            >
+              {item}
+            </Link>
+          ))}
         </nav>
       </div>
     </footer>

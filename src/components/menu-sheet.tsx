@@ -10,12 +10,12 @@ export async function MenuSheet() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="md:hidden">
+        <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open menu">
           <span className="sr-only">Mobile menu</span>
-          <Menu className="size-5" />
+          <Menu className="size-5" aria-hidden="true" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="left">
+      <SheetContent side="left" style={{ overscrollBehavior: 'contain' }}>
         <SheetHeader>
           <SheetTitle>Menu</SheetTitle>
         </SheetHeader>
@@ -33,9 +33,9 @@ export async function MenuSheet() {
 
 export function MenuSheetSkeleton() {
   return (
-    <Button variant="ghost" size="icon-lg" className="animate-pulse md:hidden" disabled>
+    <Button variant="ghost" size="icon-lg" className="animate-pulse md:hidden" disabled aria-label="Loading menu">
       <span className="sr-only">Mobile menu</span>
-      <Menu className="size-5.5" />
+      <Menu className="size-5.5" aria-hidden="true" />
     </Button>
   );
 }

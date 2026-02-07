@@ -6,7 +6,7 @@ import {
   InputGroupInput,
 } from '@/components/ui/input-group';
 import { useToggle } from '@/hooks/use-toggle';
-import { SearchIcon, X } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import Link from 'next/link';
 import * as React from 'react';
 import { useClickAway } from 'react-use';
@@ -60,13 +60,13 @@ export function SearchBar() {
         >
           <InputGroup className="bg-background! opacity-100! has-[[data-slot=input-group-control]:focus-visible]:ring-0! has-[[data-slot][aria-invalid=true]]:ring-0!">
             <InputGroupAddon align="inline-start">
-              <SearchIcon />
+              <Search aria-hidden="true" />
             </InputGroupAddon>
             <InputGroupInput
               ref={inputRef}
               type="search"
               name="q"
-              placeholder="Search here..."
+              placeholder="Search here…"
               value={query}
               onChange={handleChange}
               onFocus={setOpen}
@@ -86,8 +86,9 @@ export function SearchBar() {
                     inputRef.current?.focus();
                   }}
                   disabled={isSearching}
+                  aria-label="Clear search"
                 >
-                  <X />
+                  <X aria-hidden="true" />
                   <span className="sr-only">Clear search</span>
                 </Button>
               </InputGroupAddon>
@@ -95,9 +96,9 @@ export function SearchBar() {
 
             {isSearching && (
               <InputGroupAddon align="inline-end">
-                <Button size="icon-sm" variant="ghost" disabled={true}>
-                  <Spinner />
-                  <span className="sr-only">Searching the term: {query}</span>
+                <Button size="icon-sm" variant="ghost" disabled={true} aria-label="Searching">
+                  <Spinner aria-hidden="true" />
+                  <span className="sr-only">Searching for: {query}</span>
                 </Button>
               </InputGroupAddon>
             )}
@@ -167,7 +168,7 @@ export function SearchBar() {
                 className="not-hover:text-muted-foreground text-xs hover:underline hover:underline-offset-4"
                 onNavigate={setOff}
               >
-                View all {totalProducts} Product{totalProducts > 1 ? 's' : ''} &rarr;
+                View All {totalProducts} Product{totalProducts > 1 ? 's' : ''} →
               </Link>
             )}
           </SearchResult>

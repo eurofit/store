@@ -13,7 +13,7 @@ import {
 import { useToggle } from '@/hooks/use-toggle';
 import { cn } from '@/utils/cn';
 import { useMutation } from '@tanstack/react-query';
-import { ChevronRight, ImageOff, SearchIcon, X } from 'lucide-react';
+import { ChevronRight, ImageOff, Search } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import pluralize from 'pluralize-esm';
@@ -92,39 +92,38 @@ export function SearchSheet() {
 
   return (
     <search className="md:hidden">
-      <Button variant="outline" size="icon" onClick={setOn} aria-expanded={isOpen}>
-        <SearchIcon />
+      <Button variant="outline" size="icon" onClick={setOn} aria-expanded={isOpen} aria-label="Search products">
+        <Search aria-hidden="true" />
         <span className="sr-only">Search products</span>
       </Button>
 
-      {isOpen && (
+        {isOpen && (
         <PreventScroll>
-          <div className="bg-background absolute inset-x-0 top-0 z-50 h-dvh space-y-6 p-6">
+          <div className="bg-background absolute inset-x-0 top-0 z-50 h-dvh space-y-6 p-6" style={{ overscrollBehavior: 'contain' }}>
             <div className="flex gap-2">
-      
-            <form action="/search" className="grow">
-              <InputGroup>
-                <InputGroupAddon>
-                  <SearchIcon />
-                </InputGroupAddon>
-                <InputGroupInput
-                  type="search"
-                  name="q"
-                  value={query}
-                  onChange={handleSearchChange}
-                  placeholder="Search products"
-                  autoComplete="off"
-                  autoFocus
-                />
-                {totalProducts > 0 && (
-                  <InputGroupAddon align="inline-end">
-                    {totalProducts} {pluralize('result', totalProducts)}
+              <form action="/search" className="grow">
+                <InputGroup>
+                  <InputGroupAddon>
+                    <Search aria-hidden="true" />
                   </InputGroupAddon>
-                )}
-              </InputGroup>
-            </form>
+                    <InputGroupInput
+                      type="search"
+                      name="q"
+                      value={query}
+                      onChange={handleSearchChange}
+                      placeholder="Search products…"
+                      autoComplete="off"
+                      autoFocus
+                    />
+                  {totalProducts > 0 && (
+                    <InputGroupAddon align="inline-end">
+                      {totalProducts} {pluralize('result', totalProducts)}
+                    </InputGroupAddon>
+                  )}
+                </InputGroup>
+              </form>
 
-<Button variant="ghost" onClick={setOff} className="ml-auto">
+              <Button variant="ghost" onClick={setOff} className="ml-auto">
                 Cancel
               </Button>
             </div>
@@ -160,8 +159,8 @@ export function SearchSheet() {
                           href={`/search?q=${encodeURIComponent(query)}`}
                           onClick={setOff}
                         >
-                          View all {totalProducts} {pluralize('results', totalProducts)}
-                          <ChevronRight className="size-3.5" />
+                          View All {totalProducts} {pluralize('results', totalProducts)}
+                          <ChevronRight className="size-3.5" aria-hidden="true" />
                         </Link>
                       </Button>
                     )}
@@ -189,7 +188,7 @@ export function SearchSheet() {
                               loading="eager"
                             />
                           ) : (
-                            <ImageOff className="text-muted-foreground/50 size-3/5" />
+                            <ImageOff className="text-muted-foreground/50 size-3/5" aria-hidden="true" />
                           )}
                         </div>
                         <div className="flex-1 text-left whitespace-break-spaces">

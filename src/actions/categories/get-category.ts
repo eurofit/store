@@ -1,13 +1,14 @@
 'use server';
 
 import payloadConfig from '@/payload/config';
+import { cache } from 'react';
 import { getPayload } from 'payload';
 
 type GetCategoryArgs = {
   slug: string;
 };
 
-export async function getCategory({ slug }: GetCategoryArgs) {
+export const getCategory = cache(async ({ slug }: GetCategoryArgs) => {
   const payload = await getPayload({ config: payloadConfig });
 
   const { docs: categories } = await payload.find({
@@ -25,4 +26,4 @@ export async function getCategory({ slug }: GetCategoryArgs) {
   });
 
   return categories[0] ?? null;
-}
+});

@@ -1,7 +1,11 @@
-import { AnnounceBar } from '@/components/announce-bar';
-import { Footer } from '@/components/footer';
-import { Header } from '@/components/header';
+import dynamic from 'next/dynamic';
 import * as React from 'react';
+import { AnnounceBar } from '@/components/announce-bar';
+import { Header } from '@/components/header';
+
+const Footer = dynamic(() => import('@/components/footer').then((mod) => ({ default: mod.Footer })), {
+  ssr: true,
+});
 
 type StoreLayoutProps = Readonly<{
   children: React.ReactNode;

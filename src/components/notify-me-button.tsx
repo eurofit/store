@@ -60,9 +60,9 @@ export function NotifyMeButton({
       onClick={handleClick}
       disabled={isRequested || isPending}
     >
-      {isPending && <Spinner />}
-      {!isPending && isRequested && 'Will be Notified'}
-      {!isPending && !isRequested && 'Notify me'}
+      {isPending && <Spinner aria-hidden="true" />}
+      {!isPending && isRequested && 'Will Be Notified'}
+      {!isPending && !isRequested && 'Notify Me'}
     </Button>
   );
 }

@@ -44,93 +44,107 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
   const [qty, setQty] = React.useState(0);
   const cartQty = cartItem?.quantity ?? 0;
 
-  // Sync local qty state with cart item quantity
   React.useEffect(() => {
     setQty((current) => (current === cartQty ? current : cartQty));
   }, [cartQty]);
 
-  const commitCartChange = (newQty: number) => {
-    // if item has no price, do nothing
-    if (!line.price) return;
+  const commitCartChange = React.useCallback(
+    (newQty: number) => {
+      if (!line.price) return;
 
-    // if there is no cart, create one with the item
-    if (!isQueryPending && !cart) {
-      createCartWithItem({
-        ...line,
-        product,
-        quantity: newQty,
-        price: line.price!,
-        snapshot: {
-          retailPrice: line.price!,
-        },
-      });
-      return;
-    }
+      if (!isQueryPending && !cart) {
+        createCartWithItem({
+          ...line,
+          product,
+          quantity: newQty,
+          price: line.price,
+          snapshot: {
+            retailPrice: line.price,
+          },
+        });
+        return;
+      }
 
-    // if there is a cart, but item not in it, add the item
-    // if cart is creating, do nothing
-    if (!isQueryPending && !isCreatingCart && cart && !cartItem && newQty > 0) {
-      addItemToCart({
-        ...line,
-        product,
-        quantity: newQty,
-        price: line.price!,
-        snapshot: { retailPrice: line.price! },
-      });
+      if (!isQueryPending && !isCreatingCart && cart && !cartItem && newQty > 0) {
+        addItemToCart({
+          ...line,
+          product,
+          quantity: newQty,
+          price: line.price,
+          snapshot: { retailPrice: line.price },
+        });
+        return;
+      }
 
-      return;
-    }
+      if (
+        !isQueryPending &&
+        cart &&
+        cartItem &&
+        newQty !== cartItem.quantity &&
+        newQty > 0
+      ) {
+        updateCartItemQuantity({
+          ...line,
+          product,
+          quantity: newQty,
+          price: line.price,
+          snapshot: { retailPrice: line.price },
+        });
+        return;
+      }
 
-    // if there is a cart and item in it, update the item quantity
-    if (
-      !isQueryPending &&
-      cart &&
-      cartItem &&
-      newQty !== cartItem.quantity &&
-      newQty > 0
-    ) {
-      updateCartItemQuantity({
-        ...line,
-        product,
-        quantity: newQty,
-        price: line.price!,
-        snapshot: { retailPrice: line.price! },
-      });
-      return;
-    }
+      if (!isQueryPending && cart && cart.items.length > 1 && cartItem && newQty === 0) {
+        removeItemFromCart({
+          item: cartItem.id,
+        });
+        return;
+      }
 
-    // if new quantity is zero, and there are more than 1 items in the cart, remove the item
-    if (!isQueryPending && cart && cart?.items.length > 1 && cartItem && newQty === 0) {
-      removeItemFromCart({
-        item: cartItem.id,
-      });
-      return;
-    }
-
-    // if new quantity is zero, and this is the only item in the cart, delete the cart
-    if (!isQueryPending && cart && cart?.items.length === 1 && cartItem && newQty === 0) {
-      deleteCart();
-      return;
-    }
-  };
+      if (!isQueryPending && cart && cart.items.length === 1 && cartItem && newQty === 0) {
+        deleteCart();
+        return;
+      }
+    },
+    [
+      line,
+      product,
+      isQueryPending,
+      cart,
+      cartItem,
+      isCreatingCart,
+      createCartWithItem,
+      addItemToCart,
+      updateCartItemQuantity,
+      removeItemFromCart,
+      deleteCart,
+    ],
+  );
 
   const debouncedCommitChange = useDebouncedCallback(commitCartChange, 400);
 
-  const handleQtyChange = (newQty: number) => {
-    setQty(newQty);
+  const handleQtyChange = React.useCallback(
+    (newQty: number) => {
+      setQty(newQty);
+      debouncedCommitChange(newQty);
+    },
+    [debouncedCommitChange],
+  );
 
-    debouncedCommitChange(newQty);
-  };
+  const handleIncrement = React.useCallback(() => {
+    setQty((qty) => {
+      const newQty = clamp(qty + 1, 0, line.stock);
+      debouncedCommitChange(newQty);
+      return newQty;
+    });
+  }, [line.stock, debouncedCommitChange]);
 
-  const handleIncrement = () => {
-    setQty((qty) => qty + 1);
-    debouncedCommitChange(clamp(qty + 1, 0, line.stock));
-  };
-
-  const handleDecrement = () => {
-    setQty((qty) => qty - 1);
-    debouncedCommitChange(clamp(qty - 1, 0, line.stock));
-  };
+  const handleDecrement = React.useCallback(() => {
+    setQty((qty) => {
+      const newQty = clamp(qty - 1, 0, line.stock);
+      debouncedCommitChange(newQty);
+      return newQty;
+    });
+  }, [line.stock, debouncedCommitChange]);
 
   // TODO: refactor qty input to separate component be reusable in cart sheet and checkout item
 
@@ -163,21 +177,23 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
 
         <div className="flex items-center gap-3">
           {line.price && (
-            <span className="font-semibold">
+            <span className="font-semibold font-variant-numeric-tabular-nums">
               <span className="text-muted-foreground text-xs">Ksh</span>
               {formatWithCommas(line.price)}
             </span>
           )}
           {line.isLowStock && (
-            <span className="text-xs font-medium text-red-600">
-              Only {line.stock} left
+            <span className="font-variant-numeric-tabular-nums text-xs font-medium text-red-600">
+              Only {line.stock} Left
             </span>
           )}
           {!line.isLowStock && !line.isOutOfStock && (
-            <span className="text-xs text-green-600">{line.stock} in stock</span>
+            <span className="font-variant-numeric-tabular-nums text-xs text-green-600">
+              {line.stock} in Stock
+            </span>
           )}
           {line.isOutOfStock && (
-            <span className="text-xs text-gray-500">Out of stock</span>
+            <span className="text-xs text-gray-500">Out of Stock</span>
           )}
         </div>
       </div>
@@ -204,7 +220,7 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
               disabled={isMounted() && qty <= 0}
               onClick={handleDecrement}
             >
-              <Minus />
+              <Minus aria-hidden="true" />
             </Button>
 
             <Input
@@ -229,7 +245,7 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
               disabled={isMounted() && qty >= line.stock}
               onClick={handleIncrement}
             >
-              <Plus />
+              <Plus aria-hidden="true" />
             </Button>
           </ButtonGroup>
         )}
@@ -244,8 +260,8 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Whatsapp />
-              Inquire price
+              <Whatsapp aria-hidden="true" />
+              Inquire Price
             </Link>
           </Button>
         )}

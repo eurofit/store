@@ -46,7 +46,13 @@ function Product({}: ProductProps) {
   return (
     <div className="relative space-y-2 rounded-lg shadow-sm">
       <AspectRatio ratio={4 / 3} className="bg-muted flex items-center justify-center">
-        <Image alt="Whey protein" src="/whey.png" fill className="object-contain" />
+        <Image
+          alt="Whey protein"
+          src="/whey.png"
+          fill
+          className="object-contain"
+          sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+        />
       </AspectRatio>
       <div className="space-y-2 px-2">
         <h3 className="leading-tight font-medium">

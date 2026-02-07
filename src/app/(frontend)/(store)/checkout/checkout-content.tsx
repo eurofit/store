@@ -32,11 +32,10 @@ import { RadioGroup } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
 import { Spinner } from '@/components/ui/spinner';
 import { useCart } from '@/hooks/use-cart';
+import { useCheckout } from '@/hooks/use-checkout';
 import { useMounted } from '@/hooks/use-mounted';
-import { useCheckout } from '@/hooks/useCheckout';
 import { formatWithCommas } from '@/utils/format-with-commas';
 import { zodResolver } from '@hookform/resolvers/zod';
-
 import { uniqBy } from 'lodash-es';
 import { ChevronRight, Plus } from 'lucide-react';
 import Link from 'next/link';
@@ -139,8 +138,12 @@ export function CartContent({ user }: CartContentProps) {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg leading-normal">Checkout Items</CardTitle>
-            <CardDescription>{totatCartItems} items in your bag</CardDescription>
+            <CardTitle className="text-balance text-lg leading-normal">
+              Checkout Items
+            </CardTitle>
+            <CardDescription>
+              {totatCartItems} {totatCartItems === 1 ? 'item' : 'items'} in your bag
+            </CardDescription>
           </CardHeader>
           <CardContent>
             {cart && cart.items.length > 0 && (
@@ -172,7 +175,7 @@ export function CartContent({ user }: CartContentProps) {
             <CardAction>
               <Button variant="secondary" size="sm" asChild>
                 <Link href="/checkout/addresses/create">
-                  <Plus />
+                  <Plus aria-hidden="true" />
                   Add New Address
                 </Link>
               </Button>
@@ -227,7 +230,9 @@ export function CartContent({ user }: CartContentProps) {
       <div className="relative grow md:max-w-2/5">
         <Card className="sticky top-22 mx-auto w-full max-w-sm">
           <CardHeader>
-            <CardTitle className="text-lg leading-normal">Order Summary</CardTitle>
+            <CardTitle className="text-balance text-lg leading-normal">
+              Order Summary
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <form className="w-full" onSubmit={couponForm.handleSubmit(onCouponSubmit)}>
@@ -239,8 +244,9 @@ export function CartContent({ user }: CartContentProps) {
                     <InputGroup>
                       <InputGroupInput
                         {...field}
-                        placeholder="Coupon code"
+                        placeholder="Coupon code…"
                         aria-invalid={fieldState.invalid}
+                        autoComplete="off"
                       />
                       <InputGroupAddon align="inline-end">
                         <InputGroupButton
@@ -250,6 +256,7 @@ export function CartContent({ user }: CartContentProps) {
                             (field.value && field.value.length < 3) ||
                             couponForm.formState.isSubmitting
                           }
+                          aria-label="Apply coupon"
                         >
                           Apply
                         </InputGroupButton>
@@ -264,7 +271,7 @@ export function CartContent({ user }: CartContentProps) {
             <dl className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
                 <dt className="flex justify-between">Subtotal</dt>
-                <dd className="flex items-center text-right lining-nums slashed-zero tabular-nums">
+                <dd className="flex items-center text-right font-variant-numeric-tabular-nums">
                   <span className="text-muted-foreground">Ksh</span>
                   &nbsp;
                   <p>
@@ -281,7 +288,7 @@ export function CartContent({ user }: CartContentProps) {
               </div>
               <div className="flex items-center justify-between">
                 <dt className="flex justify-between">Shipping</dt>
-                <dd className="flex items-center text-right lining-nums slashed-zero tabular-nums">
+                <dd className="flex items-center text-right font-variant-numeric-tabular-nums">
                   <span className="text-muted-foreground">Ksh</span>
                   &nbsp;
                   <p>
@@ -301,7 +308,7 @@ export function CartContent({ user }: CartContentProps) {
                 <dt className="flex justify-between">
                   <Large>Total</Large>
                 </dt>
-                <dd className="flex items-center text-right lining-nums slashed-zero tabular-nums">
+                <dd className="flex items-center text-right font-variant-numeric-tabular-nums">
                   <span className="text-muted-foreground">Ksh</span>
                   &nbsp;
                   <Large>
@@ -326,9 +333,9 @@ export function CartContent({ user }: CartContentProps) {
                 disabled={isDisabled || isCheckoutPending}
                 onClick={handleCheckout}
               >
-                {isCheckoutPending && <Spinner />}
-                {isCheckoutPending ? 'Processing your order...' : 'Proceed to Payment'}
-                <ChevronRight />
+                {isCheckoutPending && <Spinner aria-hidden="true" />}
+                {isCheckoutPending ? 'Processing your order…' : 'Proceed to Payment'}
+                <ChevronRight aria-hidden="true" />
               </Button>
               <Muted className="text-center">Taxes calculated at checkout</Muted>
             </div>

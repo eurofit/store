@@ -31,7 +31,12 @@ export default async function ThankYouPage({ params }: ThankYouPageProps) {
     <main className="flex items-center justify-center text-center">
       <div className="flex max-w-sm flex-col items-center justify-center gap-4">
         <div className="text-muted-foreground relative mb-6 flex size-32 items-center justify-center md:size-44">
-          <Image src="/illustrations/verified.svg" fill alt="Verified" />
+          <Image
+            src="/illustrations/verified.svg"
+            fill
+            alt="Verified"
+            sizes="(max-width: 768px) 128px, 176px"
+          />
         </div>
         <hgroup className="space-y-2">
           <Heading className="font-bold">Thank You for Your Order!</Heading>

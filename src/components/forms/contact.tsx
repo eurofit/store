@@ -49,6 +49,7 @@ export function ContactForm() {
                 <Input
                   placeholder="Your name"
                   aria-invalid={fieldState.invalid}
+                  autoComplete="name"
                   {...field}
                 />
 
@@ -66,6 +67,9 @@ export function ContactForm() {
                 <Input
                   placeholder="you@example.com"
                   aria-invalid={fieldState.invalid}
+                  type="email"
+                  autoComplete="email"
+                  spellCheck={false}
                   {...field}
                 />
 
@@ -82,8 +86,9 @@ export function ContactForm() {
                 <FieldLabel>Subject</FieldLabel>
 
                 <Input
-                  placeholder="Subject..."
+                  placeholder="Subject…"
                   data-invalid={fieldState.invalid}
+                  autoComplete="off"
                   {...field}
                 />
 
@@ -100,7 +105,7 @@ export function ContactForm() {
                 <FieldLabel>Message</FieldLabel>
 
                 <Textarea
-                  placeholder="Your message..."
+                  placeholder="Your message…"
                   aria-invalid={fieldState.invalid}
                   {...field}
                 />
@@ -111,7 +116,7 @@ export function ContactForm() {
           />
 
           <Button type="submit" className="w-full" disabled={isPending}>
-            {isPending ? 'Sending...' : 'Send'}
+            {isPending ? 'Sending…' : 'Send Message'}
           </Button>
         </FieldGroup>
       </FieldSet>

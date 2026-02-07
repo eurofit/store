@@ -1,7 +1,7 @@
 'use client';
 
-import { truncate } from 'lodash-es';
-import { SearchIcon } from 'lucide-react';
+import truncate from 'lodash-es/truncate';
+import { Search } from 'lucide-react';
 import {
   Empty,
   EmptyDescription,
@@ -19,7 +19,7 @@ export function EmptySearchResult({ query }: EmptySearchResultProps) {
     <Empty className="max-w-sm">
       <EmptyHeader>
         <EmptyMedia>
-          <SearchIcon />
+          <Search />
         </EmptyMedia>
         <EmptyTitle>No products found</EmptyTitle>
         <EmptyDescription className="line-clamp-3 wrap-break-word whitespace-normal">

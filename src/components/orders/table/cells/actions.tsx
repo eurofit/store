@@ -1,7 +1,5 @@
 'use client';
 
-import { InvoiceDocument } from '@/app/(frontend)/(plain)/pdf/components/invoice-document';
-import { sampleInvoice } from '@/app/(frontend)/(plain)/pdf/data';
 import { Whatsapp } from '@/components/icons/whatsapp';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,6 +10,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { sampleInvoice } from '@/pdf/invoice/data';
+import { InvoiceDoc } from '@/pdf/invoice/doc';
 import { Order } from '@/types';
 import { pdf } from '@react-pdf/renderer';
 import { CellContext } from '@tanstack/react-table';
@@ -85,9 +85,7 @@ async function getOrderInvoiceUrl() {
   const qrCode = await QrCode.toDataURL('https://share.google/84Zpx44Yhx0tfIhfP', {
     margin: 0,
   });
-  const blob = await pdf(
-    <InvoiceDocument data={sampleInvoice} qrCode={qrCode} />,
-  ).toBlob();
+  const blob = await pdf(<InvoiceDoc data={sampleInvoice} qrCode={qrCode} />).toBlob();
 
   const url = URL.createObjectURL(blob);
 

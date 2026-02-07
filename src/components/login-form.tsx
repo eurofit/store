@@ -76,9 +76,9 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card className="gap-6">
         <CardHeader>
-          <CardTitle className="text-2xl">Sign in</CardTitle>
+          <CardTitle className="text-balance text-2xl">Sign In</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Enter your email to sign in to your account
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -96,6 +96,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
                         type="email"
                         placeholder="Email"
                         autoComplete="email"
+                        spellCheck={false}
                         {...field}
                         aria-invalid={fieldState.invalid}
                       />
@@ -129,17 +130,17 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
                   )}
                 />
                 <Button type="submit" disabled={isLoggingIn}>
-                  {isLoggingIn && <Spinner />}
-                  {isLoggingIn ? 'Logging in...' : 'Login'}
+                  {isLoggingIn && <Spinner aria-hidden="true" />}
+                  {isLoggingIn ? 'Logging in…' : 'Login'}
                 </Button>
               </FieldGroup>
             </FieldSet>
           </form>
 
           <div className="flex items-center gap-2 text-center text-sm">
-            Don&apos;t have an account?
+            Don't have an account?
             <Link href="/sign-up" className="hover:underline hover:underline-offset-4">
-              Sign up&nbsp;&rarr;
+              Sign up →
             </Link>
           </div>
         </CardContent>

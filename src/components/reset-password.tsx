@@ -66,10 +66,9 @@ export function ResetPassword() {
         <MailSentIcon className="size-32" />
         <MailSentHeader>
           <MailSentTitle>Email Sent</MailSentTitle>
-          <MailSentContent className="text-muted-foreground text-center">
-            We have sent you an email with instructions to reset your password. Please
-            check your inbox.
-          </MailSentContent>
+        <MailSentContent className="text-muted-foreground text-balance text-center">
+          We've sent you an email with instructions to reset your password. Check your inbox.
+        </MailSentContent>
         </MailSentHeader>
       </MailSent>
     );
@@ -77,8 +76,8 @@ export function ResetPassword() {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
-        <CardTitle className="text-2xl">Reset Password</CardTitle>
-        <CardDescription>Enter your new password to reset your password.</CardDescription>
+        <CardTitle className="text-balance text-2xl">Reset Password</CardTitle>
+        <CardDescription>Enter your new password.</CardDescription>
       </CardHeader>
       <CardContent>
         <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)} method="post">
@@ -121,8 +120,8 @@ export function ResetPassword() {
           </FieldSet>
 
           <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-            {form.formState.isSubmitting && <Spinner />}
-            {form.formState.isSubmitting ? 'Resetting...' : 'Reset Password'}
+            {form.formState.isSubmitting && <Spinner aria-hidden="true" />}
+            {form.formState.isSubmitting ? 'Resetting…' : 'Reset Password'}
           </Button>
         </form>
       </CardContent>

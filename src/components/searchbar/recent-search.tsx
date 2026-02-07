@@ -1,8 +1,8 @@
 'use client';
 
 import { cn } from '@/utils/cn';
-import { truncate } from 'lodash-es';
-import { SearchIcon, X } from 'lucide-react';
+import truncate from 'lodash-es/truncate';
+import { Search, X } from 'lucide-react';
 import * as React from 'react';
 import { Button } from '../ui/button';
 
@@ -54,7 +54,7 @@ export function RecentSearchListItem({
         className="grow justify-start overflow-hidden font-normal"
         {...props}
       >
-        <SearchIcon className="text-muted-foreground" />
+        <Search className="text-muted-foreground" />
         {truncate(term)}
       </Button>
       <Button variant="ghost" size="icon" onClick={onClear}>

@@ -2,10 +2,11 @@
 
 import config from '@/payload/config';
 import { safeUserSchema } from '@/schemas/safe-user';
+import { cache } from 'react';
 import { headers as getHeaders } from 'next/headers';
 import { getPayload } from 'payload';
 
-export const getCurrentUser = async () => {
+export const getCurrentUser = cache(async () => {
   const [headers, payload] = await Promise.all([getHeaders(), getPayload({ config })]);
 
   const { user } = await payload.auth({
@@ -17,12 +18,11 @@ export const getCurrentUser = async () => {
   return safeUserSchema.parse({
     ...user,
     isVerified: user._verified ?? false,
-    // default address should come first
     addresses:
       user.addresses?.docs
         ?.filter((a) => typeof a !== 'string')
         .sort((a, b) => (b.isDefault ? 1 : 0) - (a.isDefault ? 1 : 0)) ?? [],
   });
-};
+});
 
 export type CurrentUser = Awaited<ReturnType<typeof getCurrentUser>>;

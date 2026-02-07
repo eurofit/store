@@ -1,9 +1,10 @@
 'use server';
 
 import config from '@/payload/config';
+import { cache } from 'react';
 import { getPayload } from 'payload';
 
-export async function getNav() {
+export const getNav = cache(async () => {
   const payload = await getPayload({
     config,
   });
@@ -13,4 +14,4 @@ export async function getNav() {
   });
 
   return nav.items;
-}
+});

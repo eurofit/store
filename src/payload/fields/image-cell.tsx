@@ -8,7 +8,7 @@ export function ImageCell({ cellData, rowData }: DefaultCellComponentProps) {
 
   return (
     <Link
-      href={`/dashboard/collections/brands/${rowData.id}`}
+      href={`/admin/collections/brands/${rowData.id}`}
       className="relative size-12 shrink-0 overflow-hidden rounded-md border bg-white"
     >
       {cellData ? (

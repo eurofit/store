@@ -9,7 +9,7 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination';
 import { notFound } from 'next/navigation';
-import { ProductSort } from './product-sort';
+import { ProductSortSuspense } from './product-sort-suspense';
 
 import { truncate } from 'lodash-es';
 import { ProductCard } from './product-card';
@@ -62,22 +62,22 @@ export async function SearchProducts({
       {totalProducts > 0 && (
         <hgroup>
           <span className="text-muted-foreground text-sm">
-            Showing {totalProducts} products for
+            Showing {totalProducts} {totalProducts === 1 ? 'product' : 'products'} for
           </span>
-          <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-balance">
-            &quot;{truncate(q)}&quot;
+          <h1 className="text-balance scroll-m-20 text-4xl font-extrabold tracking-tight">
+            "{truncate(q)}"
           </h1>
         </hgroup>
       )}
 
       {totalProducts > 0 && (
         <div className="mb-6 flex min-h-8 items-center gap-6">
-          <ProductSort
+          <ProductSortSuspense
             className="ml-auto"
             options={PRODUCT_SORT_OPTIONS}
             defaultValue={sort == 'asc' ? 'asc' : 'desc'}
           />
-          <span className="text-sm lining-nums">
+          <span className="font-variant-numeric-tabular-nums text-sm">
             {totalProducts} Product{totalProducts !== 1 ? 's' : ''}
           </span>
         </div>

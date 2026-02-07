@@ -36,9 +36,9 @@ export function VerifyEmail() {
         <MailSentIcon className="size-32" />
         <MailSentHeader>
           <MailSentTitle>Check your email</MailSentTitle>
-          <MailSentContent className="text-muted-foreground text-center">
-            We&apos;ve sent a verification link to your email.
-          </MailSentContent>
+        <MailSentContent className="text-muted-foreground text-balance text-center">
+          We've sent a verification link to your email.
+        </MailSentContent>
         </MailSentHeader>
       </MailSent>
     );
@@ -47,10 +47,10 @@ export function VerifyEmail() {
   if (isError) {
     return (
       <div className="flex max-w-xs flex-col items-center gap-2 text-center">
-        <XCircle className="text-destructive h-8 w-8" />
-        <h3 className="text-xl font-semibold">There was a problem</h3>
-        <p className="text-muted-foreground text-sm">
-          This token is not valid or might be expired. Please try again.
+        <XCircle className="text-destructive h-8 w-8" aria-hidden="true" />
+        <h3 className="text-balance text-xl font-semibold">There Was a Problem</h3>
+        <p className="text-muted-foreground text-balance text-sm">
+          This token is invalid or expired. Try requesting a new verification link.
         </p>
       </div>
     );
@@ -60,15 +60,20 @@ export function VerifyEmail() {
     return (
       <div className="flex h-full flex-col items-center justify-center">
         <div className="text-muted-foreground relative mb-6 flex size-32 items-center justify-center">
-          <Image src="/illustrations/verified.svg" fill alt="Verified" />
+          <Image
+            src="/illustrations/verified.svg"
+            fill
+            alt="Verified"
+            sizes="128px"
+          />
         </div>
 
-        <h3 className="text-2xl font-semibold">You&apos;re all set!</h3>
-        <p className="text-muted-foreground mt-1 text-center">
+        <h3 className="text-balance text-2xl font-semibold">You're All Set!</h3>
+        <p className="text-muted-foreground mt-1 text-balance text-center">
           Thank you for verifying your email.
         </p>
         <Link className={buttonVariants({ className: 'mt-4' })} href="/login">
-          Sign in&nbsp;&rarr;
+          Sign In →
         </Link>
       </div>
     );
@@ -78,8 +83,8 @@ export function VerifyEmail() {
     return (
       <div className="flex max-w-sm flex-col items-center gap-2">
         <Loader2 className="size-8 animate-spin" />
-        <h3 className="text-xl font-semibold">Verifying...</h3>
-        <p className="text-muted-foreground text-sm">This won&apos;t take long.</p>
+        <h3 className="text-balance text-xl font-semibold">Verifying…</h3>
+        <p className="text-muted-foreground text-balance text-sm">This won't take long.</p>
       </div>
     );
   }

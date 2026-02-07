@@ -533,8 +533,8 @@ export function AddressForm({ user, city }: AddressFormProps) {
           </CardContent>
           <CardFooter>
             <Button className="w-full" disabled={isCreatingAddress}>
-              {isCreatingAddress && <Spinner />}
-              {isCreatingAddress ? 'Saving Address...' : 'Save Address'}
+              {isCreatingAddress && <Spinner aria-hidden="true" />}
+              {isCreatingAddress ? 'Saving Address…' : 'Save Address'}
             </Button>
           </CardFooter>
         </Card>

@@ -1,6 +1,6 @@
 'use client';
 
-import { orderStatus } from '@/constants/orders';
+import { orderStatusMap } from '@/constants/orders';
 import { Order } from '@/types';
 import { CellContext } from '@tanstack/react-table';
 
@@ -10,7 +10,7 @@ export function StatusCell({ getValue, row }: StatusCellProps) {
   const value = getValue<Order['status']>();
   const paymentStatus = row.original.paymentStatus;
 
-  const status = orderStatus.find((status) => status.value === value);
+  const status = orderStatusMap.get(value);
 
   if (!status) return null;
 

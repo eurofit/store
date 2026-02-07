@@ -58,9 +58,9 @@ export function ForgetPasswordForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-xl">Forgot Password</CardTitle>
+        <CardTitle className="text-balance text-xl">Forgot Password</CardTitle>
         <CardDescription>
-          Enter your email address to receive a password reset link.
+          Enter your email to receive a password reset link.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -75,9 +75,10 @@ export function ForgetPasswordForm() {
                     <FieldLabel htmlFor="email">Email</FieldLabel>
                     <Input
                       id="email"
-                      placeholder="johndoe@mail.com"
+                      placeholder="you@example.com"
                       type="email"
                       autoComplete="email"
+                      spellCheck={false}
                       {...field}
                       aria-invalid={fieldState.invalid}
                     />
@@ -86,7 +87,7 @@ export function ForgetPasswordForm() {
               />
               <Button type="submit" className="w-full" disabled={isPending}>
                 {isPending && <Loader2 className="size-4 animate-spin" />}
-                {isPending ? 'Sending...' : 'Send Reset Link'}
+                {isPending ? 'Sending…' : 'Send Reset Link'}
               </Button>
             </FieldGroup>
           </FieldSet>

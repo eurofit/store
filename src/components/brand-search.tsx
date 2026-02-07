@@ -69,17 +69,21 @@ export function BrandSearch() {
   return (
     <search ref={ref} className="relative w-full max-w-md">
       <InputGroup className="bg-background">
-        <InputGroupAddon>{isSearching ? <Spinner /> : <Search />}</InputGroupAddon>
+        <InputGroupAddon>
+          {isSearching ? <Spinner aria-hidden="true" /> : <Search aria-hidden="true" />}
+        </InputGroupAddon>
         <InputGroupInput
           type="search"
-          placeholder="Search brands"
+          placeholder="Search brands…"
           autoComplete="off"
           onFocus={setOn}
           onChange={handleChange}
         />
         {totalBrands > 0 && (
           <InputGroupAddon align="inline-end">
-            {totalBrands} {pluralize('result', totalBrands)}
+            <span className="font-variant-numeric-tabular-nums">
+              {totalBrands} {pluralize('result', totalBrands)}
+            </span>
           </InputGroupAddon>
         )}
       </InputGroup>
@@ -110,7 +114,7 @@ export function BrandSearch() {
                       loading="eager"
                     />
                   ) : (
-                    <ImageOff className="text-muted-foreground/50 size-3/5" />
+                    <ImageOff className="text-muted-foreground/50 size-3/5" aria-hidden="true" />
                   )}
                 </div>
                 <div className="flex-1 text-left whitespace-break-spaces">

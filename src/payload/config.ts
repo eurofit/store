@@ -43,7 +43,6 @@ export default buildConfig({
     },
   },
   routes: {
-    admin: '/dashboard',
     api: '/payload/api',
     graphQL: '/payload/graphql',
     graphQLPlayground: '/payload/graphql-playground',

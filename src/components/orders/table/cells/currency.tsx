@@ -15,5 +15,5 @@ export function CurrencyCell({ getValue }: CurrencyCellProps) {
     currency: 'KES',
   }).format(value);
 
-  return <p className="tabular-nums">{total}</p>;
+  return <p className="font-variant-numeric-tabular-nums">{total}</p>;
 }

@@ -1,7 +1,7 @@
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { getProductBySlug } from '@/actions/products/get-product-by-slug';
 import { ImageWithRetry } from '@/components/image-with-retry';
-import { ProductLine } from '@/components/product-line';
+import { ProductLinesList } from '@/components/product-lines-list';
 import { Heading } from '@/components/typography';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -13,13 +13,11 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 import { ChevronRight, ImageOff } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import pluralize from 'pluralize-esm';
-import * as React from 'react';
 import { titleCase } from 'title-case';
 
 type ProductPageProps = {
@@ -46,9 +44,9 @@ export async function generateMetadata({
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const [{ slug }, user] = await Promise.all([params, getCurrentUser()]);
+  const { slug } = await params;
 
-  const product = await getProductBySlug(slug);
+  const [product, user] = await Promise.all([getProductBySlug(slug), getCurrentUser()]);
 
   if (!product) notFound();
 
@@ -106,18 +104,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     {pluralize('option', product.productLines.length)}
                   </Badge>
                 </div>
-                <div className="space-y-3">
-                  {productLines.map((line, index) => (
-                    <React.Fragment key={line.id}>
-                      <ProductLine
-                        product={{ id, slug, title, image }}
-                        line={line}
-                        userId={user?.id}
-                      />
-                      {index < product.productLines.length - 1 && <Separator />}
-                    </React.Fragment>
-                  ))}
-                </div>
+                <ProductLinesList
+                  product={{ id, slug, title, image }}
+                  productLines={productLines}
+                  userId={user?.id}
+                />
               </div>
             </div>
           </main>

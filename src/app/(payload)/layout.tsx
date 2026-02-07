@@ -6,8 +6,8 @@ import { handleServerFunctions, RootLayout } from '@payloadcms/next/layouts';
 import type { ServerFunctionClient } from 'payload';
 import * as React from 'react';
 
+import { importMap } from './admin/importMap.js';
 import './custom.css';
-import { importMap } from './dashboard/importMap.js';
 
 type Args = {
   children: React.ReactNode;

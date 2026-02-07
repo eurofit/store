@@ -28,7 +28,7 @@ export async function ProductFilters({ getFilters }: BrandFiltersProps) {
     <ProductFilter>
       <ProductFilterHeader>
         <ProductFilterTitle>
-          <FunnelIcon />
+          <FunnelIcon aria-hidden="true" />
           <h2>Filter By</h2>
         </ProductFilterTitle>
         <FilterClearButton keys={['brand', 'category', 'size', 'flavour-colour']} />
@@ -41,7 +41,7 @@ export async function ProductFilters({ getFilters }: BrandFiltersProps) {
                 <div className="flex items-center">
                   <ProductFilterGroupTitle>{title}</ProductFilterGroupTitle>
                   &nbsp;
-                  <span className="text-muted-foreground text-xs lining-nums">
+                  <span className="text-muted-foreground font-variant-numeric-tabular-nums text-xs">
                     ({items.length})
                   </span>
                 </div>

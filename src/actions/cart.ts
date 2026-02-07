@@ -79,7 +79,6 @@ export async function createCartWithItem(
     getCurrentUser(),
   ]);
 
-  // find the corrosponding product line, inorder to verify prices and stocks
   const { docs: producLines } = await payload.find({
     collection: 'product-lines',
     where: {
@@ -103,9 +102,8 @@ export async function createCartWithItem(
     pagination: false,
   });
 
-  const productLine = producLines.find((pl) => pl.id === item);
+  const productLine = producLines[0];
 
-  // incase the product line is not found
   if (!productLine) {
     throw new CartProductNotFoundError([item]);
   }

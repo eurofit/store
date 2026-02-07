@@ -35,7 +35,7 @@ export function ProductCard({
     >
       <CardHeader className="bg-muted border-b border-gray-200 pt-6 pb-4">
         <div className="space-y-2">
-          <CardTitle className="text-xl tracking-tight text-pretty">
+          <CardTitle className="text-balance text-xl tracking-tight">
             <Link
               href={`/products/${slug}`}
               className="hover:underline hover:underline-offset-4"
@@ -62,21 +62,21 @@ export function ProductCard({
               ) : (
                 <ImageOff
                   className="text-muted m-auto size-1/2"
-                  aria-label="Image not available"
+                  aria-hidden="true"
                 />
               )}
             </div>
           </div>
 
           <div className="bg-background z-2 space-y-4 lg:col-span-3">
-            <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-gray-900">Choose Options</h3>
-              <span className="border-gray-300 text-xs text-gray-600">
-                {productLines.length}
-                &nbsp;
-                {pluralize('Option', productLines.length)}
-              </span>
-            </div>
+          <div className="flex items-center justify-between">
+            <h3 className="text-balance font-semibold text-gray-900">Choose Options</h3>
+            <span className="border-gray-300 font-variant-numeric-tabular-nums text-xs text-gray-600">
+              {productLines.length}
+              &nbsp;
+              {pluralize('Option', productLines.length)}
+            </span>
+          </div>
 
             <div className="space-y-3">
               {productLines.map((line, index) => (

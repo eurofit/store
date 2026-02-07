@@ -68,7 +68,13 @@ function BrandSlide({ className }: BrandSlideProps) {
       </div>
       <div className="relative h-full flex-1">
         <div className="relative -my-4 ml-auto h-[calc(100%+2rem)] w-full">
-          <Image src="/whey.png" alt="on" fill className="object-contain" />
+          <Image
+            src="/whey.png"
+            alt="on"
+            fill
+            className="object-contain"
+            sizes="(max-width: 768px) 50vw, 25vw"
+          />
         </div>
       </div>
     </div>

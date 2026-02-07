@@ -4,9 +4,10 @@ import { getCurrentUser } from '@/actions/auth/get-current-user';
 import config from '@/payload/config';
 import { ProductLine } from '@/types';
 import { uniqBy } from 'lodash-es';
+import { cache } from 'react';
 import { getPayload } from 'payload';
 
-export async function getProductBySlug(slug: string) {
+export const getProductBySlug = cache(async (slug: string) => {
   const [payload, user] = await Promise.all([getPayload({ config }), getCurrentUser()]);
 
   const { docs } = await payload.find({
@@ -89,4 +90,4 @@ export async function getProductBySlug(slug: string) {
     image: srcImage || null,
     productLines: formattedProductLines,
   };
-}
+});

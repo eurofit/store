@@ -58,12 +58,13 @@ export function AccountForm({ user }: AccountFormProps) {
                 >
                   Email
                 </FieldLabel>
-                <Input
-                  id={field.name}
-                  {...field}
-                  aria-invalid={fieldState.invalid}
-                  autoComplete="email"
-                />
+                  <Input
+                    id={field.name}
+                    {...field}
+                    aria-invalid={fieldState.invalid}
+                    autoComplete="email"
+                    spellCheck={false}
+                  />
 
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>

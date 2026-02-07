@@ -7,7 +7,7 @@ import * as React from 'react';
 
 export const RowLabel: React.FC = () => {
   const { data } = useRowLabel<Cart['items'][number]>();
-  const [title, setTitle] = React.useState<string>('Loading...');
+  const [title, setTitle] = React.useState<string>('Loading…');
 
   React.useEffect(() => {
     const productLineId =
