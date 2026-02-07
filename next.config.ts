@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
     formats: ['image/avif', 'image/webp'],
   },
   experimental: {
-    optimizePackageImports: ['lucide-react'],
+    optimizePackageImports: ['lucide-react', '@tanstack/react-query'],
   },
   // Target modern browsers to avoid unnecessary polyfills
   compiler: {

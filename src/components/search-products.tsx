@@ -65,7 +65,7 @@ export async function SearchProducts({
             Showing {totalProducts} {totalProducts === 1 ? 'product' : 'products'} for
           </span>
           <h1 className="text-balance scroll-m-20 text-4xl font-extrabold tracking-tight">
-            "{truncate(q)}"
+            &quot;{truncate(q)}&quot;
           </h1>
         </hgroup>
       )}

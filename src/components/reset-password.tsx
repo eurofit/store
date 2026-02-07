@@ -67,7 +67,7 @@ export function ResetPassword() {
         <MailSentHeader>
           <MailSentTitle>Email Sent</MailSentTitle>
         <MailSentContent className="text-muted-foreground text-balance text-center">
-          We've sent you an email with instructions to reset your password. Check your inbox.
+          We&apos;ve sent you an email with instructions to reset your password. Check your inbox.
         </MailSentContent>
         </MailSentHeader>
       </MailSent>

@@ -4,14 +4,13 @@ import {
   searchBrand as searchBrandAction,
   SearchBrandResult,
 } from '@/actions/search/search-brand';
+import { useClickAway } from '@/hooks/use-click-away';
 import { useToggle } from '@/hooks/use-toggle';
 import { cn } from '@/utils/cn';
 import { useMutation } from '@tanstack/react-query';
 import { ImageOff, Search } from 'lucide-react';
 import Link from 'next/link';
-import pluralize from 'pluralize-esm';
 import * as React from 'react';
-import { useClickAway } from 'react-use';
 import { toast } from 'sonner';
 import { useDebouncedCallback } from 'use-debounce';
 import { ImageWithRetry } from './image-with-retry';
@@ -20,20 +19,18 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from './ui/input-group';
 import { Spinner } from './ui/spinner';
 
 export function BrandSearch() {
-  const ref = React.useRef<HTMLDivElement>(null!);
-  const { value: open, setOn, setOff } = useToggle();
   const [brands, setBrands] = React.useState<NonNullable<SearchBrandResult>['brands']>(
     [],
   );
   const [totalBrands, setTotalBrands] =
     React.useState<NonNullable<SearchBrandResult>['totalBrands']>(0);
 
+  const { value: open, setOn, setOff } = useToggle();
+
   const { mutate: searchBrand, isPending: isSearching } = useMutation({
     mutationKey: ['brands-search'],
     mutationFn: searchBrandAction,
     onSuccess: (data) => {
-      console.log(data);
-
       if (data) {
         setBrands(data.brands);
         setTotalBrands(data.totalBrands);
@@ -64,7 +61,7 @@ export function BrandSearch() {
     debouncedSearch(trimmedQuery);
   };
 
-  useClickAway(ref, setOff);
+  const ref = useClickAway<HTMLDivElement>(setOff);
 
   return (
     <search ref={ref} className="relative w-full max-w-md">
@@ -82,7 +79,7 @@ export function BrandSearch() {
         {totalBrands > 0 && (
           <InputGroupAddon align="inline-end">
             <span className="font-variant-numeric-tabular-nums">
-              {totalBrands} {pluralize('result', totalBrands)}
+              {totalBrands} {totalBrands === 1 ? 'result' : 'results'}
             </span>
           </InputGroupAddon>
         )}

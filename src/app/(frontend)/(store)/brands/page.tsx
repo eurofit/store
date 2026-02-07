@@ -1,6 +1,6 @@
 import { getBrands } from '@/actions/brands/get-brands';
 import { BrandsSkeleton } from '@/components/brand-card';
-import { BrandSearch } from '@/components/brand-search';
+import { BrandSearchDynamic } from '@/components/brand-search-dynamic';
 import { Brands } from '@/components/brands';
 import { JsonLd } from '@/components/json-ld';
 import { TotalBrands } from '@/components/total-brands';
@@ -66,6 +66,7 @@ export default async function BrandsPage({
           height={900}
           className="hidden h-full w-auto object-contain md:inline"
           priority
+          loading="eager"
         />
 
         <div className="relative flex h-full grow flex-col items-center justify-center gap-6 max-md:p-6 md:bg-[url('/bg.png')] md:bg-cover md:bg-bottom md:before:absolute md:before:inset-0 md:before:backdrop-blur-md md:before:content-[''] md:after:absolute md:after:left-0 md:after:h-full md:after:w-2 md:after:-translate-x-1/2 md:after:backdrop-blur-xl md:after:content-['']">
@@ -87,7 +88,7 @@ export default async function BrandsPage({
               Authentic Global Brands Available at Unbeatable Prices in Kenya.
             </p>
           </hgroup>
-          <BrandSearch />
+          <BrandSearchDynamic />
         </div>
       </div>
 

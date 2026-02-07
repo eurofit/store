@@ -28,6 +28,7 @@ export function BrandCard({ title, image, slug, index }: BrandCardProps) {
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 33vw, 20vw"
             loading={index > 4 ? 'lazy' : 'eager'}
             priority={index <= 4}
+            fetchPriority={index <= 4 ? 'high' : 'auto'}
           />
         )}
         {!image && (
