@@ -101,14 +101,8 @@ export function SearchSheet() {
         <PreventScroll>
           <div className="bg-background absolute inset-x-0 top-0 z-50 h-dvh space-y-6 p-6">
             <div className="flex gap-2">
-              <h2 className="text-lg font-medium">Search</h2>
-              <Button variant="outline" size="icon" onClick={setOff} className="ml-auto">
-                <X />
-                <span className="sr-only">Close search</span>
-              </Button>
-            </div>
-
-            <form action="/search">
+      
+            <form action="/search" className="grow">
               <InputGroup>
                 <InputGroupAddon>
                   <SearchIcon />
@@ -129,6 +123,11 @@ export function SearchSheet() {
                 )}
               </InputGroup>
             </form>
+
+<Button variant="ghost" onClick={setOff} className="ml-auto">
+                Cancel
+              </Button>
+            </div>
 
             <div>
               {/* SEARCH SKELETON  */}
