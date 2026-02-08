@@ -32,8 +32,10 @@ export async function generateMetadata({ params }: BrandPageProps): Promise<Meta
   ]);
 
   return {
-    title: { absolute: `${brand.title} Online Store in Kenya` },
-    description: `Shop over ${totalBrandProductLines} authentic ${brand.title} products at ${site.name}. Fresh stock, fast delivery and trusted quality. Order today while stock lasts.`,
+    title: {
+      absolute: `${brand.title} Supplements in Kenya | Buy Authentic ${brand.title} Online`,
+    },
+    description: `Shop ${totalBrandProductLines}+ authentic ${brand.title} supplements in Kenya. Verified products, fair prices, and fast nationwide delivery from ${site.name}.`,
     alternates: {
       canonical: `${site.url}/brands/${brandSlug}`,
     },
