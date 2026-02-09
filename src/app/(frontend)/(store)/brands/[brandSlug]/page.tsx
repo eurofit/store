@@ -33,26 +33,27 @@ export async function generateMetadata({ params }: BrandPageProps): Promise<Meta
 
   return {
     title: `${brand.title} Supplements in Kenya`,
-    description:`Shop ${totalBrandProductLines}+ authentic ${brand.title} supplements in Kenya. Verified products, fair prices, fast nationwide delivery, and trusted quality from ${site.name}.`,
-  alternates: {
-    canonical: `${site.url}/brands/${brandSlug}`,
-  },
-};
+    description: `Shop ${totalBrandProductLines}+ authentic ${brand.title} supplements in Kenya. Verified products, fair prices, fast nationwide delivery, and trusted quality from ${site.name}.`,
+    alternates: {
+      canonical: `${site.url}/brands/${brandSlug}`,
+    },
+  };
 
-export default async function BrandPage({ params, searchParams }: BrandPageProps) {
-  const brandSlug = params.then((p) => p.brandSlug);
+  export default async function BrandPage({ params, searchParams }: BrandPageProps) {
+    const brandSlug = params.then((p) => p.brandSlug);
 
-  const formattedSearchParams = searchParams.then((sp) => {
-    return {
-      page: typeof sp.page === 'string' ? Math.max(1, Number(sp.page)) : 1,
-      title: Array.isArray(sp.title) ? sp.title[0] : (sp.title ?? 'asc'),
-      category: castArray(sp.category ?? []),
-      size: castArray(sp.size ?? []).map((s) => decodeURIComponent(s)),
-      flavourColour: castArray(sp['flavour-colour'] ?? []).map((s) =>
-        decodeURIComponent(s),
-      ),
-    };
-  });
+    const formattedSearchParams = searchParams.then((sp) => {
+      return {
+        page: typeof sp.page === 'string' ? Math.max(1, Number(sp.page)) : 1,
+        title: Array.isArray(sp.title) ? sp.title[0] : (sp.title ?? 'asc'),
+        category: castArray(sp.category ?? []),
+        size: castArray(sp.size ?? []).map((s) => decodeURIComponent(s)),
+        flavourColour: castArray(sp['flavour-colour'] ?? []).map((s) =>
+          decodeURIComponent(s),
+        ),
+      };
+    });
+  }
 
   return (
     <div className="space-y-10">
