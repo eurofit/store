@@ -7,7 +7,7 @@ import Link from 'next/link';
 type IdCellProps = CellContext<Order, unknown>;
 
 export function IdCell({ getValue }: IdCellProps) {
-  const value = getValue<number>();
+  const value = getValue<Order['id']>();
 
   return (
     <Link

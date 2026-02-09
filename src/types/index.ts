@@ -27,6 +27,7 @@ export type ProductLine = {
   title: string;
   stock: number;
   price: number | null;
+  expiryDate: string | null;
   variant?: string | null;
   isBackorder: boolean;
   isOutOfStock: boolean;
@@ -59,6 +60,18 @@ export type Order = {
   total?: number | null;
   status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
   paymentStatus: 'unpaid' | 'paid' | 'refunded';
+};
+
+// =======================
+// STOCK ALERTS
+// =======================
+
+export type StockAlert = {
+  id: string;
+  slug: string;
+  title: string;
+  image: string | null;
+  isOutOfStock: boolean;
 };
 
 // =======================

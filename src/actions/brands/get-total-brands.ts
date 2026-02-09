@@ -3,7 +3,7 @@
 import payloadConfig from '@/payload/config';
 import { getPayload } from 'payload';
 
-export async function getTotalBrand() {
+export async function getTotalBrands() {
   // 'use cache';
   // cacheTag('brands');
   // cacheLife('days');

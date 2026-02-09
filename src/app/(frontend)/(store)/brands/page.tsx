@@ -1,4 +1,5 @@
 import { getBrands } from '@/actions/brands/get-brands';
+import { getTotalBrands } from '@/actions/brands/get-total-brands';
 import { BrandsSkeleton } from '@/components/brand-card';
 import { BrandSearchDynamic } from '@/components/brand-search-dynamic';
 import { Brands } from '@/components/brands';
@@ -10,13 +11,16 @@ import { Metadata } from 'next';
 import Image from 'next/image';
 import * as React from 'react';
 
-export const metadata: Metadata = {
-  title: 'Shop by Brand',
-  description: 'Explore our wide range of brands and find your favorites.',
-  alternates: {
-    canonical: site.url + '/brands',
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const totalBrands = await getTotalBrands();
+  return {
+    title: 'Shop Trusted Sports Nutrition Brands in Kenya',
+    description: `Browse ${totalBrands}+ authentic global sports nutrition brands. Verified supplements, fair prices, and fast delivery anywhere in Kenya.`,
+    alternates: {
+      canonical: site.url + '/brands',
+    },
+  };
+}
 
 const BRANDS_LIMIT = 35;
 
@@ -78,14 +82,15 @@ export default async function BrandsPage({
               id="brand-list-heading"
               className="scroll-m-20 text-2xl font-bold tracking-tight text-pretty lg:text-3xl"
             >
-              Discover{' '}
+              Shop Over{' '}
               <React.Suspense fallback={<span>...</span>}>
                 <TotalBrands />
-              </React.Suspense>
-              + top sports nutrition brands.
+              </React.Suspense>{' '}
+              Trusted Sports Nutrition Brands
             </h1>
             <p className="text-muted-foreground text-pretty capitalize">
-              Authentic Global Brands Available at Unbeatable Prices in Kenya.
+              All your favorite global supplement brands — 100% authentic, available
+              locally in Kenya.
             </p>
           </hgroup>
           <BrandSearchDynamic />

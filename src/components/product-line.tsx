@@ -9,6 +9,7 @@ import { type ProductLine } from '@/types';
 import { buildWhatsAppLink } from '@/utils/build-wa-link';
 import { cn } from '@/utils/cn';
 import { formatWithCommas } from '@/utils/format-with-commas';
+import { format } from 'date-fns';
 import { clamp } from 'lodash-es';
 import { Minus, Plus } from 'lucide-react';
 import Link from 'next/link';
@@ -100,7 +101,13 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
         return;
       }
 
-      if (!isQueryPending && cart && cart.items.length === 1 && cartItem && newQty === 0) {
+      if (
+        !isQueryPending &&
+        cart &&
+        cart.items.length === 1 &&
+        cartItem &&
+        newQty === 0
+      ) {
         deleteCart();
         return;
       }
@@ -164,7 +171,7 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
       <div className="w-full min-w-0 grow">
         <div className="mb-1 flex items-center gap-2">
           {line.variant && (
-            <h3 id={line.slug} className="scroll-m-20 text-sm text-gray-600 capitalize">
+            <h3 id={line.slug} className="scroll-m-20 font-medium capitalize">
               {line.variant}
             </h3>
           )}
@@ -175,9 +182,21 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
           )}
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center">
+          {line.sku && (
+            <p className="text-muted-foreground text-xs">SKU:&nbsp;{line.sku}</p>
+          )}
+          {line.expiryDate && (
+            <>
+              {line.sku && <span>&nbsp;&bull;&nbsp;</span>}
+              <p className="text-xs">BBE:&nbsp;{format(line.expiryDate, 'dd/MM/yyyy')}</p>
+            </>
+          )}
+        </div>
+
+        <div className="mt-3 flex items-center gap-3">
           {line.price && (
-            <span className="font-semibold font-variant-numeric-tabular-nums">
+            <span className="font-variant-numeric-tabular-nums font-semibold">
               <span className="text-muted-foreground text-xs">Ksh</span>
               {formatWithCommas(line.price)}
             </span>
@@ -251,7 +270,7 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
         )}
 
         {!line.isOutOfStock && !line.price && (
-          <Button variant="outline" className="text-[#103928]" asChild>
+          <Button variant="outline" className="text-whatsapp" asChild>
             <Link
               href={buildWhatsAppLink({
                 phone: '254110990666',

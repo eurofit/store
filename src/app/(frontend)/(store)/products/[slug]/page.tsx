@@ -12,10 +12,8 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import { Button } from '@/components/ui/button';
-import { ChevronRight, ImageOff } from 'lucide-react';
+import { ImageOff } from 'lucide-react';
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import pluralize from 'pluralize-esm';
 import { titleCase } from 'title-case';
@@ -50,11 +48,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   if (!product) notFound();
 
-  const { id, image, title, productLines, categories, relatedProducts } = product;
-
-  const categoryParams = categories
-    .map((cat) => `category=${encodeURIComponent(cat.slug)}`)
-    .join('&');
+  const { id, image, title, productLines } = product;
 
   return (
     <div className="space-y-10">
@@ -75,46 +69,44 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </Breadcrumb>
 
       <div className="flex w-full flex-col items-start gap-16 md:flex-row">
-        <div className="relative grow space-y-10">
+        <div className="relative grow space-y-10 md:max-w-5xl">
           <Heading>{title}</Heading>
-          <main>
-            <div className="flex flex-col items-start gap-6 md:flex-row">
-              <div className="relative flex aspect-square max-w-xs items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-white md:basis-2/5">
-                {image && (
-                  <ImageWithRetry
-                    src={image}
-                    alt={title + ' image'}
-                    fill
-                    className="m-auto max-h-11/12 max-w-11/12 object-contain"
-                    sizes="(max-width: 768px) 100vw, 350px"
-                  />
-                )}
-                {!image && (
-                  <ImageOff
-                    className="text-muted m-auto size-1/2"
-                    aria-label="Image not available"
-                  />
-                )}
-              </div>
-              <div className="z-2 grow space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-semibold">Choose Options</h3>
-                  <Badge variant="outline">
-                    {product.productLines.length}{' '}
-                    {pluralize('option', product.productLines.length)}
-                  </Badge>
-                </div>
-                <ProductLinesList
-                  product={{ id, slug, title, image }}
-                  productLines={productLines}
-                  userId={user?.id}
+          <main className="flex flex-col items-start gap-6 md:flex-row">
+            <div className="relative flex aspect-square max-w-xs items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-white md:basis-2/5">
+              {image && (
+                <ImageWithRetry
+                  src={image}
+                  alt={title + ' image'}
+                  fill
+                  className="m-auto max-h-11/12 max-w-11/12 object-contain"
+                  sizes="(max-width: 768px) 100vw, 350px"
                 />
+              )}
+              {!image && (
+                <ImageOff
+                  className="text-muted m-auto size-1/2"
+                  aria-label="Image not available"
+                />
+              )}
+            </div>
+            <div className="z-2 w-full space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-semibold">Choose Variants</h3>
+                <Badge variant="outline">
+                  {product.productLines.length}{' '}
+                  {pluralize('option', product.productLines.length)}
+                </Badge>
               </div>
+              <ProductLinesList
+                product={{ id, slug, title, image }}
+                productLines={productLines}
+                userId={user?.id}
+              />
             </div>
           </main>
         </div>
 
-        <aside className="basis-1/4 space-y-10 md:px-4">
+        {/* <aside className="basis-1/4 space-y-10 md:px-4">
           {relatedProducts.products && relatedProducts?.products.length > 0 && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
@@ -159,7 +151,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </ul>
             </div>
           )}
-        </aside>
+        </aside> */}
       </div>
     </div>
   );

@@ -13,11 +13,19 @@ export const productLines: CollectionConfig = {
     singular: 'Product Line',
     plural: 'Product Lines',
   },
+  access: {
+    read: () => true,
+  },
   admin: {
     useAsTitle: 'title',
     listSearchableFields: ['sku', 'variant', 'title', 'barcode', 'slug'],
     defaultColumns: ['title', 'variant', 'sku', 'expiryDate', 'stock'],
   },
+  forceSelect: {
+    stock: true,
+    srcStock: true,
+  },
+
   fields: [
     // === Sidebar Fields ===
     slugField({

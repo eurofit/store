@@ -105,6 +105,7 @@ export async function getProductsByBrand(opts: GetProductsByBrandArgs) {
         slug: true,
         title: true,
         variant: true,
+        expiryDate: true,
         stock: true,
         srcStock: true,
         retailPrice: true,

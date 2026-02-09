@@ -10,6 +10,9 @@ export const products: CollectionConfig = {
     singular: 'Product',
     plural: 'Products',
   },
+  access: {
+    read: () => true,
+  },
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'brand', 'origin', 'srcImage'],

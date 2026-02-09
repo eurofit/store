@@ -44,7 +44,7 @@ export async function UserButton({ className }: { className?: string }) {
   const pathname = headers.get('x-pathname') ?? '/';
   const search = headers.get('x-search') ?? '';
 
-  const fullPath = pathname + search;
+  const fullPath = encodeURIComponent(pathname + search);
 
   if (!user)
     return (

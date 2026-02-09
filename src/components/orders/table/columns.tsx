@@ -1,10 +1,10 @@
 import { Order } from '@/types';
 import { ColumnDef } from '@tanstack/react-table';
 import { ActionsCell } from './cells/actions';
-import { CurrencyCell } from './cells/currency';
 import { DateCell } from './cells/date';
 import { IdCell } from './cells/id';
 import { StatusCell } from './cells/status';
+import { TotalCell } from './cells/total';
 
 export const columns: ColumnDef<Order>[] = [
   {
@@ -20,7 +20,7 @@ export const columns: ColumnDef<Order>[] = [
   {
     accessorKey: 'total',
     header: 'Total',
-    cell: CurrencyCell,
+    cell: TotalCell,
   },
   {
     accessorKey: 'status',

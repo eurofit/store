@@ -35,7 +35,7 @@ export function ProductCard({
     >
       <CardHeader className="bg-muted border-b border-gray-200 pt-6 pb-4">
         <div className="space-y-2">
-          <CardTitle className="text-balance text-xl tracking-tight">
+          <CardTitle className="text-xl tracking-tight text-balance">
             <Link
               href={`/products/${slug}`}
               className="hover:underline hover:underline-offset-4"
@@ -50,7 +50,7 @@ export function ProductCard({
       <CardContent className="space-y-6">
         <div className="relative grid grid-cols-1 content-start items-start gap-8 lg:grid-cols-5">
           <div className="flex flex-col items-center justify-center gap-6 md:sticky md:top-12 lg:col-span-2">
-            <div className="relative flex aspect-square w-full max-w-87.5 items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-white">
+            <div className="sticky top-5 flex aspect-square w-full max-w-87.5 items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-white">
               {image ? (
                 <ImageWithRetry
                   src={image}
@@ -60,23 +60,22 @@ export function ProductCard({
                   sizes="(max-width: 768px) 100vw, 350px"
                 />
               ) : (
-                <ImageOff
-                  className="text-muted m-auto size-1/2"
-                  aria-hidden="true"
-                />
+                <ImageOff className="text-muted m-auto size-1/2" aria-hidden="true" />
               )}
             </div>
           </div>
 
           <div className="bg-background z-2 space-y-4 lg:col-span-3">
-          <div className="flex items-center justify-between">
-            <h3 className="text-balance font-semibold text-gray-900">Choose Options</h3>
-            <span className="border-gray-300 font-variant-numeric-tabular-nums text-xs text-gray-600">
-              {productLines.length}
-              &nbsp;
-              {pluralize('Option', productLines.length)}
-            </span>
-          </div>
+            <div className="flex items-center justify-between">
+              <h3 className="font-semibold text-balance text-gray-900">
+                Choose Variants
+              </h3>
+              <span className="font-variant-numeric-tabular-nums border-gray-300 text-xs text-gray-600">
+                {productLines.length}
+                &nbsp;
+                {pluralize('Option', productLines.length)}
+              </span>
+            </div>
 
             <div className="space-y-3">
               {productLines.map((line, index) => (

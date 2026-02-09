@@ -65,7 +65,7 @@ export function ActionsCell({ row }: ActionsCellProps) {
             <Mail />
             Email us
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
+          <DropdownMenuItem className="text-whatsapp cursor-pointer">
             <Whatsapp />
             Chat us
           </DropdownMenuItem>

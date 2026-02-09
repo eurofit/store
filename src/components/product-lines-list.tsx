@@ -12,9 +12,13 @@ type ProductLinesListProps = {
   userId?: string | null;
 };
 
-export function ProductLinesList({ product, productLines, userId }: ProductLinesListProps) {
+export function ProductLinesList({
+  product,
+  productLines,
+  userId,
+}: ProductLinesListProps) {
   return (
-    <div className="space-y-3">
+    <div className="w-full space-y-3">
       {productLines.map((line, index) => (
         <React.Fragment key={line.id}>
           <ProductLine product={product} line={line} userId={userId} />

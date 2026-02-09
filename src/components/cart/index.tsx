@@ -32,20 +32,23 @@ export function Cart() {
   const isCartEmpty = !cart || (cart && cart.items.length === 0);
   return (
     <Sheet modal>
-        <SheetTrigger disabled={isQueryPending} asChild>
+      <SheetTrigger disabled={isQueryPending} asChild>
         <Button variant="outline" size="icon" className="relative" aria-label="View Cart">
           <ShoppingBag aria-hidden="true" />
 
           <span className="sr-only">Cart Button</span>
           {totalItems > 0 && (
-            <Badge className="bg-destructive absolute -end-2.5 -top-2.5 h-5 min-w-5 rounded-full px-1 font-variant-numeric-tabular-nums">
+            <Badge className="bg-destructive font-variant-numeric-tabular-nums absolute -end-2.5 -top-2.5 h-5 min-w-5 rounded-full px-1">
               {totalItems}
             </Badge>
           )}
         </Button>
       </SheetTrigger>
 
-      <SheetContent className="flex h-full w-11/12! min-w-1/3 flex-col" style={{ overscrollBehavior: 'contain' }}>
+      <SheetContent
+        className="flex h-full w-11/12! min-w-1/3 flex-col"
+        style={{ overscrollBehavior: 'contain' }}
+      >
         {/* HEADER  */}
         <SheetHeader className="flex-row items-center gap-2 border-b">
           <SheetTitle>Cart</SheetTitle>
@@ -63,10 +66,10 @@ export function Cart() {
             <section className="m-auto flex max-w-sm flex-col items-center gap-6 text-center">
               <ShoppingBasket className="size-24 text-gray-200" aria-hidden="true" />
               <hgroup className="space-y-2">
-                <h2 className="text-muted-foreground text-balance text-xl font-medium">
+                <h2 className="text-muted-foreground text-xl font-medium text-balance">
                   Empty Cart
                 </h2>
-                <p className="text-muted-foreground mx-auto max-w-3/5 text-balance text-sm">
+                <p className="text-muted-foreground mx-auto max-w-3/5 text-sm text-balance">
                   Your cart is empty. Add items to see them here.
                 </p>
               </hgroup>
@@ -160,5 +163,21 @@ export function Cart() {
         </SheetFooter>
       </SheetContent>
     </Sheet>
+  );
+}
+
+export function CartSkeleton() {
+  return (
+    <Button
+      variant="outline"
+      size="icon"
+      className="relative"
+      disabled
+      aria-label="Loading Cart"
+    >
+      <ShoppingBag aria-hidden="true" />
+
+      <span className="sr-only">Loading Cart</span>
+    </Button>
   );
 }

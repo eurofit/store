@@ -5,15 +5,46 @@ import { SendHorizonal } from 'lucide-react';
 import Link from 'next/link';
 import { Logo } from './logo';
 
-const QUICK_LINKS = ['Products', 'About Us', 'Store Locator', 'Careers', 'Contact', 'FAQ'];
-const CUSTOMER_SERVICE = ['Shipping Info', 'Returns', 'Order Tracking', 'Size Guide', 'Gift Cards', 'Help Center'];
-const RESOURCES = ['Blog', 'Fitness Tips', 'Nutrition Guide', 'Workout Plans', 'Product Reviews', 'Community'];
-const COMPANY = ['Our Story', 'Wholesale', 'Partnerships', 'Sustainability', 'Press Kit', 'Affiliates'];
+const QUICK_LINKS = [
+  'Products',
+  'About Us',
+  'Store Locator',
+  'Careers',
+  'Contact',
+  'FAQ',
+];
+const CUSTOMER_SERVICE = [
+  'Shipping Info',
+  'Returns',
+  'Order Tracking',
+  'Size Guide',
+  'Gift Cards',
+  'Help Center',
+];
+const RESOURCES = [
+  'Blog',
+  'Fitness Tips',
+  'Nutrition Guide',
+  'Workout Plans',
+  'Product Reviews',
+  'Community',
+];
+const COMPANY = [
+  'Our Story',
+  'Wholesale',
+  'Partnerships',
+  'Sustainability',
+  'Press Kit',
+  'Affiliates',
+];
 const LEGAL = ['Terms of Service', 'Privacy Policy', 'Cookie Policy', 'Returns Policy'];
 
 export async function Footer() {
   return (
-    <footer className="no-italic border-t px-6 py-12 md:py-16" aria-labelledby="footer-heading">
+    <footer
+      className="no-italic border-t px-6 py-12 md:py-16"
+      aria-labelledby="footer-heading"
+    >
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
@@ -133,7 +164,12 @@ export async function Footer() {
                 required
                 aria-label="Email address"
               />
-              <Button type="submit" size="sm" className="h-9" aria-label="Subscribe to newsletter">
+              <Button
+                type="submit"
+                size="sm"
+                className="h-9"
+                aria-label="Subscribe to newsletter"
+              >
                 <SendHorizonal className="h-4 w-4" aria-hidden="true" />
                 <span className="sr-only">Subscribe</span>
               </Button>
@@ -146,10 +182,11 @@ export async function Footer() {
       <div className="text-muted-foreground mt-12 flex flex-col items-center justify-between gap-6 border-t pt-8 text-xs sm:flex-row">
         <div className="flex flex-col items-center gap-2 sm:flex-row">
           <p>
-            © {new Date().getFullYear()} {site.name.toUpperCase()}. All Rights
-            Reserved.
+            © {new Date().getFullYear()} {site.name.toUpperCase()}. All Rights Reserved.
           </p>
-          <p className="hidden sm:block" aria-hidden="true">|</p>
+          <p className="hidden sm:block" aria-hidden="true">
+            |
+          </p>
           <p>VAT: EU123456789</p>
         </div>
         <nav className="flex flex-wrap justify-center gap-x-4 gap-y-2" aria-label="Legal">

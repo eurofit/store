@@ -4,8 +4,8 @@ import { getCurrentUser } from '@/actions/auth/get-current-user';
 import config from '@/payload/config';
 import { ProductLine } from '@/types';
 import { uniqBy } from 'lodash-es';
-import { cache } from 'react';
 import { getPayload } from 'payload';
+import { cache } from 'react';
 
 export const getProductBySlug = cache(async (slug: string) => {
   const [payload, user] = await Promise.all([getPayload({ config }), getCurrentUser()]);
@@ -32,6 +32,7 @@ export const getProductBySlug = cache(async (slug: string) => {
         slug: true,
         title: true,
         variant: true,
+        expiryDate: true,
         stock: true,
         srcStock: true,
         retailPrice: true,
@@ -58,6 +59,8 @@ export const getProductBySlug = cache(async (slug: string) => {
     },
     pagination: false,
     limit: 1,
+    user: user?.id,
+    overrideAccess: false,
   });
 
   if (!docs.length) return null;
