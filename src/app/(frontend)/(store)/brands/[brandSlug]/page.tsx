@@ -32,13 +32,12 @@ export async function generateMetadata({ params }: BrandPageProps): Promise<Meta
   ]);
 
   return {
-    title: { absolute: `${brand.title} Online Store in Kenya` },
-    description: `Shop over ${totalBrandProductLines} authentic ${brand.title} products at ${site.name}. Fresh stock, fast delivery and trusted quality. Order today while stock lasts.`,
-    alternates: {
-      canonical: `${site.url}/brands/${brandSlug}`,
-    },
-  };
-}
+    title: `${brand.title} Supplements in Kenya`,
+    description:`Shop ${totalBrandProductLines}+ authentic ${brand.title} supplements in Kenya. Verified products, fair prices, fast nationwide delivery, and trusted quality from ${site.name}.`,
+  alternates: {
+    canonical: `${site.url}/brands/${brandSlug}`,
+  },
+};
 
 export default async function BrandPage({ params, searchParams }: BrandPageProps) {
   const brandSlug = params.then((p) => p.brandSlug);
