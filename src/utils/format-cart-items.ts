@@ -30,7 +30,7 @@ export function formatCartItems(items: Pick<PayloadCart, 'items'>['items']): Car
       throw new Error(`Missing price in formatted product line: ${formatted.id}`);
     }
 
-    const formattedProductLine: Omit<ProductLine, 'isNotifyRequested'> = {
+    const formattedProductLine: Omit<ProductLine, 'isNotifyRequested' | 'expiryDate'> = {
       id: formatted.id,
       sku: formatted.sku,
       title: formatted.title,
