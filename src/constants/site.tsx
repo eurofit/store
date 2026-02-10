@@ -20,14 +20,14 @@ export const site = {
       href: 'tel:+254110990666',
     },
     email: {
-      text: 'info@eurofit.uk',
-      href: 'mailto:info@eurofit.uk',
+      text: 'info@eurofit.co.ke',
+      href: 'mailto:info@eurofit.co.ke',
     },
   },
   socialLinks: [
     {
       name: 'Mail',
-      href: 'mailto:info@eurofit.uk',
+      href: 'mailto:info@eurofit.co.ke',
       icon: ({ className, ...props }: React.ComponentProps<typeof Mail>) => (
         <Mail data-slot="mail" className={cn('size-4.5', className)} {...props} />
       ),
