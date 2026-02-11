@@ -16,7 +16,6 @@ import { ImageOff } from 'lucide-react';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import pluralize from 'pluralize-esm';
-import { titleCase } from 'title-case';
 
 type ProductPageProps = {
   params: Promise<{
@@ -36,7 +35,7 @@ export async function generateMetadata({
 
   return {
     title: {
-      absolute: titleCase(product.title),
+      absolute: product.title,
     },
   };
 }

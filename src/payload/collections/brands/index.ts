@@ -1,3 +1,4 @@
+import { titleCase } from '@/payload/hooks/title-case';
 import type { CollectionConfig } from 'payload';
 import { slugField } from 'payload';
 
@@ -33,6 +34,9 @@ export const brands: CollectionConfig = {
         description: 'The name of the brand, used for display and identification.',
       },
       index: true,
+      hooks: {
+        beforeValidate: [titleCase],
+      },
     },
     slugField(),
 

@@ -3,6 +3,7 @@ import { checkIfBackOrder } from './hooks/check-if-back-ordered';
 import { checkIfLowStock } from './hooks/check-if-low-stock';
 import { checkIfOutOfStock } from './hooks/check-if-out-stock';
 import { checkIfNotfiyRequested } from './hooks/check-notify-requested';
+import { titleCase } from '@/payload/hooks/title-case';
 
 export const productLines: CollectionConfig = {
   slug: 'product-lines',
@@ -75,6 +76,9 @@ export const productLines: CollectionConfig = {
           admin: {
             description:
               'Full name of the product, e.g. "Optimum Nutrition Whey 900g Banana".',
+          },
+          hooks: {
+            beforeValidate: [titleCase],
           },
         },
         {

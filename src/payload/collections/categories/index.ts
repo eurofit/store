@@ -1,3 +1,4 @@
+import { titleCase } from '@/payload/hooks/title-case';
 import { createBreadcrumbsField } from '@payloadcms/plugin-nested-docs';
 import { CollectionConfig, slugField } from 'payload';
 
@@ -28,6 +29,9 @@ export const categories: CollectionConfig = {
       label: 'Category Name',
       admin: {
         description: 'Enter the name of the category.',
+      },
+      hooks: {
+        beforeValidate: [titleCase],
       },
     },
     {

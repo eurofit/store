@@ -1,3 +1,4 @@
+import { titleCase } from '@/payload/hooks/title-case';
 import { CollectionConfig, slugField } from 'payload';
 import { getRelatedProducts } from './hooks/get-related-products';
 
@@ -50,6 +51,9 @@ export const products: CollectionConfig = {
         description: 'A descriptive title for the product, used for display purposes.',
       },
       required: true,
+      hooks: {
+        beforeValidate: [titleCase],
+      },
     },
     slugField(),
     {
