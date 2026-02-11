@@ -18,6 +18,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { after } from 'next/server';
 import pluralize from 'pluralize-esm';
+import { cache } from 'react';
 
 type ProductPageProps = {
   params: Promise<{
@@ -36,14 +37,16 @@ export async function generateMetadata({
   }
 
   // Create product viewed event
-  after(async () => {
-    await createEvent({
-      type: 'product_viewed',
-      time: new Date().toISOString(),
-      product: product.id,
-      ...data,
-    });
-  });
+  after(
+    cache(async () => {
+      await createEvent({
+        type: 'product_viewed',
+        time: new Date().toISOString(),
+        product: product.id,
+        ...data,
+      });
+    }),
+  );
 
   return {
     title: {
