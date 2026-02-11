@@ -18,6 +18,7 @@ export async function getEventContext() {
   const device = cookies.get('device')?.value;
   const geoCountry = cookies.get('geo-country')?.value;
   const geoCity = cookies.get('geo-city')?.value;
+  const isBot = cookies.get('is-bot')?.value === '1';
 
   return {
     user: user?.id,
@@ -26,11 +27,17 @@ export async function getEventContext() {
     device,
     geoCountry,
     geoCity,
+    isBot,
   };
 }
 
 export const createEvent = cache(async (input: EventInput) => {
   const validatedEvent = eventSchema.parse(input);
+
+  // if is bot, don't create the event
+  if (validatedEvent.isBot) {
+    return;
+  }
 
   const payload = await getPayload({ config });
 
@@ -59,6 +66,7 @@ const eventSchema = z.object({
   device: z.string().optional(),
   geoCountry: z.string().optional(),
   geoCity: z.string().optional(),
+  isBot: z.boolean().optional(),
 });
 
 type EventInput = z.infer<typeof eventSchema>;

@@ -54,6 +54,15 @@ export function proxy(req: NextRequest) {
     maxAge: 60 * 30, // 30 minutes
   });
 
+  // is bot
+  const isBotValue = (req.cookies.get('is-bot')?.value ?? ua.isBot) ? '1' : '0';
+  res.cookies.set('is-bot', isBotValue, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 60 * 30, // 30 minutes
+  });
+
   // geo country
   const geoCountryValue =
     req.cookies.get('geo-country')?.value ?? req.headers.get('x-vercel-ip-country') ?? '';

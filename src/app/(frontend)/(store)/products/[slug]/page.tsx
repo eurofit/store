@@ -30,23 +30,11 @@ export async function generateMetadata({
   params: paramsPromise,
 }: ProductPageProps): Promise<Metadata> {
   const { slug } = await paramsPromise;
-  const [product, data] = await Promise.all([getProductBySlug(slug), getEventContext()]);
+  const product = await getProductBySlug(slug);
 
   if (!product) {
     notFound();
   }
-
-  // Create product viewed event
-  after(
-    cache(async () => {
-      await createEvent({
-        type: 'product_viewed',
-        time: new Date().toISOString(),
-        product: product.id,
-        ...data,
-      });
-    }),
-  );
 
   return {
     title: {
@@ -58,11 +46,27 @@ export async function generateMetadata({
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
 
-  const [product, user] = await Promise.all([getProductBySlug(slug), getCurrentUser()]);
+  const [product, user, eventContext] = await Promise.all([
+    getProductBySlug(slug),
+    getCurrentUser(),
+    getEventContext(),
+  ]);
 
   if (!product) notFound();
 
   const { id, image, title, productLines } = product;
+
+  // Create product viewed event
+  after(
+    cache(async () => {
+      await createEvent({
+        type: 'product_viewed',
+        time: new Date().toISOString(),
+        product: id,
+        ...eventContext,
+      });
+    }),
+  );
 
   return (
     <div className="space-y-10">
