@@ -1,6 +1,7 @@
 import { getCurrentUser } from '@/actions/auth/get-current-user';
-import { createEvent, getEventContext } from '@/actions/events/create';
+import { getEventContext } from '@/actions/events/create';
 import { getProductBySlug } from '@/actions/products/get-product-by-slug';
+import { EventTrigger } from '@/components/event-trigger';
 import { ImageWithRetry } from '@/components/image-with-retry';
 import { ProductLinesList } from '@/components/product-lines-list';
 import { Heading } from '@/components/typography';
@@ -16,9 +17,7 @@ import {
 import { ImageOff } from 'lucide-react';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { after } from 'next/server';
 import pluralize from 'pluralize-esm';
-import { cache } from 'react';
 
 type ProductPageProps = {
   params: Promise<{
@@ -56,73 +55,70 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   const { id, image, title, productLines } = product;
 
-  // Create product viewed event
-  after(
-    cache(async () => {
-      await createEvent({
-        type: 'product_viewed',
-        time: new Date().toISOString(),
-        product: id,
-        ...eventContext,
-      });
-    }),
-  );
-
   return (
-    <div className="space-y-10">
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/">Home</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>Products</BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>{title}</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+    <>
+      <EventTrigger
+        event={{
+          type: 'product_viewed',
+          time: new Date().toISOString(),
+          product: id,
+          ...eventContext,
+        }}
+      />
+      <div className="space-y-10">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>Products</BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{title}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
-      <div className="flex w-full flex-col items-start gap-16 md:flex-row">
-        <div className="relative grow space-y-10 md:max-w-5xl">
-          <Heading>{title}</Heading>
-          <main className="flex flex-col items-start gap-6 md:flex-row">
-            <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-white max-md:w-full md:max-w-xs md:basis-2/5">
-              {image && (
-                <ImageWithRetry
-                  src={image}
-                  alt={title + ' image'}
-                  fill
-                  className="m-auto max-h-11/12 max-w-11/12 object-contain"
-                  sizes="(max-width: 768px) 100vw, 350px"
-                />
-              )}
-              {!image && (
-                <ImageOff
-                  className="text-muted m-auto size-1/2"
-                  aria-label="Image not available"
-                />
-              )}
-            </div>
-            <div className="z-2 w-full space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="font-semibold">Choose Variants</h3>
-                <Badge variant="outline">
-                  {product.productLines.length}{' '}
-                  {pluralize('option', product.productLines.length)}
-                </Badge>
+        <div className="flex w-full flex-col items-start gap-16 md:flex-row">
+          <div className="relative grow space-y-10 md:max-w-5xl">
+            <Heading>{title}</Heading>
+            <main className="flex flex-col items-start gap-6 md:flex-row">
+              <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-white max-md:w-full md:max-w-xs md:basis-2/5">
+                {image && (
+                  <ImageWithRetry
+                    src={image}
+                    alt={title + ' image'}
+                    fill
+                    className="m-auto max-h-11/12 max-w-11/12 object-contain"
+                    sizes="(max-width: 768px) 100vw, 350px"
+                  />
+                )}
+                {!image && (
+                  <ImageOff
+                    className="text-muted m-auto size-1/2"
+                    aria-label="Image not available"
+                  />
+                )}
               </div>
-              <ProductLinesList
-                product={{ id, slug, title, image }}
-                productLines={productLines}
-                userId={user?.id}
-              />
-            </div>
-          </main>
-        </div>
+              <div className="z-2 w-full space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold">Choose Variants</h3>
+                  <Badge variant="outline">
+                    {product.productLines.length}{' '}
+                    {pluralize('option', product.productLines.length)}
+                  </Badge>
+                </div>
+                <ProductLinesList
+                  product={{ id, slug, title, image }}
+                  productLines={productLines}
+                  userId={user?.id}
+                />
+              </div>
+            </main>
+          </div>
 
-        {/* <aside className="basis-1/4 space-y-10 md:px-4">
+          {/* <aside className="basis-1/4 space-y-10 md:px-4">
           {relatedProducts.products && relatedProducts?.products.length > 0 && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
@@ -168,7 +164,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </div>
           )}
         </aside> */}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

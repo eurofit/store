@@ -36,6 +36,7 @@ export const createEvent = cache(async (input: EventInput) => {
 
   // if is bot, don't create the event
   if (validatedEvent.isBot) {
+    console.log('is bot, skipping event creation');
     return;
   }
 
@@ -69,4 +70,4 @@ const eventSchema = z.object({
   isBot: z.boolean().optional(),
 });
 
-type EventInput = z.infer<typeof eventSchema>;
+export type EventInput = z.infer<typeof eventSchema>;
