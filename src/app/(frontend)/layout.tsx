@@ -14,6 +14,7 @@ import NextTopLoader from 'nextjs-toploader';
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
+  applicationName: site.name,
   title: {
     default: site.name,
     template: `%s | ${site.name}`,
