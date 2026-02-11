@@ -1,4 +1,5 @@
 import { getCurrentUser } from '@/actions/auth/get-current-user';
+import { createEvent, getEventContext } from '@/actions/events/create';
 import { getProductBySlug } from '@/actions/products/get-product-by-slug';
 import { ImageWithRetry } from '@/components/image-with-retry';
 import { ProductLinesList } from '@/components/product-lines-list';
@@ -15,6 +16,7 @@ import {
 import { ImageOff } from 'lucide-react';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { after } from 'next/server';
 import pluralize from 'pluralize-esm';
 
 type ProductPageProps = {
@@ -27,11 +29,21 @@ export async function generateMetadata({
   params: paramsPromise,
 }: ProductPageProps): Promise<Metadata> {
   const { slug } = await paramsPromise;
-  const product = await getProductBySlug(slug);
+  const [product, data] = await Promise.all([getProductBySlug(slug), getEventContext()]);
 
   if (!product) {
     notFound();
   }
+
+  // Create product viewed event
+  after(async () => {
+    await createEvent({
+      type: 'product_viewed',
+      time: new Date().toISOString(),
+      product: product.id,
+      ...data,
+    });
+  });
 
   return {
     title: {
@@ -57,9 +69,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <BreadcrumbLink href="/">Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/products">Products</BreadcrumbLink>
-          </BreadcrumbItem>
+          <BreadcrumbItem>Products</BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbPage>{title}</BreadcrumbPage>

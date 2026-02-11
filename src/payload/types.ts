@@ -80,6 +80,7 @@ export interface Config {
     transactions: Transaction;
     inventory: InventoryItem;
     'stock-alerts': StockAlert;
+    events: Event;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -121,6 +122,7 @@ export interface Config {
     transactions: TransactionsSelect<false> | TransactionsSelect<true>;
     inventory: InventorySelect<false> | InventorySelect<true>;
     'stock-alerts': StockAlertsSelect<false> | StockAlertsSelect<true>;
+    events: EventsSelect<false> | EventsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -755,6 +757,27 @@ export interface OrderStatus {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events".
+ */
+export interface Event {
+  id: string;
+  type: 'brand_viewed' | 'product_viewed';
+  time: string;
+  user?: (string | null) | User;
+  session: string;
+  brand?: (string | null) | Brand;
+  category?: (string | null) | Category;
+  product?: (string | null) | Product;
+  productLine?: (string | null) | ProductLine;
+  quantity?: number | null;
+  price?: number | null;
+  source?: string | null;
+  device?: string | null;
+  geoCountry?: string | null;
+  geoCity?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -828,6 +851,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'stock-alerts';
         value: string | StockAlert;
+      } | null)
+    | ({
+        relationTo: 'events';
+        value: string | Event;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1164,6 +1191,26 @@ export interface StockAlertsSelect<T extends boolean = true> {
   lastNotifiedAt?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events_select".
+ */
+export interface EventsSelect<T extends boolean = true> {
+  type?: T;
+  time?: T;
+  user?: T;
+  session?: T;
+  brand?: T;
+  category?: T;
+  product?: T;
+  productLine?: T;
+  quantity?: T;
+  price?: T;
+  source?: T;
+  device?: T;
+  geoCountry?: T;
+  geoCity?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
