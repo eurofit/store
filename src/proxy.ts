@@ -55,7 +55,7 @@ export function proxy(req: NextRequest) {
   });
 
   // is bot
-  const isBotValue = (req.cookies.get('is-bot')?.value ?? ua.isBot) ? '1' : '0';
+  const isBotValue = req.cookies.get('is-bot')?.value ?? (ua.isBot ? '1' : '0');
   res.cookies.set('is-bot', isBotValue, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
