@@ -72,7 +72,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <div className="relative grow space-y-10 md:max-w-5xl">
           <Heading>{title}</Heading>
           <main className="flex flex-col items-start gap-6 md:flex-row">
-            <div className="relative flex aspect-square max-w-xs items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-white md:basis-2/5">
+            <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-white max-md:w-full md:max-w-xs md:basis-2/5">
               {image && (
                 <ImageWithRetry
                   src={image}
