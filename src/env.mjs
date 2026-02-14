@@ -8,8 +8,9 @@ export const env = createEnv({
     DATABASE_URI: z.string().min(1),
     PAYLOAD_CONFIG_PATH: z.string().min(1),
     PAYLOAD_SECRET: z.string().min(1),
-    SMTP_PASSWORD: z.string().min(1),
     SMTP_USERNAME: z.email(),
+    SMTP_PASSWORD: z.string().min(1),
+    SMTP_INFO_USERNAME: z.email(),
     SMTP_HOST: z.string().min(1),
     SMTP_PORT: z
       .string()
@@ -34,6 +35,7 @@ export const env = createEnv({
     PAYLOAD_SECRET: process.env.PAYLOAD_SECRET,
     SMTP_USERNAME: process.env.SMTP_USERNAME,
     SMTP_PASSWORD: process.env.SMTP_PASSWORD,
+    SMTP_INFO_USERNAME: process.env.SMTP_INFO_USERNAME,
     SMTP_HOST: process.env.SMTP_HOST,
     SMTP_PORT: process.env.SMTP_PORT,
     PAYSTACK_SECRET_KEY: process.env.PAYSTACK_SECRET_KEY,

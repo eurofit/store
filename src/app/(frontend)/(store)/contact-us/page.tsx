@@ -1,34 +1,51 @@
 import { ContactCard } from '@/components/cards/contact';
 import { ContactForm } from '@/components/forms/contact';
+import { Whatsapp } from '@/components/icons/whatsapp';
 import { Mail, MapPin, Phone } from 'lucide-react';
 import type { Metadata } from 'next';
 
 const contacts = [
   {
     icon: <Mail className="size-4" />,
-    title: 'Email',
-    description: `Have a question or need help?\nDrop us an email and we'll respond within 24 hours.`,
+    title: 'Email Support',
+    description: `Have a question about an order or product?
+Send us an email and we’ll reply within 24 hours.`,
     cta: {
-      label: 'info@eurofit.uk',
-      href: 'mailto:info@eurofit.uk',
+      label: 'info@eurofit.co.ke',
+      href: 'mailto:info@eurofit.co.ke',
     },
   },
   {
     icon: <Phone className="size-4" />,
-    title: 'Phone',
-    description: `Prefer to chat?\nGive us a call Monday–Friday, 9 AM–5 PM (EST).`,
+    title: 'Call Us',
+    description: `Want a quick answer?
+Call us Monday–Saturday, 9 AM–6 PM (EAT).`,
     cta: {
       label: '+254 110 990 666',
       href: 'tel:+254110990666',
     },
   },
   {
+    icon: <Whatsapp className="size-4" />,
+    title: 'Whatsapp Support',
+    description: `Have a question about an order or product or anything else?
+Send us a WhatsApp message and we’ll reply within 24 hours.`,
+    cta: {
+      label: '+254 110 990 666',
+      href: 'https://wa.me/254110990666',
+      external: true,
+    },
+  },
+  {
     icon: <MapPin className="size-4" />,
-    title: 'Headquarter',
-    description: `Unit 111, 1st Floor, 6th Street Tower, 6th Street, Eastleigh, Nairobi, Kenya`,
+    title: 'Visit Our Store',
+    description: `Unit G17, Ground Floor
+                  Istanbul Shopping Mall
+                  Captain Mungai Street, Eastleigh
+                  Nairobi, Kenya`,
     cta: {
       label: 'Get Directions',
-      href: 'https://www.google.com/maps/place/Eurofit/@-1.2740179,36.850036,3a,90y,5.59h,119.86t/data=!3m7!1e1!3m5!1sgah-pNCiqkN0-ekyhHk4SA!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D-29.862727585145777%26panoid%3Dgah-pNCiqkN0-ekyhHk4SA%26yaw%3D5.592524421825633!7i16384!8i8192!4m14!1m7!3m6!1s0x182f17a816057ee7:0xd76ece853c799109!2sEurofit!8m2!3d-1.2739283!4d36.8500384!16s%2Fg%2F11mc9m0286!3m5!1s0x182f17a816057ee7:0xd76ece853c799109!8m2!3d-1.2739283!4d36.8500384!16s%2Fg%2F11mc9m0286?entry=ttu&g_ep=EgoyMDI1MDQyMy4wIKXMDSoJLDEwMjExNDUzSAFQAw%3D%3D',
+      href: 'https://share.google/BJvKY66P3AJkdnMWo',
       external: true,
       btn: true,
     },
@@ -53,8 +70,8 @@ export default function ContactUs() {
             Speak With our Friendly team
           </h1>
           <p className="text-muted-foreground max-w-lg text-lg text-pretty">
-            We are available for questions, feedback, or collaboration opportunities. Let
-            us know how we can help! Fill out the form or drop us an email.
+            Have a question about products, bulk orders, delivery, or partnerships? Our
+            Nairobi team is ready to help. Fill in the form or contact us directly below.
           </p>
         </hgroup>
         <div className="mt-10 flex flex-wrap gap-10 max-md:flex-col">

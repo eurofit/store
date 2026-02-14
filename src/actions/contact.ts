@@ -3,7 +3,6 @@
 import { env } from '@/env.mjs';
 import config from '@/payload/config';
 import { contactFormSchema } from '@/schemas/contact';
-import nodemailer from 'nodemailer';
 import { getPayload } from 'payload';
 
 export async function sendContactEmail(_state: any, formData: FormData) {
@@ -14,18 +13,10 @@ export async function sendContactEmail(_state: any, formData: FormData) {
 
     const payload = await getPayload({ config });
 
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: env.SMTP_USERNAME,
-        pass: env.SMTP_PASSWORD,
-      },
-    });
-
     // Email content
     const mailOptions = {
       from: env.SMTP_USERNAME,
-      to: env.SMTP_USERNAME,
+      to: env.SMTP_INFO_USERNAME,
       subject:
         validatedData.subject || `New Contact Form Submission from ${validatedData.name}`,
       html: `
