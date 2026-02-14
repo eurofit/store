@@ -8,9 +8,9 @@ import { getPayload, SendEmailOptions } from 'payload';
 export async function sendContactEmail(_state: any, formData: FormData) {
   const data = Object.fromEntries(formData.entries());
 
-  console.log('SMTP_HOST:', env.SMTP_HOST);
-  console.log('SMTP_USER:', env.SMTP_USERNAME);
-  console.log('SMTP_PASS exists:', !!env.SMTP_PASSWORD);
+  console.error('SMTP_HOST:', env.SMTP_HOST);
+  console.error('SMTP_USER:', env.SMTP_USERNAME);
+  console.error('SMTP_PASS exists:', !!env.SMTP_PASSWORD);
 
   try {
     const validatedData = contactFormSchema.parse(data);
