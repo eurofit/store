@@ -7,15 +7,27 @@ import { Textarea } from '@/components/ui/textarea';
 import { env } from '@/env.mjs';
 import { contactFormSchema, ContactFormValues } from '@/schemas/contact';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import Script from 'next/script';
-import { useActionState, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from '../ui/field';
 import { Spinner } from '../ui/spinner';
 
 export function ContactForm() {
-  const [state, formAction, isPending] = useActionState(sendContactEmail, null);
+  const { mutate: sendEmail, isPending: isSending } = useMutation({
+    mutationKey: ['contact'],
+    mutationFn: sendContactEmail,
+    onSuccess: () => {
+      toast.success('Email sent successfully!', {
+        description: 'We will get back to you as soon as possible.',
+        duration: 5000,
+      });
+    },
+    onError: () => {
+      toast.error('Failed to send email');
+    },
+  });
 
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
@@ -27,21 +39,17 @@ export function ContactForm() {
     },
   });
 
-  useEffect(() => {
-    if (!state) return;
-
-    if (!state.success) {
-      toast.error(state.message);
-      return;
-    }
-
-    toast.success(state.message);
-  }, [state]);
+  const handleSendEmail = (data: ContactFormValues) => {
+    sendEmail(data);
+  };
 
   return (
     <>
       <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
-      <form action={formAction} className="max-w-md space-y-4 p-6 shadow-md">
+      <form
+        onSubmit={form.handleSubmit(handleSendEmail)}
+        className="max-w-md space-y-4 p-6 shadow-md"
+      >
         <FieldSet>
           <FieldGroup>
             <Controller
@@ -120,9 +128,9 @@ export function ContactForm() {
               )}
             />
 
-            <Button type="submit" className="w-full" disabled={isPending}>
-              {isPending && <Spinner aria-hidden="true" />}
-              {isPending ? 'Sending…' : 'Send Message'}
+            <Button type="submit" className="w-full" disabled={isSending}>
+              {isSending && <Spinner aria-hidden="true" />}
+              {isSending ? 'Sending…' : 'Send Message'}
             </Button>
           </FieldGroup>
         </FieldSet>
