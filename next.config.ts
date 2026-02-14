@@ -16,10 +16,11 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['lucide-react', '@tanstack/react-query'],
   },
   // Target modern browsers to avoid unnecessary polyfills
-  compiler: {
-    // Remove console logs in production
-    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
-  },
+  // compiler: {
+  //   // Remove console logs in production
+  //   removeConsole:
+  //     process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
+  // },
   // Production optimizations
   ...(process.env.NODE_ENV === 'production' && {
     productionBrowserSourceMaps: false,
