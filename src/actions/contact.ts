@@ -54,6 +54,7 @@ export async function sendContactEmail(_state: any, formData: FormData) {
 
     return { success: true, message: 'Email sent successfully!', name: data.name };
   } catch (error) {
+    console.error('Error sending contact email:', error);
     return {
       success: false,
       message: `Failed to send email. Please try again.`,
