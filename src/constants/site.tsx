@@ -80,6 +80,7 @@ export const site = {
     line2: '6th Street, Eastleigh',
     city: 'Nairobi',
     county: 'Nairobi County',
+    countryCode: 'KE',
     country: 'Kenya',
     postalCode: '00610',
     postalAddress: 'P.O BOX 8047-00610',

@@ -5,6 +5,10 @@ import { Offer, Product, WithContext } from 'schema-dts';
 export function getProductJsonLd(product: ProductDetails) {
   const id = `${site.url}/products/${product.slug}#product`;
 
+  const activeLines = product.productLines.filter(
+    (line) => !line.isOutOfStock && line.price != null,
+  );
+
   const parentProduct: WithContext<Product> = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -28,12 +32,13 @@ export function getProductJsonLd(product: ProductDetails) {
     offers: {
       '@type': 'AggregateOffer',
       priceCurrency: 'KES',
-      lowPrice: Math.min(...product.productLines.map((line) => line.price || 0)),
-      highPrice: Math.max(...product.productLines.map((line) => line.price || 0)),
-      offerCount: '6',
-      availability: product.productLines.some((line) => line.isOutOfStock)
-        ? 'https://schema.org/OutOfStock'
-        : 'https://schema.org/InStock',
+      lowPrice: Math.min(...activeLines.map((line) => line.price || 0)),
+      highPrice: Math.max(...activeLines.map((line) => line.price || 0)),
+      offerCount: activeLines.length,
+      availability:
+        activeLines.length > 0
+          ? 'https://schema.org/InStock'
+          : 'https://schema.org/OutOfStock',
       seller: {
         '@type': 'Organization',
         name: site.name,
@@ -54,6 +59,7 @@ export function getProductJsonLd(product: ProductDetails) {
       '@type': 'Product',
       '@id': id,
     },
+
     offers: {
       '@type': 'Offer',
       url: `${site.url}/products/${line.slug}`,

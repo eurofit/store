@@ -62,7 +62,7 @@ export const localBusiness: WithContext<LocalBusiness> = {
     addressLocality: site.address.city,
     addressRegion: site.address.county,
     postalCode: site.address.postalCode,
-    addressCountry: site.address.country,
+    addressCountry: site.address.countryCode,
   },
   geo: {
     '@type': 'GeoCoordinates',
