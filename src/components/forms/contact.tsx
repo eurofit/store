@@ -12,6 +12,7 @@ import { useActionState, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from '../ui/field';
+import { Spinner } from '../ui/spinner';
 
 export function ContactForm() {
   const [state, formAction, isPending] = useActionState(sendContactEmail, null);
@@ -120,6 +121,7 @@ export function ContactForm() {
             />
 
             <Button type="submit" className="w-full" disabled={isPending}>
+              {isPending && <Spinner aria-hidden="true" />}
               {isPending ? 'Sending…' : 'Send Message'}
             </Button>
           </FieldGroup>
