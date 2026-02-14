@@ -52,7 +52,7 @@ export async function sendContactEmail(_state: any, formData: FormData) {
 
     await payload.sendEmail(mailOptions);
 
-    return { success: true, message: 'Email sent successfully!', name: data.name };
+    return { success: true, message: 'Email sent successfully!' };
   } catch (error) {
     return {
       success: false,
