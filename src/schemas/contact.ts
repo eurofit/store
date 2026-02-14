@@ -5,6 +5,7 @@ export const contactFormSchema = z.object({
   email: z.email('Invalid email address'),
   subject: z.string().min(1, 'Subject is required'),
   message: z.string().min(1, 'Message is required'),
+  'cf-turnstile-response': z.string().min(1, 'Please complete the CAPTCHA'),
 });
 
 export type ContactFormValues = z.infer<typeof contactFormSchema>;

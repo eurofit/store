@@ -23,9 +23,11 @@ export const env = createEnv({
     SUPABASE_S3_SECRET_ACCESS_KEY: z.string().min(1),
     SUPABASE_S3_REGION: z.string().min(1),
     SUPABASE_S3_ENDPOINT: z.string().min(1),
+    CLOUDFLARE_TURNSTILE_SECRET_KEY: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_APP_URL: z.string().min(1),
+    NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITEKEY: z.string().min(1),
   },
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
@@ -45,6 +47,9 @@ export const env = createEnv({
     SUPABASE_S3_SECRET_ACCESS_KEY: process.env.SUPABASE_S3_SECRET_ACCESS_KEY,
     SUPABASE_S3_REGION: process.env.SUPABASE_S3_REGION,
     SUPABASE_S3_ENDPOINT: process.env.SUPABASE_S3_ENDPOINT,
+    CLOUDFLARE_TURNSTILE_SECRET_KEY: process.env.CLOUDFLARE_TURNSTILE_SECRET_KEY,
+    NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITEKEY:
+      process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITEKEY,
   },
 });
 

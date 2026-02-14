@@ -62,7 +62,7 @@ export default function ContactUs() {
   return (
     <>
       <div className="container mx-auto max-w-5xl p-6 pb-16">
-        <hgroup className="max-w-3xl space-y-2">
+        <hgroup className="mx-auto flex max-w-3xl flex-col items-center space-y-2 text-center">
           <span className="text-muted-foreground text-sm font-medium tracking-widest uppercase">
             Reach us
           </span>

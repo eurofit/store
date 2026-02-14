@@ -4,8 +4,10 @@ import { sendContactEmail } from '@/actions/contact';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { env } from '@/env.mjs';
 import { contactFormSchema, ContactFormValues } from '@/schemas/contact';
 import { zodResolver } from '@hookform/resolvers/zod';
+import Script from 'next/script';
 import { useActionState, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -36,90 +38,99 @@ export function ContactForm() {
   }, [state]);
 
   return (
-    <form action={formAction} className="max-w-md space-y-4 p-6 shadow-md">
-      <FieldSet>
-        <FieldGroup>
-          <Controller
-            control={form.control}
-            name="name"
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel>Name</FieldLabel>
+    <>
+      <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
+      <form action={formAction} className="max-w-md space-y-4 p-6 shadow-md">
+        <FieldSet>
+          <FieldGroup>
+            <Controller
+              control={form.control}
+              name="name"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel>Name</FieldLabel>
 
-                <Input
-                  placeholder="Your name"
-                  aria-invalid={fieldState.invalid}
-                  autoComplete="name"
-                  {...field}
-                />
+                  <Input
+                    placeholder="Your name"
+                    aria-invalid={fieldState.invalid}
+                    autoComplete="name"
+                    {...field}
+                  />
 
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-              </Field>
-            )}
-          />
-          <Controller
-            control={form.control}
-            name="email"
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel>Email</FieldLabel>
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="email"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel>Email</FieldLabel>
 
-                <Input
-                  placeholder="you@example.com"
-                  aria-invalid={fieldState.invalid}
-                  type="email"
-                  autoComplete="email"
-                  spellCheck={false}
-                  {...field}
-                />
+                  <Input
+                    placeholder="you@example.com"
+                    aria-invalid={fieldState.invalid}
+                    type="email"
+                    autoComplete="email"
+                    spellCheck={false}
+                    {...field}
+                  />
 
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-              </Field>
-            )}
-          />
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
 
-          <Controller
-            control={form.control}
-            name="subject"
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel>Subject</FieldLabel>
+            <Controller
+              control={form.control}
+              name="subject"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel>Subject</FieldLabel>
 
-                <Input
-                  placeholder="Subject…"
-                  data-invalid={fieldState.invalid}
-                  autoComplete="off"
-                  {...field}
-                />
+                  <Input
+                    placeholder="Subject…"
+                    data-invalid={fieldState.invalid}
+                    autoComplete="off"
+                    {...field}
+                  />
 
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-              </Field>
-            )}
-          />
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
 
-          <Controller
-            control={form.control}
-            name="message"
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel>Message</FieldLabel>
+            <Controller
+              control={form.control}
+              name="message"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel>Message</FieldLabel>
 
-                <Textarea
-                  placeholder="Your message…"
-                  aria-invalid={fieldState.invalid}
-                  {...field}
-                />
+                  <Textarea
+                    placeholder="Your message…"
+                    aria-invalid={fieldState.invalid}
+                    {...field}
+                  />
 
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-              </Field>
-            )}
-          />
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
 
-          <Button type="submit" className="w-full" disabled={isPending}>
-            {isPending ? 'Sending…' : 'Send Message'}
-          </Button>
-        </FieldGroup>
-      </FieldSet>
-    </form>
+            <Button type="submit" className="w-full" disabled={isPending}>
+              {isPending ? 'Sending…' : 'Send Message'}
+            </Button>
+          </FieldGroup>
+        </FieldSet>
+        <div
+          className="cf-turnstile"
+          data-theme="light"
+          data-size="flexible"
+          data-sitekey={env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITEKEY}
+        />
+      </form>
+    </>
   );
 }
