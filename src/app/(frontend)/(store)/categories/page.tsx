@@ -12,9 +12,8 @@ export const metadata: Metadata = {
 };
 
 export default async function CategoriesPage() {
-  const payloadConfig = await config;
   const payload = await getPayload({
-    config: payloadConfig,
+    config,
   });
 
   const { docs: categories } = await payload.find({
@@ -31,17 +30,22 @@ export default async function CategoriesPage() {
         equals: true,
       },
     },
-
     limit: 0,
     depth: 0,
   });
 
   return (
-    <main>
-      <hgroup className="mb-8 max-w-sm space-y-2 text-pretty">
-        <h2 className="text-2xl font-bold tracking-tight">Shop by Category</h2>
-        <p className="text-muted-foreground">
-          Browse through our wide range of categories to find the products you love.
+    <main className="space-y-8 md:space-y-14">
+      <hgroup className="mx-auto mb-8 max-w-sm space-y-2 text-center text-pretty">
+        <p className="text-muted-foreground text-sm font-medium tracking-widest uppercase">
+          Shop by Category
+        </p>
+        <h2 className="text-3xl font-bold tracking-tight">
+          Find the Right Supplement for Your Goal
+        </h2>
+        <p className="text-muted-foreground text-lg">
+          Whether you&apos;re building muscle, improving endurance, or supporting your
+          overall health, choose a category below and find exactly what your body needs.
         </p>
       </hgroup>
 

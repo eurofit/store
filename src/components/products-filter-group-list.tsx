@@ -14,7 +14,7 @@ export function ProductFilterGroupVirtualizedList({
   items,
 }: VirtualizedProductFilterListProps) {
   return (
-    <ScrollArea className="h-72">
+    <ScrollArea className="max-h-72">
       <div className="space-y-2 pr-4">
         {items.map((item) => (
           <FilterItemSuspense key={item.slug} queryKey={key} item={item} />
