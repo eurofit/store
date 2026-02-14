@@ -3,7 +3,7 @@
 import { env } from '@/env.mjs';
 import config from '@/payload/config';
 import { contactFormSchema } from '@/schemas/contact';
-import { getPayload } from 'payload';
+import { getPayload, SendEmailOptions } from 'payload';
 
 export async function sendContactEmail(_state: any, formData: FormData) {
   const data = Object.fromEntries(formData.entries());
@@ -14,10 +14,9 @@ export async function sendContactEmail(_state: any, formData: FormData) {
     const payload = await getPayload({ config });
 
     // Email content
-    const mailOptions = {
+    const mailOptions: SendEmailOptions = {
       from: env.SMTP_USERNAME,
       to: env.SMTP_INFO_USERNAME,
-      fromName: 'Contact Form',
       subject:
         validatedData.subject || `New Contact Form Submission from ${validatedData.name}`,
       html: `
