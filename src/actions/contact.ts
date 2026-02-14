@@ -17,6 +17,7 @@ export async function sendContactEmail(_state: any, formData: FormData) {
     const mailOptions = {
       from: env.SMTP_USERNAME,
       to: env.SMTP_INFO_USERNAME,
+      fromName: 'Contact Form',
       subject:
         validatedData.subject || `New Contact Form Submission from ${validatedData.name}`,
       html: `
