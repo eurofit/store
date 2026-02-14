@@ -1,8 +1,7 @@
 import { getCurrentUser } from '@/actions/auth/get-current-user';
-import { getEventContext } from '@/actions/events/create';
 import { getProductBySlug } from '@/actions/products/get-product-by-slug';
-import { EventTrigger } from '@/components/event-trigger';
 import { ImageWithRetry } from '@/components/image-with-retry';
+import { JsonLd } from '@/components/json-ld';
 import { ProductLinesList } from '@/components/product-lines-list';
 import { Heading } from '@/components/typography';
 import { Badge } from '@/components/ui/badge';
@@ -14,6 +13,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
+import { getProductJsonLd } from '@/utils/products/get-product-json-ld';
 import { ImageOff } from 'lucide-react';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -45,26 +45,17 @@ export async function generateMetadata({
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
 
-  const [product, user, eventContext] = await Promise.all([
-    getProductBySlug(slug),
-    getCurrentUser(),
-    getEventContext(),
-  ]);
+  const [product, user] = await Promise.all([getProductBySlug(slug), getCurrentUser()]);
 
   if (!product) notFound();
 
   const { id, image, title, productLines } = product;
 
+  const jsonLd = getProductJsonLd(product);
+
   return (
     <>
-      <EventTrigger
-        event={{
-          type: 'product_viewed',
-          time: new Date().toISOString(),
-          product: id,
-          ...eventContext,
-        }}
-      />
+      <JsonLd jsonLd={jsonLd} />
       <div className="space-y-10">
         <Breadcrumb>
           <BreadcrumbList>

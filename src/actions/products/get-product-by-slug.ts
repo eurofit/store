@@ -19,6 +19,7 @@ export const getProductBySlug = cache(async (slug: string) => {
       slug: true,
       title: true,
       origin: true,
+      brand: true,
       categories: true,
       nutritionalInformation: true,
       productInformation: true,
@@ -33,6 +34,7 @@ export const getProductBySlug = cache(async (slug: string) => {
         title: true,
         variant: true,
         expiryDate: true,
+        barcode: true,
         stock: true,
         srcStock: true,
         retailPrice: true,
@@ -41,6 +43,14 @@ export const getProductBySlug = cache(async (slug: string) => {
         isOutOfStock: true,
         isNotifyRequested: true,
         category: true,
+      },
+      categories: {
+        slug: true,
+        title: true,
+      },
+      brands: {
+        slug: true,
+        title: true,
       },
     },
     joins: {
@@ -57,16 +67,15 @@ export const getProductBySlug = cache(async (slug: string) => {
     context: {
       relatedProducts: true,
     },
-    pagination: false,
     limit: 1,
-    user: user?.id,
-    overrideAccess: false,
+    pagination: false,
+    depth: 3,
   });
 
   if (!docs.length) return null;
 
   const product = docs[0];
-  const { srcImage, productLines, categories, ...p } = product;
+  const { brand, srcImage, productLines, categories, ...p } = product;
 
   const formattedCategories = uniqBy(
     (categories ?? [])
@@ -88,9 +97,12 @@ export const getProductBySlug = cache(async (slug: string) => {
     }) || []) as unknown as ProductLine[];
 
   return {
+    brand: typeof brand === 'object' ? brand : null,
     ...p,
     categories: formattedCategories,
     image: srcImage || null,
     productLines: formattedProductLines,
   };
 });
+
+export type ProductDetails = NonNullable<Awaited<ReturnType<typeof getProductBySlug>>>;

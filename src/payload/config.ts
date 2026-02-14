@@ -65,14 +65,14 @@ export default buildConfig({
   }),
 
   email: nodemailerAdapter({
-    defaultFromAddress: env.GMAIL,
+    defaultFromAddress: env.SMTP_USERNAME,
     defaultFromName: site.name,
     transportOptions: {
       host: env.SMTP_HOST,
       port: env.SMTP_PORT,
       auth: {
-        user: env.GMAIL,
-        pass: env.GMAIL_PASSWORD,
+        user: env.SMTP_USERNAME,
+        pass: env.SMTP_PASSWORD,
       },
     },
   }),

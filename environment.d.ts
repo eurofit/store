@@ -5,8 +5,8 @@ namespace NodeJS {
     NODE_ENV: 'development' | 'test' | 'production';
     DATABASE_URI: string;
     PAYLOAD_SECRET: string;
-    GMAIL_PASSWORD: string;
-    GMAIL: string;
+    SMTP_PASSWORD: string;
+    SMTP_USERNAME: string;
     SMTP_HOST: string;
     SMTP_PORT: number;
     PAYSTACK_SECRET_KEY: string;

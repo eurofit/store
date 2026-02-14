@@ -166,7 +166,6 @@ export const products: CollectionConfig = {
           required: true,
         },
       ],
-
       virtual: true,
       label: 'Related Products',
     },

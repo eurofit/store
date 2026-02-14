@@ -1,29 +1,31 @@
 'use server';
 
 import { env } from '@/env.mjs';
+import config from '@/payload/config';
 import { contactFormSchema } from '@/schemas/contact';
 import nodemailer from 'nodemailer';
+import { getPayload } from 'payload';
 
 export async function sendContactEmail(_state: any, formData: FormData) {
   const data = Object.fromEntries(formData.entries());
 
   try {
-    // Validate form data
     const validatedData = contactFormSchema.parse(data);
 
-    // Create transporter using Gmail
+    const payload = await getPayload({ config });
+
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: env.GMAIL,
-        pass: env.GMAIL_PASSWORD,
+        user: env.SMTP_USERNAME,
+        pass: env.SMTP_PASSWORD,
       },
     });
 
     // Email content
     const mailOptions = {
-      from: env.GMAIL,
-      to: env.GMAIL,
+      from: env.SMTP_USERNAME,
+      to: env.SMTP_USERNAME,
       subject:
         validatedData.subject || `New Contact Form Submission from ${validatedData.name}`,
       html: `
@@ -36,12 +38,10 @@ export async function sendContactEmail(_state: any, formData: FormData) {
       replyTo: validatedData.email,
     };
 
-    // Send email
-    await transporter.sendMail(mailOptions);
+    await payload.sendEmail(mailOptions);
 
     return { success: true, message: 'Email sent successfully!', name: data.name };
   } catch (error) {
-    console.error('Error sending email:', error);
     return {
       success: false,
       message: `Failed to send email. Please try again.`,
