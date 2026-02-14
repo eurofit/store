@@ -16,25 +16,25 @@ export async function sendContactEmail(_state: any, formData: FormData) {
     const validatedData = contactFormSchema.parse(data);
 
     // verify turnstile token
-    const turnstileResponse = await fetch(
-      `https://challenges.cloudflare.com/turnstile/v0/siteverify`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          secret: env.CLOUDFLARE_TURNSTILE_SECRET_KEY,
-          response: validatedData['cf-turnstile-response'],
-        }),
-      },
-    );
+    // const turnstileResponse = await fetch(
+    //   `https://challenges.cloudflare.com/turnstile/v0/siteverify`,
+    //   {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //       secret: env.CLOUDFLARE_TURNSTILE_SECRET_KEY,
+    //       response: validatedData['cf-turnstile-response'],
+    //     }),
+    //   },
+    // );
 
-    const turnstileData = await turnstileResponse.json();
+    // const turnstileData = await turnstileResponse.json();
 
-    if (!turnstileData.success) {
-      return { success: false, message: 'Failed to verify CAPTCHA' };
-    }
+    // if (!turnstileData.success) {
+    //   return { success: false, message: 'Failed to verify CAPTCHA' };
+    // }
 
     const payload = await getPayload({ config });
 
