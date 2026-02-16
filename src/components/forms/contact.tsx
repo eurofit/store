@@ -49,9 +49,80 @@ export function ContactForm() {
   });
 
   useEffect(() => {
+    // SUCCESS
     // @ts-ignore
-    window.onTurnstileSuccess = function (token: string) {
-      form.setValue('cf-turnstile-response', token);
+    window.onTurnstileSuccess = (token: string) => {
+      form.setValue('cf-turnstile-response', token, {
+        shouldValidate: true,
+      });
+    };
+
+    const resetTurnstile = () => {
+      // @ts-ignore
+      if (window.turnstile) {
+        // reset specific widget
+        // @ts-ignore
+        window.turnstile.reset('#turnstile-widget');
+      }
+    };
+
+    const reExecute = () => {
+      // @ts-ignore
+      if (window.turnstile) {
+        // @ts-ignore
+        window.turnstile.execute('#turnstile-widget');
+      }
+    };
+
+    // ERROR
+    // @ts-ignore
+    window.onTurnstileError = () => {
+      form.setValue('cf-turnstile-response', '');
+      form.setError('cf-turnstile-response', {
+        type: 'manual',
+        message: 'Human verification failed. Retrying...',
+      });
+
+      resetTurnstile();
+      reExecute();
+    };
+
+    // EXPIRED
+    // @ts-ignore
+    window.onTurnstileExpired = () => {
+      form.setValue('cf-turnstile-response', '');
+      form.setError('cf-turnstile-response', {
+        type: 'manual',
+        message: 'Verification expired. Retrying...',
+      });
+
+      resetTurnstile();
+      reExecute();
+    };
+
+    // TIMEOUT
+    // @ts-ignore
+    window.onTurnstileTimeout = () => {
+      form.setValue('cf-turnstile-response', '');
+      form.setError('cf-turnstile-response', {
+        type: 'manual',
+        message: 'Verification timed out. Retrying...',
+      });
+
+      resetTurnstile();
+      reExecute();
+    };
+
+    return () => {
+      // cleanup
+      // @ts-ignore
+      delete window.onTurnstileSuccess;
+      // @ts-ignore
+      delete window.onTurnstileError;
+      // @ts-ignore
+      delete window.onTurnstileExpired;
+      // @ts-ignore
+      delete window.onTurnstileTimeout;
     };
   }, [form]);
 
@@ -151,12 +222,17 @@ export function ContactForm() {
               )}
             />
             <div
+              id="turnstile-widget"
               className="cf-turnstile"
-              data-theme="light"
-              data-size="normal"
               data-sitekey={env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITEKEY}
+              data-theme="light"
+              data-size="invisible"
               data-callback="onTurnstileSuccess"
+              data-error-callback="onTurnstileError"
+              data-expired-callback="onTurnstileExpired"
+              data-timeout-callback="onTurnstileTimeout"
             />
+
             <Button
               type="submit"
               className={cn('w-full', {
