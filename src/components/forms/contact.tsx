@@ -32,10 +32,11 @@ export function ContactForm() {
         duration: 5000,
       });
     },
-    onError: (error: unknown) => {
-      console.error(error);
-
-      toast.error('Failed to send email');
+    onError: () => {
+      toast.error('Failed to send email', {
+        description: 'Please try again.',
+        duration: 5000,
+      });
     },
   });
 
