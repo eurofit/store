@@ -38,11 +38,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${dmSans.variable} ${montserrat.variable} antialiased`}>
         <JsonLd
-          jsonLd={{
-            '@context': 'https://schema.org',
-            // @ts-ignore
-            '@graph': [organization, website, localBusiness],
-          }}
+          jsonLd={[organization, website, localBusiness]}
           strategy="beforeInteractive"
         />
         <TailwindIndicator />
