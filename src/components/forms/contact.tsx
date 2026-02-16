@@ -55,6 +55,11 @@ export function ContactForm() {
         onSubmit={form.handleSubmit(handleSendEmail)}
         method="post"
       >
+        {form.formState.errors['cf-turnstile-response']?.message && (
+          <div className="text-destructive">
+            {form.formState.errors['cf-turnstile-response']?.message}
+          </div>
+        )}
         <FieldSet>
           <FieldGroup>
             <Controller
