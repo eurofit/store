@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { env } from '@/env.mjs';
 import { contactFormSchema, ContactFormValues } from '@/schemas/contact';
+import { cn } from '@/utils/cn';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import Script from 'next/script';
@@ -16,7 +17,7 @@ import { Spinner } from '../ui/spinner';
 
 export function ContactForm() {
   const { mutate: sendEmail, isPending: isSending } = useMutation({
-    mutationKey: ['contact'],
+    mutationKey: ['contact-email'],
     mutationFn: sendContactEmail,
     onSuccess: () => {
       toast.success('Email sent successfully!', {
@@ -36,6 +37,7 @@ export function ContactForm() {
       email: '',
       subject: '',
       message: '',
+      'cf-turnstile-response': '',
     },
   });
 
@@ -46,9 +48,12 @@ export function ContactForm() {
   return (
     <>
       <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
+
       <form
-        onSubmit={form.handleSubmit(handleSendEmail)}
+        id="contact-form"
         className="max-w-md space-y-4 p-6 shadow-md"
+        onSubmit={form.handleSubmit(handleSendEmail)}
+        method="post"
       >
         <FieldSet>
           <FieldGroup>
@@ -76,7 +81,6 @@ export function ContactForm() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel>Email</FieldLabel>
-
                   <Input
                     placeholder="you@example.com"
                     aria-invalid={fieldState.invalid}
@@ -127,19 +131,25 @@ export function ContactForm() {
                 </Field>
               )}
             />
-
-            <Button type="submit" className="w-full" disabled={isSending}>
+            <div
+              className="cf-turnstile"
+              data-theme="light"
+              data-size="normal"
+              data-sitekey={env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITEKEY}
+            />
+            <Button
+              type="submit"
+              className={cn('w-full', {
+                'bg-destructive text-white':
+                  form.formState.errors['cf-turnstile-response']?.message,
+              })}
+              disabled={isSending}
+            >
               {isSending && <Spinner aria-hidden="true" />}
               {isSending ? 'Sending…' : 'Send Message'}
             </Button>
           </FieldGroup>
         </FieldSet>
-        <div
-          className="cf-turnstile"
-          data-theme="light"
-          data-size="flexible"
-          data-sitekey={env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITEKEY}
-        />
       </form>
     </>
   );
