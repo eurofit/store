@@ -2,7 +2,15 @@
 
 import { sendContactEmail } from '@/actions/contact';
 import { Button } from '@/components/ui/button';
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldSet,
+} from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
 import { env } from '@/env.mjs';
 import { contactFormSchema, ContactFormValues } from '@/schemas/contact';
@@ -10,10 +18,9 @@ import { cn } from '@/utils/cn';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import Script from 'next/script';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from '../ui/field';
-import { Spinner } from '../ui/spinner';
 
 export function ContactForm() {
   const { mutate: sendEmail, isPending: isSending } = useMutation({
@@ -40,6 +47,13 @@ export function ContactForm() {
       'cf-turnstile-response': '',
     },
   });
+
+  useEffect(() => {
+    // @ts-ignore
+    window.onTurnstileSuccess = function (token: string) {
+      form.setValue('cf-turnstile-response', token);
+    };
+  }, [form]);
 
   const handleSendEmail = (data: ContactFormValues) => {
     sendEmail(data);
@@ -141,6 +155,7 @@ export function ContactForm() {
               data-theme="light"
               data-size="normal"
               data-sitekey={env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITEKEY}
+              data-callback="onTurnstileSuccess"
             />
             <Button
               type="submit"
