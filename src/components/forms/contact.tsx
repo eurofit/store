@@ -32,7 +32,9 @@ export function ContactForm() {
         duration: 5000,
       });
     },
-    onError: () => {
+    onError: (error: unknown) => {
+      console.error(error);
+
       toast.error('Failed to send email');
     },
   });
