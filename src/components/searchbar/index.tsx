@@ -44,8 +44,8 @@ export function SearchBar() {
 
   const { value: isOpen, setOn: setOpen, setOff } = useToggle();
 
-  const ref = React.useRef<HTMLDivElement>(null);
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const ref = React.useRef<HTMLDivElement>(null!);
+  const inputRef = React.useRef<HTMLInputElement>(null!);
 
   useClickAway(ref, setOff);
 
@@ -96,7 +96,12 @@ export function SearchBar() {
 
             {isSearching && (
               <InputGroupAddon align="inline-end">
-                <Button size="icon-sm" variant="ghost" disabled={true} aria-label="Searching">
+                <Button
+                  size="icon-sm"
+                  variant="ghost"
+                  disabled={true}
+                  aria-label="Searching"
+                >
                   <Spinner aria-hidden="true" />
                   <span className="sr-only">Searching for: {query}</span>
                 </Button>
@@ -193,5 +198,22 @@ export function SearchBar() {
         </SearchContent>
       )}
     </div>
+  );
+}
+
+export function SearchBarSkeleton() {
+  return (
+    <InputGroup className="bg-background! opacity-100! has-[[data-slot=input-group-control]:focus-visible]:ring-0! has-[[data-slot][aria-invalid=true]]:ring-0!">
+      <InputGroupAddon align="inline-start">
+        <Search aria-hidden="true" />
+      </InputGroupAddon>
+      <InputGroupInput
+        type="search"
+        name="q"
+        placeholder="Search here…"
+        autoComplete="off"
+        disabled
+      />
+    </InputGroup>
   );
 }

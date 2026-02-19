@@ -11,7 +11,7 @@ import { Skeleton } from './ui/skeleton';
 export async function Nav() {
   const navItems = await getNav();
   return (
-    <NavigationMenu className="max-md:hidden">
+    <NavigationMenu className="hidden md:block">
       {navItems.length > 0 && (
         <NavigationMenuList>
           {navItems.map(({ label, url, id }, idx) => (
@@ -29,7 +29,7 @@ export async function Nav() {
 
 export function NavSkeleton() {
   return (
-    <div className="flex flex-1 gap-2 overflow-hidden">
+    <div className="hidden flex-1 gap-2 overflow-hidden md:flex md:items-center">
       <Skeleton className="h-6 w-32 rounded-md" />
       <Skeleton className="h-6 w-24 rounded-md" />
       <Skeleton className="h-6 w-20 rounded-md" />

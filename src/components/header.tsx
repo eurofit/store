@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Logo } from '@/components/logo';
 import { Nav, NavSkeleton } from '@/components/nav';
-import { SearchBar } from '@/components/searchbar';
+import { SearchBar, SearchBarSkeleton } from '@/components/searchbar';
 import { UserButton, UserButtonSkeleton } from './auth/user-button';
 import { CartDynamic } from './cart/cart-dynamic';
 import { MenuSheet, MenuSheetSkeleton } from './menu-sheet';
@@ -21,7 +21,7 @@ export function Header() {
         <Nav />
       </React.Suspense>
       <div className="ml-auto flex flex-1 items-center justify-end gap-x-3">
-        <React.Suspense fallback={<div className="flex-1" />}>
+        <React.Suspense fallback={<SearchBarSkeleton />}>
           <SearchBar />
         </React.Suspense>
         <SearchSheetDynamic />

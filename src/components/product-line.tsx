@@ -229,7 +229,7 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
         {!line.isOutOfStock && line.price && (
           <ButtonGroup
             className={cn('relative w-full', {
-              'border border-amber-500': isUpdatingCartItem,
+              'outline outline-amber-500': isUpdatingCartItem,
             })}
           >
             <Button

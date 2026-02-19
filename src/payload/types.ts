@@ -139,7 +139,9 @@ export interface Config {
     nav: NavSelect<false> | NavSelect<true>;
   };
   locale: null;
-  user: User;
+  user: User & {
+    collection: 'users';
+  };
   jobs: {
     tasks: unknown;
     workflows: unknown;
@@ -262,7 +264,6 @@ export interface User {
       }[]
     | null;
   password?: string | null;
-  collection: 'users';
 }
 /**
  * Customer delivery addresses.

@@ -72,10 +72,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </Breadcrumb>
 
         <div className="flex w-full flex-col items-start gap-16 md:flex-row">
-          <div className="relative grow space-y-10 md:max-w-5xl">
+          <div className="relative grow space-y-10">
             <Heading>{title}</Heading>
-            <main className="flex flex-col items-start gap-6 md:flex-row">
-              <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-white max-md:w-full md:max-w-xs md:basis-2/5">
+            <main className="flex w-full flex-col items-start gap-6 md:flex-row md:gap-10">
+              <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-white max-md:w-full md:max-w-xl md:basis-3/5">
                 {image && (
                   <ImageWithRetry
                     src={image}

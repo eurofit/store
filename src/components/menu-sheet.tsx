@@ -33,7 +33,13 @@ export async function MenuSheet() {
 
 export function MenuSheetSkeleton() {
   return (
-    <Button variant="ghost" size="icon-lg" className="animate-pulse md:hidden" disabled aria-label="Loading menu">
+    <Button
+      variant="ghost"
+      size="icon-lg"
+      className="animate-pulse md:hidden"
+      disabled
+      aria-label="Loading menu"
+    >
       <span className="sr-only">Mobile menu</span>
       <Menu className="size-5.5" aria-hidden="true" />
     </Button>
