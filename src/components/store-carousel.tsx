@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/carousel';
 import { useToggle } from '@/hooks/use-toggle';
 import AutoPlay from 'embla-carousel-autoplay';
+import Image from 'next/image';
 import { useIdle } from 'react-use';
 import { CarouselDots } from './ui-extras/carousel';
 
@@ -80,7 +81,7 @@ export function StoreCarousel({ className }: StoreCarouselProps) {
       <CarouselContent>
         <CarouselItem className="relative w-full">
           <div className="relative h-auto w-full max-w-[1900px]">
-            <img
+            <Image
               src="/iso-xp.png"
               alt="Banner"
               fill
