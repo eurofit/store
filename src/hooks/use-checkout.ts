@@ -1,23 +1,29 @@
 'use client';
 
-import { checkout } from '@/actions/checkout';
+import { checkout as checkoutAction } from '@/actions/checkout';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 export function useCheckout() {
   const router = useRouter();
+
   const checkoutMutation = useMutation({
-    mutationFn: checkout,
+    mutationFn: checkoutAction,
     mutationKey: ['checkout'],
     onSuccess: ({ data: { authorization_url } }) => {
       router.push(authorization_url);
     },
-    onError: (error) => {
-      toast.error(
-        error instanceof Error ? error.message : 'An unexpected error occurred.',
-      );
+    onError: () => {
+      toast.error('An unexpected error occurred.');
     },
   });
-  return checkoutMutation;
+
+  const { mutate: checkout, isPending: isCheckingout, ...r } = checkoutMutation;
+
+  return {
+    checkout,
+    isCheckingout,
+    ...r,
+  };
 }

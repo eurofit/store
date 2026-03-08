@@ -1,6 +1,7 @@
 'use client';
 
 import { CurrentUser } from '@/actions/auth/get-current-user';
+import { ImageWithRetry } from '@/components/image-with-retry';
 import { Button } from '@/components/ui/button';
 import { ButtonGroup, ButtonGroupText } from '@/components/ui/button-group';
 import {
@@ -12,16 +13,21 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 import { Spinner } from '@/components/ui/spinner';
 import { useCart as useCartMutations } from '@/hooks/use-cart';
+import { useCheckout } from '@/hooks/use-checkout';
 import { useToggle } from '@/hooks/use-toggle';
 import { useCart } from '@/providers/cart';
-import { Address, AddressId, AddressWithId } from '@/schemas/address';
+import { AddressId, AddressWithId } from '@/schemas/address';
 import { type CartItem } from '@/schemas/cart';
 import { cn } from '@/utils/cn';
 import { formatWithCommas } from '@/utils/format-with-commas';
 import {
   CheckCircleIcon,
+  ChevronRight,
+  ImageOff,
+  Lock,
   MapPin,
   Minus,
   Plus,
@@ -30,6 +36,7 @@ import {
   Trash,
 } from 'lucide-react';
 import * as React from 'react';
+import { toast } from 'sonner';
 import { AddressSelector } from '../address-selector';
 import { CreateAddressForm } from '../create-address';
 import { UpdateAddressForm } from '../update-address';
@@ -227,7 +234,28 @@ export function AddressStep({ addresses }: AddressStepProps) {
 
 export function ReviewStep() {
   const stepper = useStepper();
-  const address = stepper.metadata.get<Address | null>('address');
+  const address = stepper.metadata.get<AddressWithId | null>('address');
+  const { items, totalItems, totalPrice } = useCart();
+  const { checkout, isCheckingout } = useCheckout();
+
+  const handleCheckout = () => {
+    if (!address) {
+      toast.info('Please provide delivery Address');
+      return;
+    }
+
+    checkout({
+      items: items.map((item) => ({
+        id: item.id,
+        quantity: item.quantity,
+        snapshot: {
+          price: item.price,
+          title: item.title,
+        },
+      })),
+      addressId: address?.id,
+    });
+  };
 
   return (
     <Stepper.Content step="place-order">
@@ -239,9 +267,9 @@ export function ReviewStep() {
         <CardContent className="mt-4">
           <div className="space-y-4">
             <div className="bg-muted/50 space-y-6 rounded-md p-2">
-              <div className="flex gap-4">
-                <div className="bg-muted flex size-10 rounded-md">
-                  <MapPin className="m-auto size-6" />
+              <div className="flex items-center gap-2.5">
+                <div className="bg-muted flex size-16 rounded-md">
+                  <MapPin className="m-auto size-10" />
                 </div>
                 <div>
                   <h3 className="text-foreground font-medium">Shipping Address</h3>
@@ -252,10 +280,10 @@ export function ReviewStep() {
                 <div className="ml-auto">
                   <Button
                     variant="ghost"
-                    size="sm"
+                    size="xs"
                     onClick={() => stepper.navigation.goTo('address')}
                   >
-                    Edit
+                    Change <ChevronRight aria-hidden="true" />
                   </Button>
                 </div>
               </div>
@@ -279,47 +307,121 @@ export function ReviewStep() {
               </div>
             </div>
             <div className="bg-muted/50 space-y-6 rounded-md p-2">
-              <div className="flex gap-4">
-                <div className="bg-muted flex size-10 rounded-md">
-                  <ShoppingCart className="m-auto size-6" />
+              <div className="flex items-center gap-2.5">
+                <div className="bg-muted flex size-16 rounded-md">
+                  <ShoppingCart className="m-auto size-8" />
                 </div>
                 <div>
-                  <h3 className="text-foreground font-medium">Shipping Address</h3>
+                  <h3 className="text-foreground font-medium">
+                    Cart&nbsp;
+                    <span className="text-muted-foreground text-xs" aria-hidden>
+                      ({totalItems})
+                    </span>
+                  </h3>
                   <p className="text-muted-foreground mt-0.5 text-xs">
-                    Where your order will be delivered
+                    Your items in the cart
                   </p>
                 </div>
                 <div className="ml-auto">
                   <Button
                     variant="ghost"
-                    size="sm"
-                    onClick={() => stepper.navigation.goTo('address')}
+                    size="xs"
+                    onClick={() => stepper.navigation.goTo('cart')}
                   >
-                    Edit
+                    Edit <ChevronRight aria-hidden="true" />
                   </Button>
                 </div>
               </div>
               <div className="space-y-2">
-                <p className="font-medium capitalize">
-                  {address?.title} {address?.firstName} {address?.lastName}
-                </p>
-                <div className="text-muted-foreground text-sm">
-                  <p>{address?.line1},</p>
-                  {address?.line2 && <p>{address?.line2},</p>}
-                  <p>
-                    {address?.area}, {address?.postalCode}
-                  </p>
-                  {address?.city && <p>{address?.city}</p>}
-                  {address?.county && <p>{address?.county}</p>}
-
-                  {address?.country && <p>{address?.country}</p>}
-                  {address?.phone && <p>{address?.phone}</p>}
-                  {address?.secondaryPhone && <p>{address?.secondaryPhone}</p>}
-                </div>
+                {items.map((item) => (
+                  <div key={item.id} className="flex items-start gap-2.5">
+                    <div className="bg-muted relative flex size-16 items-center justify-center rounded-md">
+                      {item.product.image ? (
+                        <ImageWithRetry
+                          src={item.product.image}
+                          alt={item.product.title}
+                          width={64}
+                          height={64}
+                          className="m-auto max-h-11/12 max-w-11/12 rounded-md object-contain"
+                        />
+                      ) : (
+                        <ImageOff
+                          className="text-muted-foreground/50 size-3/5"
+                          aria-label="Image not available"
+                        />
+                      )}
+                    </div>
+                    <div>
+                      <h3 className="max-w-xs text-sm font-medium text-pretty">
+                        {item.product.title}
+                      </h3>
+                      <p className="text-muted-foreground text-sm">{item.variant}</p>
+                      <p className="text-muted-foreground mt-1 text-xs">
+                        Qty: {item.quantity}
+                      </p>
+                    </div>
+                    <div className="ml-auto space-y-2">
+                      <div className="flex items-center justify-end text-right text-sm font-medium">
+                        <span className="text-muted-foreground text-xs">Ksh</span>
+                        &nbsp;
+                        <span>{formatWithCommas(item.price)}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
+            </div>
+            <div className="bg-muted/50 space-y-6 rounded-md p-2">
+              <h3 className="text-foreground text-lg font-semibold tracking-tight">
+                Order Summary
+              </h3>
+
+              <dl>
+                <div className="flex items-start justify-between gap-2 py-2">
+                  <dt className="font-medium">Subtotal</dt>
+                  <dd className="text-right slashed-zero tabular-nums">
+                    <span className="text-muted-foreground">Ksh</span>
+                    &nbsp;
+                    <span>{formatWithCommas(totalPrice)}</span>
+                  </dd>
+                </div>
+                <div className="flex items-start justify-between gap-2 py-2">
+                  <dt className="font-medium">Delivery Fee</dt>
+                  <dd className="text-right slashed-zero tabular-nums">
+                    <span className="text-muted-foreground">Ksh</span>
+                    &nbsp;
+                    <span>2,000</span>
+                  </dd>
+                </div>
+                <Separator className="my-2" />
+                <div className="flex items-start justify-between gap-2 py-2 text-lg font-medium">
+                  <dt className="uppercase">Total</dt>
+                  <dd className="text-right slashed-zero tabular-nums">
+                    <span className="text-muted-foreground">Ksh</span>
+                    &nbsp;
+                    <span>{formatWithCommas(totalPrice + 2000)}</span>
+                  </dd>
+                </div>
+              </dl>
             </div>
           </div>
         </CardContent>
+        <CardFooter className="flex flex-col gap-4">
+          <Button className="w-full" onClick={handleCheckout}>
+            {isCheckingout && (
+              <>
+                <Spinner /> Placing Order
+              </>
+            )}
+
+            {!isCheckingout && 'Place Order'}
+          </Button>
+
+          <div className="text-muted-foreground flex items-center gap-2 text-xs">
+            <Lock className="size-4" />
+            <p>You will be redirected to complete payment securely.</p>
+          </div>
+        </CardFooter>
       </Card>
     </Stepper.Content>
   );
@@ -377,7 +479,22 @@ function CartItem({ item }: CartItemProps) {
 
   return (
     <div key={item.id} className="flex items-start gap-2">
-      <div className="bg-muted relative flex size-16 items-center justify-center rounded-md"></div>
+      <div className="bg-muted relative flex size-16 items-center justify-center rounded-md">
+        {item.product.image ? (
+          <ImageWithRetry
+            src={item.product.image}
+            alt={item.product.title}
+            width={64}
+            height={64}
+            className="m-auto max-h-11/12 max-w-11/12 rounded-md object-contain"
+          />
+        ) : (
+          <ImageOff
+            className="text-muted-foreground/50 size-3/5"
+            aria-label="Image not available"
+          />
+        )}
+      </div>
       <div>
         <h3 className="max-w-xs text-sm font-medium text-pretty">{item.product.title}</h3>
         <p className="text-muted-foreground text-sm">{item.variant}</p>
