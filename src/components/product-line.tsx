@@ -171,7 +171,10 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
       <div className="w-full min-w-0 grow">
         <div className="mb-1 flex items-center gap-2">
           {line.variant && (
-            <h3 id={line.slug} className="scroll-m-20 font-medium capitalize">
+            <h3
+              id={line.slug}
+              className="max-w-xs scroll-m-20 font-medium text-pretty capitalize"
+            >
               {line.variant}
             </h3>
           )}

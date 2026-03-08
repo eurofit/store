@@ -1,8 +1,20 @@
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { getCart } from '@/actions/cart';
-import { PageHeading } from '@/components/page-heading';
-import { notFound, redirect } from 'next/navigation';
+import { CheckoutHeader } from '@/components/checkout/header';
+import { CartProvider } from '@/providers/cart';
+import { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 import * as React from 'react';
+
+export const metadata: Metadata = {
+  title: {
+    absolute: 'Secure Checkout',
+  },
+  description: 'Checkout page',
+  robots: {
+    index: false,
+  },
+};
 
 type CheckoutLayoutProps = Readonly<{
   children: React.ReactNode;
@@ -15,18 +27,10 @@ export default async function CheckoutLayout({ children }: CheckoutLayoutProps) 
     redirect('/login' + '?next=' + encodeURIComponent('/checkout'));
   }
 
-  if (!cart || cart.items.length === 0) {
-    notFound();
-  }
-
   return (
-    <div className="space-y-6 md:space-y-12">
-      <PageHeading
-        title="Secure Checkout"
-        description="Complete your purchase securely and efficiently."
-      />
-
-      {children}
+    <div className="bg-muted/50 container mx-auto">
+      <CheckoutHeader />
+      <CartProvider cart={cart}>{children}</CartProvider>
     </div>
   );
 }

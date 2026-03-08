@@ -16,6 +16,8 @@ export const ensureSingleDefaultAddress: CollectionBeforeChangeHook<Address> = a
         isDefault: { equals: true },
       },
       data: { isDefault: false },
+      req,
+      user: req.user,
     });
 
     return data;
@@ -30,6 +32,8 @@ export const ensureSingleDefaultAddress: CollectionBeforeChangeHook<Address> = a
     limit: 1,
     pagination: false,
     depth: 0,
+    req,
+    user: req.user,
   });
 
   if (existingDefaultAddresses.length === 0) {

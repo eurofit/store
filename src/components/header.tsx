@@ -10,7 +10,7 @@ import { SearchSheetDynamic } from './search-sheet-dynamic';
 
 export function Header() {
   return (
-    <header className="bg-background sticky top-0 z-50 flex h-20 items-center justify-between gap-x-6 border-b px-6 md:h-16">
+    <header className="bg-background sticky top-0 z-50 flex h-20 items-center justify-between gap-x-6 border-b px-4 md:h-16 md:px-6">
       <div className="flex items-center gap-2">
         <React.Suspense fallback={<MenuSheetSkeleton />}>
           <MenuSheet />

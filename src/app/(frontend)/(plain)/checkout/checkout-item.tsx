@@ -1,27 +1,27 @@
-import { type CartItem } from '@/schemas/cart';
-import { cn } from '@/utils/cn';
-import { formatWithCommas } from '@/utils/format-with-commas';
-
 import { ImageWithRetry } from '@/components/image-with-retry';
 import { Button } from '@/components/ui/button';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { Input } from '@/components/ui/input';
 import { useCart } from '@/hooks/use-cart';
+import { type CartItem } from '@/schemas/cart';
+import { cn } from '@/utils/cn';
+import { formatWithCommas } from '@/utils/format-with-commas';
 import clamp from 'lodash-es/clamp';
 import { Ban, CheckCircle, Clock3, ImageOff, Minus, Plus, X } from 'lucide-react';
+import Link from 'next/link';
 import * as React from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
 type CartItemProps = {
   item: CartItem;
   index: number;
-  onPending?: (isPending: boolean) => void;
+  onCartPending?: (isPending: boolean) => void;
 };
 
 export function CheckoutItem({
   index,
   item: { product, ...item },
-  onPending,
+  onCartPending,
 }: CartItemProps) {
   const {
     queryResult: { cart, isQueryPending },
@@ -45,9 +45,9 @@ export function CheckoutItem({
 
   // Notify parent about pending state
   React.useEffect(() => {
-    if (!onPending) return;
+    if (!onCartPending) return;
 
-    onPending(
+    onCartPending(
       isCreatingCart ||
         isUpdatingCartItem ||
         isRemovingCartItem ||
@@ -55,7 +55,7 @@ export function CheckoutItem({
         isQueryPending,
     );
   }, [
-    onPending,
+    onCartPending,
     isCreatingCart,
     isUpdatingCartItem,
     isRemovingCartItem,
@@ -138,13 +138,13 @@ export function CheckoutItem({
 
   const handleIncrement = () => {
     setQty((qty) => qty + 1);
-    onPending && onPending(true);
+    onCartPending && onCartPending(true);
     debouncedCommitChange(clamp(qty + 1, 0, item.stock));
   };
 
   const handleDecrement = () => {
     setQty((qty) => qty - 1);
-    onPending && onPending(true);
+    onCartPending && onCartPending(true);
     debouncedCommitChange(clamp(qty - 1, 0, item.stock));
   };
 
@@ -155,7 +155,10 @@ export function CheckoutItem({
       )}
 
       <article className="flex items-start space-x-4">
-        <div className="relative flex aspect-square size-16 items-center justify-center rounded-md bg-white shadow-sm">
+        <Link
+          href={`/products/${product.slug}`}
+          className="relative flex aspect-square size-16 items-center justify-center rounded-md bg-white shadow-sm"
+        >
           {product.image ? (
             <ImageWithRetry
               src={product.image}
@@ -171,16 +174,17 @@ export function CheckoutItem({
               aria-label="Image not available"
             />
           )}
-        </div>
+        </Link>
         <div className="w-full space-y-2">
           <div className="flex items-start justify-between gap-4">
-            <h3 className="max-w-56 text-sm text-pretty">{item.title}</h3>
+            <Link href={`/products/${product.slug}`}>
+              <h3 className="max-w-56 text-sm text-pretty">{item.title}</h3>
+            </Link>
 
             <Button
-              variant="ghost"
-              className="text-destructive *:[svg]:text-destructive! hover:bg-destructive/10 size-7"
+              variant="destructive"
+              size="icon-sm"
               onClick={() => handleQtyChange(0)}
-              size="icon"
             >
               <X className="size-3.5" />
               <span className="sr-only">Remove item</span>

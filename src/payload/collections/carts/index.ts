@@ -6,7 +6,13 @@ export const carts: CollectionConfig = {
   typescript: {
     interface: 'Cart',
   },
-
+  access: {
+    create: ({ req: { user } }) => Boolean(user),
+    read: ({ req: { user } }) => Boolean(user),
+    update: ({ req: { user } }) => Boolean(user),
+    delete: ({ req: { user } }) => Boolean(user),
+    admin: ({ req: { user } }) => Boolean(user),
+  },
   labels: {
     singular: 'Cart',
     plural: 'Carts',
@@ -108,6 +114,5 @@ export const carts: CollectionConfig = {
   ],
   hooks: {
     beforeChange: [validateCartItems],
-    // afterChange: [revalidateCache],
   },
 };

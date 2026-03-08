@@ -56,15 +56,6 @@ export const addresses: CollectionConfig = {
       required: true,
     },
     {
-      name: 'email',
-      type: 'email',
-      admin: {
-        description:
-          'Email address for this address, if different from the user’s main email.',
-      },
-      required: true,
-    },
-    {
       name: 'phone',
       type: 'text',
       admin: {
@@ -72,6 +63,14 @@ export const addresses: CollectionConfig = {
           'Phone number for this address, if different from the user’s main number.',
       },
       required: true,
+    },
+    {
+      name: 'secondaryPhone',
+      type: 'text',
+      admin: {
+        description:
+          'Secondary phone number for this address, if different from the user’s main number.',
+      },
     },
 
     /**
@@ -107,10 +106,19 @@ export const addresses: CollectionConfig = {
       },
     },
     {
-      name: 'line3',
+      name: 'area',
       type: 'text',
       admin: {
-        description: 'Landmark',
+        description:
+          'Area or neighborhood. Example: Eastleigh, Kibera, Embakasi, Westlands.',
+      },
+    },
+    {
+      name: 'landmark',
+      type: 'text',
+      admin: {
+        description:
+          'Landmark or direction to the address. Example: Near the main gate, Behind the school.',
       },
     },
 
@@ -118,12 +126,11 @@ export const addresses: CollectionConfig = {
      * LOCATION (ADMINISTRATIVE)
      */
     {
-      name: 'country',
+      name: 'city',
       type: 'text',
       required: true,
-      defaultValue: 'Kenya',
       admin: {
-        description: 'Country where this address is located.',
+        description: 'City or town. Example: Nairobi, Thika, Nakuru.',
       },
     },
     {
@@ -135,11 +142,12 @@ export const addresses: CollectionConfig = {
       },
     },
     {
-      name: 'city',
+      name: 'country',
       type: 'text',
       required: true,
+      defaultValue: 'Kenya',
       admin: {
-        description: 'City or town. Example: Nairobi, Thika, Nakuru.',
+        description: 'Country where this address is located.',
       },
     },
     {
