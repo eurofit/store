@@ -14,10 +14,11 @@ import { Cart } from '@/payload/types';
 import { formatCartItems } from '@/utils/format-cart-items';
 import { cookies as getCookies } from 'next/headers';
 import { getPayload } from 'payload';
+import * as React from 'react';
 import z from 'zod';
 import { getCurrentUser } from './auth/get-current-user';
 
-export async function getCart() {
+export const getCart = React.cache(async () => {
   const [payload, cookies, user] = await Promise.all([
     getPayload({ config }),
     getCookies(),
@@ -29,17 +30,18 @@ export async function getCart() {
   const { docs: carts } = await payload.find({
     collection: 'carts',
     where: {
-      ...(user
-        ? {
-            user: {
-              equals: user.id,
-            },
-          }
-        : {
-            guestSessionId: {
-              equals: guestSessionId,
-            },
-          }),
+      or: [
+        {
+          user: {
+            equals: user?.id,
+          },
+        },
+        {
+          guestSessionId: {
+            equals: guestSessionId,
+          },
+        },
+      ],
     },
     select: {
       items: true,
@@ -58,7 +60,9 @@ export async function getCart() {
     ...cart,
     items: formattedCartItems,
   };
-}
+});
+
+export type CartResponse = Awaited<ReturnType<typeof getCart>>;
 
 const createCartWithItemSchema = z.object({
   item: z.uuid('Product line ID must be a valid UUID'),
@@ -128,7 +132,7 @@ export async function createCartWithItem(
   const newCart = await payload.create({
     collection: 'carts',
     data: {
-      guestSessionId: user ? undefined : guestSessionId,
+      guestSessionId,
       user: user?.id,
       items: [
         {
@@ -245,7 +249,7 @@ export async function addItemToCart(input: z.infer<typeof addItemToCartSchema>) 
   const updateCart: Cart = {
     ...cart,
     user: user?.id,
-    guestSessionId: user ? undefined : guestSessionId,
+    guestSessionId,
     lastActiveAt: new Date().toISOString(),
     items: [
       ...cart.items,
@@ -332,7 +336,7 @@ export async function updateCartItemQuantity(
     };
   }
 
-  // find the corrosponding product line, inorder to verify prices and stocks
+  // find the corrosponding product line, inorder to pas the  snapshort values,  verify prices and stocks
   const { docs: producLines } = await payload.find({
     collection: 'product-lines',
     where: {
@@ -383,7 +387,7 @@ export async function updateCartItemQuantity(
   const updateCart: Cart = {
     ...cart,
     user: user?.id,
-    guestSessionId: guestSessionId ?? undefined,
+    guestSessionId: user ? undefined : guestSessionId,
     lastActiveAt: new Date().toISOString(),
     items: cart.items.map((cartItem) => {
       const productLineId =

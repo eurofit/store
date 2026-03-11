@@ -124,8 +124,12 @@ export interface Config {
     'stock-alerts': StockAlertsSelect<false> | StockAlertsSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
-    'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
-    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
+    'payload-locked-documents':
+      | PayloadLockedDocumentsSelect<false>
+      | PayloadLockedDocumentsSelect<true>;
+    'payload-preferences':
+      | PayloadPreferencesSelect<false>
+      | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
@@ -139,9 +143,11 @@ export interface Config {
     nav: NavSelect<false> | NavSelect<true>;
   };
   locale: null;
-  user: User & {
-    collection: 'users';
+  widgets: {
+    'users-count': UsersCountWidget;
+    collections: CollectionsWidget;
   };
+  user: User;
   jobs: {
     tasks: unknown;
     workflows: unknown;
@@ -287,13 +293,13 @@ export interface Address {
    */
   lastName: string;
   /**
-   * Email address for this address, if different from the user’s main email.
-   */
-  email: string;
-  /**
    * Phone number for this address, if different from the user’s main number.
    */
   phone: string;
+  /**
+   * Secondary phone number for this address, if different from the user’s main number.
+   */
+  secondaryPhone?: string | null;
   /**
    * Short name to identify this address. Example: Home, Work, Shop, Warehouse, Cargo.
    */
@@ -307,21 +313,25 @@ export interface Address {
    */
   line2?: string | null;
   /**
-   * Landmark
+   * Area or neighborhood. Example: Eastleigh, Kibera, Embakasi, Westlands.
    */
-  line3?: string | null;
+  area?: string | null;
   /**
-   * Country where this address is located.
+   * Landmark or direction to the address. Example: Near the main gate, Behind the school.
    */
-  country: string;
+  landmark?: string | null;
+  /**
+   * City or town. Example: Nairobi, Thika, Nakuru.
+   */
+  city: string;
   /**
    * County name. Example: Nairobi, Kiambu, Mombasa.
    */
   county: string;
   /**
-   * City or town. Example: Nairobi, Thika, Nakuru.
+   * Country where this address is located.
    */
-  city: string;
+  country: string;
   /**
    * Postal code for the area. Example: 00100, 00200.
    */
@@ -963,15 +973,16 @@ export interface AddressesSelect<T extends boolean = true> {
   title?: T;
   firstName?: T;
   lastName?: T;
-  email?: T;
   phone?: T;
+  secondaryPhone?: T;
   label?: T;
   line1?: T;
   line2?: T;
-  line3?: T;
-  country?: T;
-  county?: T;
+  area?: T;
+  landmark?: T;
   city?: T;
+  county?: T;
+  country?: T;
   postalCode?: T;
   note?: T;
   isDefault?: T;
@@ -1285,12 +1296,31 @@ export interface NavSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users-count_widget".
+ */
+export interface UsersCountWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'x-small' | 'small' | 'medium' | 'large' | 'x-large' | 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "collections_widget".
+ */
+export interface CollectionsWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "auth".
  */
 export interface Auth {
   [k: string]: unknown;
 }
-
 
 declare module 'payload' {
   export interface GeneratedTypes extends Config {}

@@ -64,6 +64,7 @@ export async function checkout(unSafeData: CheckoutArgs) {
     collection: 'orders',
     data: {
       customer: user.id,
+      // TODO: remain with shipping address only
       shippingAddress: address.id,
       billingAddress: address.id,
       items: orderItems,

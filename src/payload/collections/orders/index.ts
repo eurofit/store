@@ -127,6 +127,9 @@ export const orders: CollectionConfig = {
     },
   ],
   hooks: {
-    beforeChange: [validateOrderItems, autoincrement({ field: 'id' })],
+    beforeChange: [
+      validateOrderItems,
+      autoincrement({ field: 'id', startFrom: 31032025 }),
+    ],
   },
 };

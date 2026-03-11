@@ -4,13 +4,13 @@ import { NextResponse } from 'next/server';
 import crypto from 'node:crypto';
 import { getPayload } from 'payload';
 
-const secret = env.PAYSTACK_SECRET_KEY;
+const paystackSecretKey = env.PAYSTACK_SECRET_KEY;
 
 export async function POST(req: Request) {
   const body = await req.json();
 
   const hash = crypto
-    .createHmac('sha512', secret)
+    .createHmac('sha512', paystackSecretKey)
     .update(JSON.stringify(body))
     .digest('hex');
 
