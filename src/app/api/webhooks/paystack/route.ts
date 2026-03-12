@@ -14,9 +14,9 @@ export async function POST(req: Request) {
     .update(JSON.stringify(body))
     .digest('hex');
 
-  const signature = req.headers.get('x-paystack-signature');
+  const paystackSignature = req.headers.get('x-paystack-signature');
 
-  if (hash != signature) {
+  if (hash != paystackSignature) {
     return Response.json(
       {
         success: false,
@@ -32,10 +32,44 @@ export async function POST(req: Request) {
   });
 
   if (body.event == 'charge.success') {
-    const order = await payload.findByID({
+    const eventData = body.data;
+    // check if order exists and is not already paid
+    const { docs: orders } = await payload.find({
       collection: 'orders',
-      id: body.data.reference,
+      where: {
+        and: [
+          {
+            id: {
+              equals: eventData.reference,
+            },
+          },
+          {
+            paymentStatus: {
+              equals: 'unpaid',
+            },
+          },
+        ],
+      },
+      limit: 1,
+      pagination: false,
     });
+
+    if (!orders || orders.length === 0) {
+      return Response.json(
+        {
+          success: false,
+          message: 'Order not found',
+        },
+        {
+          status: 404,
+        },
+      );
+    }
+
+    const order = orders[0];
+
+    // check if the amount matches, done is transaction collection beforechange hook
+    // send order confirmation email to user, done in transaction collection afterchange hook
 
     await payload.create({
       collection: 'transactions',
@@ -44,6 +78,9 @@ export async function POST(req: Request) {
         ref: body.data.reference,
         amount: body.data.amount / 100,
         provider: 'paystack',
+        isTest: body.data.domain !== 'live',
+        paidAt: body.data.paid_at,
+        snapshot: body.data,
       },
       draft: false,
     });

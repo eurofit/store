@@ -6,6 +6,7 @@ export const markOrderPaid: CollectionAfterChangeHook<Transaction> = async ({
   operation,
   req,
   doc,
+  context,
 }) => {
   if (operation !== 'create') {
     return;
@@ -13,12 +14,14 @@ export const markOrderPaid: CollectionAfterChangeHook<Transaction> = async ({
 
   // verify the correct amount was paid
   const isOrderPopulated = typeof doc.order === 'object' && doc.order !== null;
-  const orderId = typeof doc.order === 'number' ? doc.order : (doc.order as Order).id;
+  const orderId = typeof doc.order === 'number' ? doc.order : doc.order.id;
 
   let order: Order;
 
   if (isOrderPopulated) {
     order = doc.order as Order;
+  } else if (context.order) {
+    order = context.order as Order;
   } else {
     order = await req.payload.findByID({
       id: orderId,

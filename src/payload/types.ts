@@ -124,12 +124,8 @@ export interface Config {
     'stock-alerts': StockAlertsSelect<false> | StockAlertsSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
-    'payload-locked-documents':
-      | PayloadLockedDocumentsSelect<false>
-      | PayloadLockedDocumentsSelect<true>;
-    'payload-preferences':
-      | PayloadPreferencesSelect<false>
-      | PayloadPreferencesSelect<true>;
+    'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
+    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
@@ -270,6 +266,7 @@ export interface User {
       }[]
     | null;
   password?: string | null;
+  collection: 'users';
 }
 /**
  * Customer delivery addresses.
@@ -721,6 +718,10 @@ export interface Order {
   status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
   paymentStatus: 'unpaid' | 'paid' | 'refunded';
   /**
+   * Access code returned by Paystack when initiating a transaction. We can re use to charge the payment.
+   */
+  paystackAccessCode?: string | null;
+  /**
    * Snapshot of the order at the time of purchase
    */
   snapshot:
@@ -750,6 +751,20 @@ export interface Transaction {
   amount: number;
   ref: string;
   provider: string;
+  /**
+   * Indicates if the transaction is a test transaction
+   */
+  isTest?: boolean | null;
+  paidAt: string;
+  snapshot:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1150,6 +1165,7 @@ export interface OrdersSelect<T extends boolean = true> {
   total?: T;
   status?: T;
   paymentStatus?: T;
+  paystackAccessCode?: T;
   snapshot?: T;
   transactions?: T;
   updatedAt?: T;
@@ -1176,6 +1192,9 @@ export interface TransactionsSelect<T extends boolean = true> {
   amount?: T;
   ref?: T;
   provider?: T;
+  isTest?: T;
+  paidAt?: T;
+  snapshot?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1321,6 +1340,7 @@ export interface CollectionsWidget {
 export interface Auth {
   [k: string]: unknown;
 }
+
 
 declare module 'payload' {
   export interface GeneratedTypes extends Config {}

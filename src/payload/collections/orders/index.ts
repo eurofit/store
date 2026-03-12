@@ -110,6 +110,15 @@ export const orders: CollectionConfig = {
       options: paymentStatus,
     },
     {
+      name: 'paystackAccessCode',
+      type: 'text',
+      admin: {
+        description:
+          'Access code returned by Paystack when initiating a transaction. We can re use to charge the payment.',
+        hidden: true,
+      },
+    },
+    {
       name: 'snapshot',
       type: 'json',
       required: true,

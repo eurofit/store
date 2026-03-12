@@ -1,5 +1,7 @@
 import { CollectionConfig } from 'payload';
 import { markOrderPaid } from './hooks/mark-order-paid';
+import { sendOrderConfimationEmail } from './hooks/send-order-confimation-email';
+import { validatePaidAmount } from './hooks/validate-amount-paid';
 
 export const transactions: CollectionConfig = {
   slug: 'transactions',
@@ -32,8 +34,28 @@ export const transactions: CollectionConfig = {
       type: 'text',
       required: true,
     },
+    {
+      name: 'isTest',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description: 'Indicates if the transaction is a test transaction',
+        hidden: true,
+      },
+    },
+    {
+      name: 'paidAt',
+      type: 'date',
+      required: true,
+    },
+    {
+      name: 'snapshot',
+      type: 'json',
+      required: true,
+    },
   ],
   hooks: {
-    afterChange: [markOrderPaid],
+    beforeChange: [validatePaidAmount],
+    afterChange: [markOrderPaid, sendOrderConfimationEmail],
   },
 };

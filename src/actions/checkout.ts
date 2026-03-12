@@ -110,5 +110,15 @@ export async function checkout(unSafeData: CheckoutArgs) {
   if ('data' in res && res.data === null) {
     throw new Error('Failed to initialize payment');
   }
+
+  // update order with paystack access code, so that we can recharge the payment if the user does not complete the payment after being redirected to paystack
+  await payload.update({
+    collection: 'orders',
+    id: order.id,
+    data: {
+      paystackAccessCode: res.data.access_code,
+    },
+  });
+
   return res;
 }
