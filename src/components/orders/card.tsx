@@ -1,0 +1,37 @@
+'use client';
+
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Copy } from 'lucide-react';
+import { toast } from 'sonner';
+
+type OrderCardProps = {
+  orderId: number;
+};
+
+export function OrderCard({ orderId }: OrderCardProps) {
+  const handleCopy = () => {
+    navigator.clipboard.writeText(orderId.toString());
+    toast.success(`#${orderId} copied to clipboard!`);
+  };
+
+  return (
+    <Card size="sm" className="py-2!">
+      <CardContent>
+        <div className="flex items-center justify-between gap-10 text-left">
+          <div>
+            <p className="text-muted-foreground text-sm">Order number</p>
+            <p>
+              <span className="font-medium">{orderId}</span>
+            </p>
+          </div>
+          <div className="ml-auto">
+            <Button variant="outline" size="icon-sm" onClick={handleCopy}>
+              <Copy />
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}

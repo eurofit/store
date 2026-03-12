@@ -1,5 +1,6 @@
 import * as z from 'zod';
 import { addressWithIdSchema } from './address';
+import { productSchema } from './cart';
 
 const orderSnapShotSchema = z.object({
   user: z.object({
@@ -11,8 +12,10 @@ const orderSnapShotSchema = z.object({
 });
 
 export const orderItemSnapShotSchema = z.object({
+  variant: z.string().min(1, 'Product line variant is required'),
   price: z.number().min(0, 'Price must be a positive number'),
   title: z.string().min(1, 'Product line title is required'),
+  product: productSchema,
 });
 
 export const orderItem = z.object({

@@ -249,8 +249,10 @@ export function ReviewStep() {
         id: item.id,
         quantity: item.quantity,
         snapshot: {
-          price: item.price,
           title: item.title,
+          variant: item.variant ?? '',
+          price: item.price,
+          product: item.product,
         },
       })),
       addressId: address?.id,

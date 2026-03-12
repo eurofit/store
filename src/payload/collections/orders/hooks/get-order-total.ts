@@ -20,7 +20,6 @@ export const getOrderTotal: FieldHook<Order, Order['total'], Order> = async ({
   if (!areOrderItemsPopulated) {
     throw new Error('Order items must be populated to calculate total');
   }
-
   const formattedItems = data.items.map((item) => ({
     ...item,
     id: typeof item.productLine === 'string' ? item.productLine : item.productLine?.id,
