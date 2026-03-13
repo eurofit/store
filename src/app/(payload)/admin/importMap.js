@@ -5,7 +5,6 @@ import { RowLabel as RowLabel_136f5c07131edccd38c6dc479a848911 } from '@/payload
 import { PayloadIcon as PayloadIcon_d761f61b7314634717e4170a1aff3eac } from '@/components/payload-icon.tsx'
 import { Logo as Logo_98b9c1e527fb6c856d7dd54df5e3faa4 } from '@/components/logo.tsx'
 import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24 } from '@payloadcms/storage-s3/client'
-import { UsersCount as UsersCount_5fef82ed03041c021d62c54e18eea35b } from '@/components/widgets/users-count.tsx'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 export const importMap = {
@@ -16,6 +15,5 @@ export const importMap = {
   "@/components/payload-icon.tsx#PayloadIcon": PayloadIcon_d761f61b7314634717e4170a1aff3eac,
   "@/components/logo.tsx#Logo": Logo_98b9c1e527fb6c856d7dd54df5e3faa4,
   "@payloadcms/storage-s3/client#S3ClientUploadHandler": S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24,
-  "@/components/widgets/users-count.tsx#UsersCount": UsersCount_5fef82ed03041c021d62c54e18eea35b,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

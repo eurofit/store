@@ -132,7 +132,7 @@ export const orders: CollectionConfig = {
       type: 'join',
       collection: 'transactions',
       on: 'order',
-      hasMany: true,
+      hasMany: false,
     },
   ],
   hooks: {

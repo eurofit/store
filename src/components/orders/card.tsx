@@ -16,7 +16,7 @@ export function OrderCard({ orderId }: OrderCardProps) {
   };
 
   return (
-    <Card size="sm" className="py-2!">
+    <Card size="sm" className="py-2! max-md:w-full">
       <CardContent>
         <div className="flex items-center justify-between gap-10 text-left">
           <div>

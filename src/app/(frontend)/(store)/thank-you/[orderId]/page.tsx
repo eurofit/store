@@ -1,6 +1,7 @@
 import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { ImageWithRetry } from '@/components/image-with-retry';
 import { OrderCard } from '@/components/orders/card';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
   Collapsible,
@@ -9,13 +10,23 @@ import {
 } from '@/components/ui/collapsible';
 import { Separator } from '@/components/ui/separator';
 import config from '@/payload/config';
+import { addressSchema } from '@/schemas/address';
 import { orderItem, orderItemSnapShotSchema } from '@/schemas/order';
 import { SearchParams } from '@/types';
 import { formatWithCommas } from '@/utils/format-with-commas';
-import { CheckIcon, ChevronDownIcon, ImageOff, Mail } from 'lucide-react';
+import { format as formatDate } from 'date-fns';
+import {
+  Box,
+  CheckIcon,
+  ChevronDownIcon,
+  Clock,
+  ImageOff,
+  Mail,
+  MapPinIcon,
+} from 'lucide-react';
 import { notFound, redirect } from 'next/navigation';
 import { getPayload } from 'payload';
-import z from 'zod';
+import * as z from 'zod';
 
 type ThankYouPageProps = {
   params: Promise<{
@@ -63,10 +74,14 @@ export default async function ThankYouPage({ params, searchParams }: ThankYouPag
         quantity: true,
         snapshot: true,
       },
+      snapshot: true,
+      transactions: true,
       total: true,
     },
     populate: {
-      'product-lines': {},
+      transactions: {
+        paidAt: true,
+      },
     },
     overrideAccess: false,
     user: user.id,
@@ -92,8 +107,13 @@ export default async function ThankYouPage({ params, searchParams }: ThankYouPag
 
   const formattedItems = z.array(itemSchema).parse(items);
 
+  const shippingAddress = addressSchema.parse((order.snapshot as any)?.address);
+
+  const transaction = order.transactions?.docs?.filter((t) => typeof t !== 'string')?.[0];
+
   return (
     <>
+      {/* <pre>{JSON.stringify(order, null, 2)}</pre> */}
       <main className="mx-auto flex max-w-lg flex-col items-center justify-center">
         <div className="relative flex w-full flex-col items-center justify-center gap-4">
           <div className="flex size-12 rounded-full bg-green-50 text-green-700">
@@ -113,86 +133,198 @@ export default async function ThankYouPage({ params, searchParams }: ThankYouPag
             </p>
           </div>
 
-          <Collapsible defaultOpen className="mt-10 w-full">
-            <CollapsibleTrigger asChild>
-              <Button
-                variant="outline"
-                size="lg"
-                className="group w-full data-[state=open]:rounded-b-none"
-              >
-                Order Summary
-                <ChevronDownIcon className="ml-auto group-data-[state=open]:rotate-180" />
-              </Button>
-            </CollapsibleTrigger>
-            <CollapsibleContent className="rounded-b-lg border px-2.5 py-3">
-              <div className="space-y-2">
-                {formattedItems.map((item) => (
-                  <div key={item.variant} className="flex items-start gap-2.5">
-                    <div className="bg-muted relative flex size-16 items-center justify-center rounded-md">
-                      {item.product.image ? (
-                        <ImageWithRetry
-                          src={item.product.image}
-                          alt={item.product.title}
-                          width={64}
-                          height={64}
-                          className="m-auto max-h-11/12 max-w-11/12 rounded-md object-contain"
-                        />
-                      ) : (
-                        <ImageOff
-                          className="text-muted-foreground/50 size-3/5"
-                          aria-label="Image not available"
-                        />
-                      )}
+          <div className="mt-10 w-full space-y-8">
+            <Collapsible defaultOpen>
+              <CollapsibleTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="group w-full data-[state=open]:rounded-b-none"
+                >
+                  Order Summary
+                  <ChevronDownIcon className="ml-auto group-data-[state=open]:rotate-180" />
+                </Button>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="rounded-b-lg border px-2.5 py-3">
+                <div className="space-y-2">
+                  {formattedItems.map((item) => (
+                    <div key={item.variant} className="flex items-start gap-2.5">
+                      <div className="bg-muted relative flex size-16 min-h-16 min-w-16 items-center justify-center rounded-md">
+                        {item.product.image ? (
+                          <ImageWithRetry
+                            src={item.product.image}
+                            alt={item.product.title}
+                            width={64}
+                            height={64}
+                            className="m-auto max-h-11/12 max-w-11/12 rounded-md object-contain"
+                          />
+                        ) : (
+                          <ImageOff
+                            className="text-muted-foreground/50 size-3/5"
+                            aria-label="Image not available"
+                          />
+                        )}
+                      </div>
+                      <div>
+                        <h3 className="max-w-xs text-sm font-medium text-pretty">
+                          {item.product.title}
+                        </h3>
+                        <p className="text-muted-foreground text-sm">{item.variant}</p>
+                        <p className="text-muted-foreground mt-1 text-xs">
+                          Qty: {item.quantity}
+                        </p>
+                      </div>
+                      <div className="ml-auto space-y-2">
+                        <div className="flex items-center justify-end text-right text-sm font-medium">
+                          <span className="text-muted-foreground text-xs">Ksh</span>
+                          &nbsp;
+                          <span>{formatWithCommas(item.price * item.quantity)}</span>
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="max-w-xs text-sm font-medium text-pretty">
-                        {item.product.title}
-                      </h3>
-                      <p className="text-muted-foreground text-sm">{item.variant}</p>
-                      <p className="text-muted-foreground mt-1 text-xs">
-                        Qty: {item.quantity}
+                  ))}
+                </div>
+                <Separator className="my-4" />
+                <dl className="text-sm">
+                  <div className="flex items-start justify-between gap-2 py-1.5">
+                    <dt className="font-medium">Subtotal</dt>
+                    <dd className="text-right slashed-zero tabular-nums">
+                      <span className="text-muted-foreground">Ksh</span>
+                      &nbsp;
+                      <span>{formatWithCommas(order.total!)}</span>
+                    </dd>
+                  </div>
+                  <div className="flex items-start justify-between gap-2 py-1.5">
+                    <dt className="font-medium">Delivery Fee</dt>
+                    <dd className="text-right slashed-zero tabular-nums">
+                      <span className="text-muted-foreground">Ksh</span>
+                      &nbsp;
+                      <span>{formatWithCommas(2000)}</span>
+                    </dd>
+                  </div>
+                  <Separator className="my-2" />
+                  <div className="flex items-start justify-between gap-2 py-1.5 font-medium">
+                    <dt className="uppercase">Total</dt>
+                    <dd className="text-right slashed-zero tabular-nums">
+                      <span className="text-muted-foreground">Ksh</span>
+                      &nbsp;
+                      <span>{formatWithCommas(order.total! + 2000)}</span>
+                    </dd>
+                  </div>
+                </dl>
+              </CollapsibleContent>
+            </Collapsible>
+
+            <Collapsible defaultOpen>
+              <CollapsibleTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="group w-full data-[state=open]:rounded-b-none"
+                >
+                  Delivery Details
+                  <ChevronDownIcon className="ml-auto group-data-[state=open]:rotate-180" />
+                </Button>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="space-y-6 rounded-b-lg border px-2.5 py-3">
+                <div className="flex items-start gap-2">
+                  <MapPinIcon className="size-5" />
+                  <div className="space-y-1">
+                    <h3 className="text-sm font-medium text-pretty">Delivering to</h3>
+                    <div className="text-muted-foreground text-sm">
+                      <p className="font-medium capitalize">
+                        {shippingAddress?.title} {shippingAddress?.firstName}{' '}
+                        {shippingAddress?.lastName}
                       </p>
-                    </div>
-                    <div className="ml-auto space-y-2">
-                      <div className="flex items-center justify-end text-right text-sm font-medium">
-                        <span className="text-muted-foreground text-xs">Ksh</span>
-                        &nbsp;
-                        <span>{formatWithCommas(item.price * item.quantity)}</span>
+                      <div>
+                        <p>{shippingAddress?.line1},</p>
+                        {shippingAddress?.line2 && <p>{shippingAddress?.line2},</p>}
+                        <p>
+                          {shippingAddress?.area}, {shippingAddress?.postalCode}
+                        </p>
+
+                        <div className="flex gap-1.5">
+                          {shippingAddress?.city && <p>{shippingAddress?.city},</p>}
+                          {shippingAddress?.county && <p>{shippingAddress?.county}</p>}
+                        </div>
+
+                        {shippingAddress?.country && <p>{shippingAddress?.country}</p>}
+                        {shippingAddress?.phone && <p>{shippingAddress?.phone}</p>}
+                        {shippingAddress?.secondaryPhone && (
+                          <p>{shippingAddress?.secondaryPhone}</p>
+                        )}
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
-              <Separator className="my-4" />
-              <dl className="text-sm">
-                <div className="flex items-start justify-between gap-2 py-1.5">
-                  <dt className="font-medium">Subtotal</dt>
-                  <dd className="text-right slashed-zero tabular-nums">
-                    <span className="text-muted-foreground">Ksh</span>
-                    &nbsp;
-                    <span>{formatWithCommas(order.total!)}</span>
-                  </dd>
                 </div>
-                <div className="flex items-start justify-between gap-2 py-1.5">
-                  <dt className="font-medium">Delivery Fee</dt>
-                  <dd className="text-right slashed-zero tabular-nums">
-                    <span className="text-muted-foreground">Ksh</span>
-                    &nbsp;
-                    <span>{formatWithCommas(2000)}</span>
-                  </dd>
-                </div>
-                <Separator className="my-2" />
-                <div className="flex items-start justify-between gap-2 py-1.5 font-medium">
-                  <dt className="uppercase">Total</dt>
-                  <dd className="text-right slashed-zero tabular-nums">
-                    <span className="text-muted-foreground">Ksh</span>
-                    &nbsp;
-                    <span>{formatWithCommas(order.total! + 2000)}</span>
-                  </dd>
-                </div>
-              </dl>
-            </CollapsibleContent>
-          </Collapsible>
+                <Alert>
+                  <Box />
+                  <div>
+                    <AlertTitle>Estimated Delivery</AlertTitle>
+                    <p>Wednesday, March 18 - Saturday, March 19</p>
+                  </div>
+                  <AlertDescription>
+                    We will send you a tracking number once your order has shipped.
+                    Delivery times may vary based on your location and the shipping method
+                    selected at checkout.
+                  </AlertDescription>
+                </Alert>
+              </CollapsibleContent>
+            </Collapsible>
+
+            <Collapsible defaultOpen>
+              <CollapsibleTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="group w-full data-[state=open]:rounded-b-none"
+                >
+                  Whats Next?
+                  <ChevronDownIcon className="ml-auto group-data-[state=open]:rotate-180" />
+                </Button>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="space-y-6 rounded-b-lg border px-2.5 py-3">
+                <ol className="space-y-4">
+                  <li className="relative flex gap-4">
+                    {/* left */}
+                    <div className="relative flex w-6 flex-col items-center">
+                      <div className="flex size-6 items-center justify-center rounded-full bg-green-700 text-white">
+                        <CheckIcon className="size-4" />
+                      </div>
+                      {/* connector */}
+                      <div className="bg-muted absolute top-6 bottom-0 left-3 w-1" />
+                    </div>
+                    {/* right */}
+                    <div className="text-sm">
+                      <p>Order Placed</p>
+                      <p className="text-muted-foreground">
+                        {transaction?.paidAt
+                          ? formatDate(
+                              new Date(transaction.paidAt),
+                              "MMMM dd, yyyy 'at' h:mm aa",
+                            )
+                          : 'N/A'}
+                      </p>
+                    </div>
+                  </li>
+                  <li className="relative flex gap-4">
+                    {/* left */}
+                    <div className="relative flex w-6 flex-col items-center">
+                      <div className="flex size-6 items-center justify-center rounded-full bg-black text-white">
+                        <Clock className="size-4" />
+                      </div>
+                      {/* connector */}
+                      <div className="bg-muted absolute top-6 bottom-0 left-3 w-1" />
+                    </div>
+                    {/* right */}
+                    <div className="text-sm">
+                      <p>Pending Confimation</p>
+                    </div>
+                  </li>
+                </ol>
+              </CollapsibleContent>
+            </Collapsible>
+          </div>
         </div>
       </main>
     </>
