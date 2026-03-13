@@ -2,7 +2,7 @@ import { NAMESPACE } from '@/constants/keys';
 import { site } from '@/constants/site';
 import { env } from '@/env.mjs';
 import { postgresAdapter } from '@payloadcms/db-postgres';
-import { nodemailerAdapter } from '@payloadcms/email-nodemailer';
+import { resendAdapter } from '@payloadcms/email-resend';
 import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
 import { s3Storage } from '@payloadcms/storage-s3';
@@ -55,17 +55,10 @@ export default buildConfig({
     generateSchemaOutputFile: path.resolve(dirname, './generated-schema.ts'),
   }),
 
-  email: nodemailerAdapter({
-    defaultFromAddress: env.SMTP_USERNAME,
+  email: resendAdapter({
+    apiKey: env.RESEND_API_KEY,
+    defaultFromAddress: `${site.name} <${env.SMTP_USERNAME}>`,
     defaultFromName: site.name,
-    transportOptions: {
-      host: env.SMTP_HOST,
-      port: env.SMTP_PORT,
-      auth: {
-        user: env.SMTP_USERNAME,
-        pass: env.SMTP_PASSWORD,
-      },
-    },
   }),
   plugins: [
     s3Storage({
