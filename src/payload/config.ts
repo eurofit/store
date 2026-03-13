@@ -32,15 +32,6 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     dateFormat: 'dd MMMM yyyy hh:mm',
-    dashboard: {
-      widgets: [
-        {
-          ComponentPath: '@/components/widgets/users-count.tsx#UsersCount',
-          slug: 'users-count',
-          label: 'Users Count',
-        },
-      ],
-    },
   },
   routes: {
     api: '/payload/api',
