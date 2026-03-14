@@ -70,14 +70,14 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
                     <Img
                       alt="Eurofit Logo Dark"
                       height="28"
-                      src="${/static/logo-light.png"
+                      src={`${baseUrl}/logos/logo-light.png`}
                     />
                   </span>
                   <span className="logo dark" style={{ display: 'none' }}>
                     <Img
                       alt="Eurofit Logo Dark"
                       height="28"
-                      src="${/static/logo-dark.png"
+                      src={`${baseUrl}/logos/logo-dark.png`}
                     />
                   </span>
                 </Column>
