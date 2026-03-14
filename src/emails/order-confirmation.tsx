@@ -1,6 +1,7 @@
 import {
   Column,
   Container,
+  Head,
   Img,
   Link,
   Preview,
@@ -34,8 +35,28 @@ export type OrderConfirmationProps = {
   };
 };
 export default function OrderConfirmation({ customer, order }: OrderConfirmationProps) {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
+
   return (
     <html>
+      <Head>
+        <meta content="light dark" name="color-scheme" />
+        <meta content="light dark" name="supported-color-schemes" />
+
+        <style type="text/css">
+          {`
+            @media (prefers-color-scheme: dark) {
+              .logo.light {
+                display: none !important;
+              }
+              .logo.dark {
+                display: block !important;
+              }
+            }
+      `}
+        </style>
+      </Head>
+
       <Preview>Your Eurofit order #{order.id} has been received</Preview>
 
       <Tailwind>
@@ -45,11 +66,20 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
             <Section className="my-6 px-4 py-6">
               <Row>
                 <Column align="center">
-                  <Img
-                    alt="Eurofit"
-                    height="28"
-                    src="http://localhost:3000/static/logo-without-background.png"
-                  />
+                  <span className="logo light">
+                    <Img
+                      alt="Eurofit Logo Dark"
+                      height="28"
+                      src="${/static/logo-light.png"
+                    />
+                  </span>
+                  <span className="logo dark" style={{ display: 'none' }}>
+                    <Img
+                      alt="Eurofit Logo Dark"
+                      height="28"
+                      src="${/static/logo-dark.png"
+                    />
+                  </span>
                 </Column>
               </Row>
 
@@ -234,17 +264,7 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
                     }}
                   >
                     <tr>
-                      <td
-                        style={{
-                          padding: '10px 12px',
-                          verticalAlign: 'middle',
-                          width: '30px',
-                        }}
-                      >
-                        <Img src="/static/mail.png" width="18" height="18" alt="Email" />
-                      </td>
-
-                      <td style={{ verticalAlign: 'middle' }}>
+                      <td style={{ verticalAlign: 'middle', padding: '10px 12px' }}>
                         <Link
                           href="mailto:info@eurofit.co.ke"
                           style={{
@@ -253,6 +273,7 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
                             fontSize: '14px',
                           }}
                         >
+                          <Text className="m-0 p-0 text-sm text-gray-600">Email</Text>
                           info@eurofit.co.ke
                         </Link>
                       </td>
@@ -273,22 +294,7 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
                     }}
                   >
                     <tr>
-                      <td
-                        style={{
-                          padding: '10px 12px',
-                          verticalAlign: 'middle',
-                          width: '30px',
-                        }}
-                      >
-                        <Img
-                          src="/static/whatsapp.png"
-                          width="18"
-                          height="18"
-                          alt="Phone"
-                        />
-                      </td>
-
-                      <td style={{ verticalAlign: 'middle' }}>
+                      <td style={{ verticalAlign: 'middle', padding: '10px 12px' }}>
                         <Link
                           href="https://wa.me/254110990666"
                           style={{
@@ -297,6 +303,7 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
                             fontSize: '14px',
                           }}
                         >
+                          <Text className="m-0 p-0 text-sm text-gray-600">Whatsapp</Text>
                           +254 110 990 660
                         </Link>
                       </td>
@@ -320,50 +327,69 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
               <table className="w-full">
                 <tr className="w-full">
                   <td align="center">
-                    <Img
-                      alt="Eurofit"
-                      height="20"
-                      src="http://localhost:3000/static/logo-without-background.png"
-                    />
+                    <span className="logo light">
+                      <Img
+                        alt="Eurofit Logo Dark"
+                        height="20"
+                        src={`${baseUrl}/logos/logo-light.png`}
+                      />
+                    </span>
+                    <span className="logo dark" style={{ display: 'none' }}>
+                      <Img
+                        alt="Eurofit Logo Dark"
+                        height="20"
+                        src={`${baseUrl}/logos/logo-dark.png`}
+                      />
+                    </span>
                   </td>
                 </tr>
                 <tr className="w-full">
                   <td align="center">
-                    <Text className="mt-[4px] mb-0 text-[16px] leading-[24px] text-gray-500">
+                    <Text className="mt-1 mb-0 text-[16px] leading-6 text-gray-500">
                       European Fitness, African Strength
                     </Text>
                   </td>
                 </tr>
                 <tr>
                   <td align="center">
-                    <Row className="table-cell h-[44px] w-[56px] align-bottom">
-                      <Column className="pr-[8px]">
-                        <Link href="#">
+                    <Row className="table-cell h-11 w-14 align-bottom">
+                      <Column className="pr-4">
+                        <Link href="https://www.tiktok.com/@eurofitltd">
                           <Img
-                            alt="Facebook"
-                            height="36"
-                            src="https://react.email/static/facebook-logo.png"
-                            width="36"
+                            alt="TikTok"
+                            height="24"
+                            src={`${baseUrl}/logos/tiktok.png`}
+                            width="24"
                           />
                         </Link>
                       </Column>
-                      <Column className="pr-[8px]">
-                        <Link href="#">
+                      <Column className="pr-4">
+                        <Link href="https://www.instagram.com/eurofitltd">
+                          <Img
+                            alt="Instagram"
+                            height="24"
+                            src={`${baseUrl}/logos/instagram.png`}
+                            width="24"
+                          />
+                        </Link>
+                      </Column>
+                      <Column className="pr-4">
+                        <Link href="https://www.x.com/eurofitltd">
                           <Img
                             alt="X"
-                            height="36"
-                            src="https://react.email/static/x-logo.png"
-                            width="36"
+                            height="24"
+                            src={`${baseUrl}/logos/x.png`}
+                            width="24"
                           />
                         </Link>
                       </Column>
                       <Column>
-                        <Link href="#">
+                        <Link href="https://www.facebook.com/eurofitltd">
                           <Img
-                            alt="Instagram"
-                            height="36"
-                            src="https://react.email/static/instagram-logo.png"
-                            width="36"
+                            alt="Facebook"
+                            height="24"
+                            src={`${baseUrl}/logos/facebook.png`}
+                            width="24"
                           />
                         </Link>
                       </Column>
@@ -372,11 +398,12 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
                 </tr>
                 <tr>
                   <td align="center">
-                    <Text className="my-[8px] text-[16px] leading-[24px] font-semibold text-gray-500">
-                      123 Main Street Anytown, CA 12345
+                    <Text className="my-2 leading-6 font-semibold text-gray-500">
+                      Unit 111, 1st Floor, 6th Street Tower, 6th Street, Eastleigh,
+                      Nairobi, Kenya
                     </Text>
-                    <Text className="mt-[4px] mb-0 text-[16px] leading-[24px] font-semibold text-gray-500">
-                      mail@example.com +123456789
+                    <Text className="mt-1 mb-0 leading-6 font-semibold text-gray-500">
+                      info@eurofit.co.ke +254 110 990 660
                     </Text>
                   </td>
                 </tr>
@@ -394,7 +421,7 @@ export function generateOrderConfirmationEmailHTML(props: OrderConfirmationProps
 }
 
 OrderConfirmation.PreviewProps = {
-  user: {
+  customer: {
     name: 'Abdurezak',
   },
   order: {
