@@ -177,7 +177,7 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
                           alt={item.product.title}
                           width="60"
                           height="60"
-                          style={{ borderRadius: '6px' }}
+                          style={{ borderRadius: '6px', backgroundColor: '#f3f4f6' }}
                         />
                       ) : (
                         <Text>N/A</Text>
