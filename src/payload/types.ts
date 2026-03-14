@@ -140,7 +140,6 @@ export interface Config {
   };
   locale: null;
   widgets: {
-    'users-count': UsersCountWidget;
     collections: CollectionsWidget;
   };
   user: User;
@@ -1312,16 +1311,6 @@ export interface NavSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users-count_widget".
- */
-export interface UsersCountWidget {
-  data?: {
-    [k: string]: unknown;
-  };
-  width: 'x-small' | 'small' | 'medium' | 'large' | 'x-large' | 'full';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

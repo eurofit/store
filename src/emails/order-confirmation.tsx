@@ -8,20 +8,21 @@ import {
   Section,
   Tailwind,
   Text,
+  render,
 } from '@react-email/components';
 
 type Item = {
   quantity: number;
   price: number;
   product: {
-    image: string;
+    image?: string | null;
     title: string;
   };
   variant: string;
 };
 
-type OrderConfirmationProps = {
-  user: {
+export type OrderConfirmationProps = {
+  customer: {
     name: string;
   };
   order: {
@@ -32,7 +33,7 @@ type OrderConfirmationProps = {
     deliveryFee: number;
   };
 };
-export default function OrderConfirmation({ user, order }: OrderConfirmationProps) {
+export default function OrderConfirmation({ customer, order }: OrderConfirmationProps) {
   return (
     <html>
       <Preview>Your Eurofit order #{order.id} has been received</Preview>
@@ -96,7 +97,7 @@ export default function OrderConfirmation({ user, order }: OrderConfirmationProp
 
             {/* Body */}
             <Section className="px-4">
-              <Text className="text-lg font-semibold">Hi {user.name},</Text>
+              <Text className="text-lg font-semibold">Hi {customer.name},</Text>
 
               <Text>
                 Thank you for shopping with <strong>EUROFIT</strong>. This is just a quick
@@ -140,13 +141,17 @@ export default function OrderConfirmation({ user, order }: OrderConfirmationProp
                   >
                     {/* Product Image */}
                     <Column width="70" style={{ verticalAlign: 'top' }}>
-                      <Img
-                        src={item.product.image}
-                        alt={item.product.title}
-                        width="60"
-                        height="60"
-                        style={{ borderRadius: '6px' }}
-                      />
+                      {item.product.image ? (
+                        <Img
+                          src={item.product.image}
+                          alt={item.product.title}
+                          width="60"
+                          height="60"
+                          style={{ borderRadius: '6px' }}
+                        />
+                      ) : (
+                        <Text>N/A</Text>
+                      )}
                     </Column>
 
                     {/* Product Details */}
@@ -382,6 +387,10 @@ export default function OrderConfirmation({ user, order }: OrderConfirmationProp
       </Tailwind>
     </html>
   );
+}
+
+export function generateOrderConfirmationEmailHTML(props: OrderConfirmationProps) {
+  return render(<OrderConfirmation {...props} />);
 }
 
 OrderConfirmation.PreviewProps = {

@@ -1,6 +1,9 @@
+import { generateOrderConfirmationEmailHTML } from '@/emails/order-confirmation';
 import { env } from '@/env.mjs';
 import { Order, Transaction, User } from '@/payload/types';
+import { orderItem, orderItemSnapShotSchema } from '@/schemas/order';
 import { CollectionAfterChangeHook } from 'payload';
+import * as z from 'zod';
 
 export const sendOrderConfimationEmail: CollectionAfterChangeHook<Transaction> = async ({
   operation,
@@ -42,14 +45,42 @@ export const sendOrderConfimationEmail: CollectionAfterChangeHook<Transaction> =
     });
   }
 
+  const items = order.items.map(({ snapshot, ...item }) => ({
+    ...item,
+    ...(typeof snapshot === 'object' ? snapshot : {}),
+    id: typeof item.productLine === 'string' ? item.productLine : item.productLine.id,
+  }));
+
+  const itemSchema = orderItemSnapShotSchema.extend(
+    orderItem.pick({ id: true, quantity: true }).shape,
+  );
+
+  const formattedItems = z.array(itemSchema).parse(items);
+
   req.payload.sendEmail({
     from: `EUROFIT <${env.SMTP_USERNAME}>`,
     to: customer.email,
     subject: 'Order Confirmation',
-    html: `<p>Dear ${customer.firstName},</p>
-           <p>Thank you for your order! Your order number is ${order.id}.</p>
-           <p>We will notify you once your order has been shipped.</p>
-           <p>Best regards,<br/>The Eurofit Team</p>`,
+    html: await generateOrderConfirmationEmailHTML({
+      customer: {
+        name: customer.firstName,
+      },
+      order: {
+        id: order.id.toString(),
+        items: formattedItems.map((item) => ({
+          quantity: item.quantity,
+          price: item.price,
+          variant: item.variant,
+          product: {
+            title: item.product.title,
+            image: item.product.image,
+          },
+        })),
+        total: order.total! + 300,
+        subtotal: order.total!,
+        deliveryFee: 350,
+      },
+    }),
     replyTo: env.SMTP_INFO_USERNAME,
   });
 
