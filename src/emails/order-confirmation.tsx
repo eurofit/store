@@ -35,7 +35,7 @@ export type OrderConfirmationProps = {
   };
 };
 export default function OrderConfirmation({ customer, order }: OrderConfirmationProps) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL!;
 
   return (
     <html>
