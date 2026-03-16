@@ -1,5 +1,3 @@
-'use client';
-
 import { Text } from '@react-pdf/renderer';
 
 export function PageNumber() {
