@@ -119,6 +119,7 @@ export const sendOrderConfimationEmail: CollectionAfterChangeHook<Transaction> =
       {
         filename: `invoice-${order.id}.pdf`,
         content: invoicePdf,
+        contentType: 'application/pdf',
       },
     ],
   });
