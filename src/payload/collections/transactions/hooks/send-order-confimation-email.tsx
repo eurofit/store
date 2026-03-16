@@ -4,6 +4,7 @@ import {
 } from '@/emails/order-confirmation';
 import { env } from '@/env.mjs';
 import { Order, Transaction, User } from '@/payload/types';
+import { generateBarcode } from '@/pdf/components/barcode';
 import { sampleInvoice } from '@/pdf/invoice/data';
 import { InvoiceDoc } from '@/pdf/invoice/doc';
 import { orderItem, orderItemSnapShotSchema } from '@/schemas/order';
@@ -67,9 +68,10 @@ export const sendOrderConfimationEmail: CollectionAfterChangeHook<Transaction> =
   const qr = await QrCode.toDataURL('https://g.page/r/CS7vpFfn8OgQEAE/review', {
     margin: 0,
   });
+  const barcode = await generateBarcode(order.id.toString());
 
   const invoicePdf = await renderToBuffer(
-    <InvoiceDoc data={sampleInvoice} qrCode={qr} />,
+    <InvoiceDoc data={sampleInvoice} qrCode={qr} barcode={barcode} />,
   );
 
   req.payload.sendEmail({

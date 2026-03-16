@@ -3,7 +3,6 @@ import { formatWithCommas } from '@/utils/format-with-commas';
 import { Document, Image, Page, Text, View } from '@react-pdf/renderer';
 import { format } from 'date-fns';
 import truncate from 'lodash-es/truncate';
-import { Barcode } from '../components/barcode';
 import { PageNumber } from './page-number';
 import { styles } from './styles';
 import { InvoiceData } from './types';
@@ -13,9 +12,10 @@ const Br = () => '\n';
 type InvoiceDocProps = {
   data: InvoiceData;
   qrCode: string;
+  barcode: string;
 };
 
-export function InvoiceDoc({ data, qrCode }: InvoiceDocProps) {
+export function InvoiceDoc({ data, qrCode, barcode }: InvoiceDocProps) {
   return (
     <Document
       title={`Eurofit - Invoice #${data.invoiceNumber}`}
@@ -51,7 +51,7 @@ export function InvoiceDoc({ data, qrCode }: InvoiceDocProps) {
           </View>
           <View style={{ alignItems: 'flex-end', gap: 2 }}>
             <Text style={styles.title}>Invoice</Text>
-            <Barcode value={data.invoiceNumber} />
+            <Image src={barcode} style={{ width: 130 }} />
             <View
               style={{
                 position: 'relative',
