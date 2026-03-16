@@ -7,7 +7,7 @@ import { Order, Transaction, User } from '@/payload/types';
 import { sampleInvoice } from '@/pdf/invoice/data';
 import { InvoiceDoc } from '@/pdf/invoice/doc';
 import { orderItem, orderItemSnapShotSchema } from '@/schemas/order';
-import { pdf } from '@react-pdf/renderer';
+import { renderToBuffer } from '@react-pdf/renderer';
 import { CollectionAfterChangeHook } from 'payload';
 import QrCode from 'qrcode';
 import * as z from 'zod';
@@ -68,7 +68,9 @@ export const sendOrderConfimationEmail: CollectionAfterChangeHook<Transaction> =
     margin: 0,
   });
 
-  const invoicePdf = pdf(<InvoiceDoc data={sampleInvoice} qrCode={qr} />).toString();
+  const invoicePdf = await renderToBuffer(
+    <InvoiceDoc data={sampleInvoice} qrCode={qr} />,
+  ).toString();
 
   req.payload.sendEmail({
     from: `EUROFIT <${env.SMTP_USERNAME}>`,
