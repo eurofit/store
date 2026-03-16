@@ -64,7 +64,6 @@ export const sendOrderConfimationEmail: CollectionAfterChangeHook<Transaction> =
     from: `EUROFIT <${env.SMTP_USERNAME}>`,
     to: customer.email,
     subject: 'Order Confirmation',
-
     text: getOrderConfirmationEmailText({
       customer: {
         name: customer.firstName,

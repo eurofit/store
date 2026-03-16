@@ -1,6 +1,8 @@
+import { site } from '@/constants/site';
 import {
   Column,
   Container,
+  Head,
   Img,
   Link,
   Preview,
@@ -34,14 +36,47 @@ export type OrderConfirmationProps = {
   };
 };
 export default function OrderConfirmation({ customer, order }: OrderConfirmationProps) {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL!;
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Order',
+    '@id': `${site.url}/orders/${order.id}#order`,
+    orderNumber: order.id,
+    priceCurrency: 'KES',
+    price: order.total,
+    seller: { '@id': `${site.url}/#organization` },
+    customer: { '@type': 'Person', name: customer.name },
+    acceptedOffer: order.items.map((item) => ({
+      '@type': 'Offer',
+      priceCurrency: 'KES',
+      price: item.price,
+      eligibleQuantity: { '@type': 'QuantitativeValue', value: item.quantity },
+      itemOffered: {
+        '@type': 'Product',
+        name: item.product.title,
+        description: item.variant,
+        ...(item.product.image && { image: item.product.image }),
+      },
+    })),
+    orderStatus: 'https://schema.org/OrderProcessing',
+    potentialAction: {
+      '@type': 'ViewAction',
+      name: 'View Order',
+      url: `${site.url}/orders/${order.id}`,
+    },
+  };
 
   return (
     <html>
-      <Preview>Your Eurofit order #{order.id} has been received</Preview>
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </Head>
 
       <Tailwind>
         <body className="bg-gray-50 font-sans text-gray-900">
+          <Preview>Your Eurofit order #{order.id} has been received</Preview>
           <Container className="mx-auto max-w-150">
             {/* Header */}
             <Section className="my-6 px-4 py-6">
@@ -51,14 +86,14 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
                     <Img
                       alt="Eurofit Logo Light"
                       height="28"
-                      src={`${baseUrl}/logos/logo-light.png`}
+                      src={`${site.url}/logos/logo-light.png`}
                     />
                   </span>
                   <span className="logo dark" style={{ display: 'none' }}>
                     <Img
                       alt="Eurofit Logo Dark"
                       height="28"
-                      src={`${baseUrl}/logos/logo-dark.png`}
+                      src={`${site.url}/logos/logo-dark.png`}
                     />
                   </span>
                 </Column>
@@ -71,7 +106,7 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
                       <td className="px-2">
                         <Link
                           className="text-gray-600 [text-decoration:none]"
-                          href={`${baseUrl}/brands`}
+                          href={`${site.url}/brands`}
                         >
                           Brands
                         </Link>
@@ -79,7 +114,7 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
                       <td className="px-2">
                         <Link
                           className="text-gray-600 [text-decoration:none]"
-                          href={`${baseUrl}/categories`}
+                          href={`${site.url}/categories`}
                         >
                           Categories
                         </Link>
@@ -87,7 +122,7 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
                       <td className="px-2">
                         <Link
                           className="text-gray-600 [text-decoration:none]"
-                          href={`${baseUrl}/contact-us`}
+                          href={`${site.url}/contact-us`}
                         >
                           Contact
                         </Link>
@@ -95,7 +130,7 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
                       <td className="px-2">
                         <Link
                           className="text-gray-600 [text-decoration:none]"
-                          href={`${baseUrl}/about-us`}
+                          href={`${site.url}/about-us`}
                         >
                           About
                         </Link>
@@ -314,14 +349,14 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
                       <Img
                         alt="Eurofit Logo Light"
                         height="20"
-                        src={`${baseUrl}/logos/logo-light.png`}
+                        src={`${site.url}/logos/logo-light.png`}
                       />
                     </span>
                     <span className="logo dark" style={{ display: 'none' }}>
                       <Img
                         alt="Eurofit Logo Dark"
                         height="20"
-                        src={`${baseUrl}/logos/logo-dark.png`}
+                        src={`${site.url}/logos/logo-dark.png`}
                       />
                     </span>
                   </td>
@@ -341,7 +376,7 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
                           <Img
                             alt="TikTok"
                             height="24"
-                            src={`${baseUrl}/logos/tiktok.png`}
+                            src={`${site.url}/logos/tiktok.png`}
                             width="24"
                           />
                         </Link>
@@ -351,7 +386,7 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
                           <Img
                             alt="Instagram"
                             height="24"
-                            src={`${baseUrl}/logos/instagram.png`}
+                            src={`${site.url}/logos/instagram.png`}
                             width="24"
                           />
                         </Link>
@@ -361,7 +396,7 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
                           <Img
                             alt="X"
                             height="24"
-                            src={`${baseUrl}/logos/x.png`}
+                            src={`${site.url}/logos/x.png`}
                             width="24"
                           />
                         </Link>
@@ -371,7 +406,7 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
                           <Img
                             alt="Facebook"
                             height="24"
-                            src={`${baseUrl}/logos/facebook.png`}
+                            src={`${site.url}/logos/facebook.png`}
                             width="24"
                           />
                         </Link>
