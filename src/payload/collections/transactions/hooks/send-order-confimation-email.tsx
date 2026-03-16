@@ -70,7 +70,7 @@ export const sendOrderConfimationEmail: CollectionAfterChangeHook<Transaction> =
 
   const invoicePdf = await renderToBuffer(
     <InvoiceDoc data={sampleInvoice} qrCode={qr} />,
-  ).toString();
+  );
 
   req.payload.sendEmail({
     from: `EUROFIT <${env.SMTP_USERNAME}>`,
