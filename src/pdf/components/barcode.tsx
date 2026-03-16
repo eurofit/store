@@ -1,27 +1,25 @@
 import { Image } from '@react-pdf/renderer';
-import JsBarcode from 'jsbarcode';
+import bwipjs from 'bwip-js';
 
-function generateBarcodeBase64(value: string, options?: JsBarcode.BaseOptions) {
-  const canvas = document.createElement('canvas');
-  JsBarcode(canvas, value, {
-    format: 'CODE128',
-    width: 2,
-    height: 50,
-    displayValue: true,
-    margin: 0,
-    textAlign: 'right',
-    ...options,
+export async function generateBarcode(value: string) {
+  const png = await bwipjs.toBuffer({
+    bcid: 'code128',
+    text: value,
+    scale: 3,
+    height: 10,
+    includetext: true,
+    textxalign: 'center',
   });
-  return canvas.toDataURL('image/png');
+
+  return `data:image/png;base64,${png.toString('base64')}`;
 }
 
 type BarcodeProps = {
   value: string;
-  options?: JsBarcode.BaseOptions;
 } & Omit<React.ComponentProps<typeof Image>, 'src'>;
 
-export function Barcode({ value, options, ...props }: BarcodeProps) {
-  const barcode = generateBarcodeBase64(value, options);
+export async function Barcode({ value, ...props }: BarcodeProps) {
+  const barcode = await generateBarcode(value);
 
   // eslint-disable-next-line jsx-a11y/alt-text
   return <Image src={barcode} style={{ width: 130 }} {...props} />;
