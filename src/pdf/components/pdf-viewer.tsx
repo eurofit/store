@@ -1,7 +1,7 @@
 import QrCode from 'qrcode';
 import { sampleInvoice } from '../invoice/data';
 import { InvoiceDoc } from '../invoice/doc';
-import { PDFViewer } from './viewer';
+import PDFViewer from './viewer';
 
 export async function PdfViewer() {
   const qr = await QrCode.toDataURL('https://g.page/r/CS7vpFfn8OgQEAE/review', {

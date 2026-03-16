@@ -4,8 +4,12 @@ import {
 } from '@/emails/order-confirmation';
 import { env } from '@/env.mjs';
 import { Order, Transaction, User } from '@/payload/types';
+import { sampleInvoice } from '@/pdf/invoice/data';
+import { InvoiceDoc } from '@/pdf/invoice/doc';
 import { orderItem, orderItemSnapShotSchema } from '@/schemas/order';
+import { pdf } from '@react-pdf/renderer';
 import { CollectionAfterChangeHook } from 'payload';
+import QrCode from 'qrcode';
 import * as z from 'zod';
 
 export const sendOrderConfimationEmail: CollectionAfterChangeHook<Transaction> = async ({
@@ -60,6 +64,12 @@ export const sendOrderConfimationEmail: CollectionAfterChangeHook<Transaction> =
 
   const formattedItems = z.array(itemSchema).parse(items);
 
+  const qr = await QrCode.toDataURL('https://g.page/r/CS7vpFfn8OgQEAE/review', {
+    margin: 0,
+  });
+
+  const invoicePdf = pdf(<InvoiceDoc data={sampleInvoice} qrCode={qr} />).toString();
+
   req.payload.sendEmail({
     from: `EUROFIT <${env.SMTP_USERNAME}>`,
     to: customer.email,
@@ -105,6 +115,12 @@ export const sendOrderConfimationEmail: CollectionAfterChangeHook<Transaction> =
       },
     }),
     replyTo: env.SMTP_INFO_USERNAME,
+    attachments: [
+      {
+        filename: `invoice-${order.id}.pdf`,
+        content: invoicePdf,
+      },
+    ],
   });
 
   return transaction;

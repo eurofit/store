@@ -20,11 +20,11 @@ function generateBarcodeBase64(value: string, options?: JsBarcode.BaseOptions) {
 type BarcodeProps = {
   value: string;
   options?: JsBarcode.BaseOptions;
-};
+} & Omit<React.ComponentProps<typeof Image>, 'src'>;
 
-export function Barcode({ value, options }: BarcodeProps) {
+export function Barcode({ value, options, ...props }: BarcodeProps) {
   const barcode = generateBarcodeBase64(value, options);
 
   // eslint-disable-next-line jsx-a11y/alt-text
-  return <Image src={barcode} style={{ width: 130 }} />;
+  return <Image src={barcode} style={{ width: 130 }} {...props} />;
 }

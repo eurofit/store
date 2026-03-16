@@ -6,7 +6,6 @@ import { Document, Image, Page, Text, View } from '@react-pdf/renderer';
 import { format } from 'date-fns';
 import truncate from 'lodash-es/truncate';
 import { Barcode } from '../components/barcode';
-import './fonts';
 import { PageNumber } from './page-number';
 import { styles } from './styles';
 import { InvoiceData } from './types';
@@ -479,7 +478,7 @@ export function InvoiceDoc({ data, qrCode }: InvoiceDocProps) {
           style={{ flexDirection: 'row', marginTop: 24, alignItems: 'flex-start' }}
           wrap={false}
         >
-          <View style={{ gap: 16 }}>
+          {/* <View style={{ gap: 16 }}>
             <View style={{ width: '37%' }}>
               <Text style={{ fontWeight: 700, fontSize: 12 }}>Payment Instructions:</Text>
               <Text style={{ marginTop: 4 }}>
@@ -499,7 +498,7 @@ export function InvoiceDoc({ data, qrCode }: InvoiceDocProps) {
                 claims will be accepted afterward.
               </Text>
             </View>
-          </View>
+          </View> */}
           {/* TABLE */}
           <View
             style={{
@@ -628,10 +627,9 @@ export function InvoiceDoc({ data, qrCode }: InvoiceDocProps) {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 border: '1px solid black',
-                backgroundColor: 'green',
-                color: 'white',
                 fontWeight: 900,
                 textTransform: 'uppercase',
+                fontSize: 12,
               }}
             >
               <View
@@ -679,15 +677,7 @@ export function InvoiceDoc({ data, qrCode }: InvoiceDocProps) {
             marginTop: 24,
           }}
         >
-          <View style={{ gap: 20 }}>
-            <Text
-              style={{
-                fontSize: 24,
-                fontFamily: 'Great Vibes',
-              }}
-            >
-              Thank you for your order!
-            </Text>
+          <View style={{ gap: 20, marginTop: 'auto' }}>
             <View
               style={{
                 display: 'flex',
