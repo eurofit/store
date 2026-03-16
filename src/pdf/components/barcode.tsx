@@ -1,5 +1,3 @@
-'use client';
-
 import { Image } from '@react-pdf/renderer';
 import JsBarcode from 'jsbarcode';
 
