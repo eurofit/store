@@ -1,4 +1,7 @@
-import { generateOrderConfirmationEmailHTML } from '@/emails/order-confirmation';
+import {
+  getOrderConfirmationEmailHTML,
+  getOrderConfirmationEmailText,
+} from '@/emails/order-confirmation';
 import { env } from '@/env.mjs';
 import { Order, Transaction, User } from '@/payload/types';
 import { orderItem, orderItemSnapShotSchema } from '@/schemas/order';
@@ -61,7 +64,28 @@ export const sendOrderConfimationEmail: CollectionAfterChangeHook<Transaction> =
     from: `EUROFIT <${env.SMTP_USERNAME}>`,
     to: customer.email,
     subject: 'Order Confirmation',
-    html: await generateOrderConfirmationEmailHTML({
+
+    text: await getOrderConfirmationEmailText({
+      customer: {
+        name: customer.firstName,
+      },
+      order: {
+        id: order.id.toString(),
+        items: formattedItems.map((item) => ({
+          quantity: item.quantity,
+          price: item.price,
+          variant: item.variant,
+          product: {
+            title: item.product.title,
+            image: item.product.image,
+          },
+        })),
+        total: order.total! + 300,
+        subtotal: order.total!,
+        deliveryFee: 350,
+      },
+    }),
+    html: await getOrderConfirmationEmailHTML({
       customer: {
         name: customer.firstName,
       },

@@ -399,8 +399,82 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
   );
 }
 
-export function generateOrderConfirmationEmailHTML(props: OrderConfirmationProps) {
+export function getOrderConfirmationEmailHTML(props: OrderConfirmationProps) {
   return render(<OrderConfirmation {...props} />);
+}
+
+export function getOrderConfirmationEmailText({
+  customer,
+  order,
+}: OrderConfirmationProps): string {
+  const itemsText = order.items
+    .map((item) => {
+      const totalPrice = item.price * item.quantity;
+
+      return [
+        `${item.product.title}`,
+        `Variant: ${item.variant}`,
+        `Quantity: ${item.quantity}`,
+        `Price: Ksh ${totalPrice.toLocaleString()}`,
+        '',
+      ].join('\n');
+    })
+    .join('\n');
+
+  return `
+Hi ${customer.name},
+
+Thank you for shopping with EUROFIT. This is just a quick email to say we have received your order and everything is now in our system.
+
+Order Number
+#${order.id}
+
+Our team is currently reviewing the order and preparing the items for shipment. As soon as everything is confirmed and ready to leave our warehouse, you will receive another email with tracking details and delivery updates.
+
+Here is a quick summary of the items in your order:
+
+Items
+--------------------------------------------------
+${itemsText}
+--------------------------------------------------
+Subtotal: Ksh ${order.subtotal.toLocaleString()}
+Delivery Fee: Ksh ${order.deliveryFee.toLocaleString()}
+TOTAL: Ksh ${order.total.toLocaleString()}
+--------------------------------------------------
+
+Once your order is packed and dispatched, we will keep you updated so you always know where your package is.
+
+If anything about your order needs clarification, or if you simply want an update, feel free to reach out:
+
+Email: info@eurofit.co.ke
+WhatsApp: +254 110 990 660
+
+Our team is always happy to help.
+
+Thanks again for choosing EUROFIT. Your support means a lot, and our team looks forward to getting your order delivered soon.
+
+— The Eurofit Team
+
+
+--------------------------------------------------
+
+EUROFIT
+European Fitness, African Strength
+
+Unit 111, 1st Floor
+6th Street Tower
+6th Street, Eastleigh
+Nairobi, Kenya
+
+Email: info@eurofit.co.ke
+Phone: +254 110 990 660
+
+Follow us:
+TikTok: https://www.tiktok.com/@eurofitltd
+Instagram: https://www.instagram.com/eurofitltd
+X: https://www.x.com/eurofitltd
+Facebook: https://www.facebook.com/eurofitltd
+`.trim();
 }
 
 OrderConfirmation.PreviewProps = {
