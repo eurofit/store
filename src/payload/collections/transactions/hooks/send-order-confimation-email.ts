@@ -65,7 +65,7 @@ export const sendOrderConfimationEmail: CollectionAfterChangeHook<Transaction> =
     to: customer.email,
     subject: 'Order Confirmation',
 
-    text: await getOrderConfirmationEmailText({
+    text: getOrderConfirmationEmailText({
       customer: {
         name: customer.firstName,
       },
