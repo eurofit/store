@@ -1,5 +1,3 @@
-'use client';
-
 import { site } from '@/constants/site';
 import { formatWithCommas } from '@/utils/format-with-commas';
 import { Document, Image, Page, Text, View } from '@react-pdf/renderer';
