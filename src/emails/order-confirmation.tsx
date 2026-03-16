@@ -71,7 +71,7 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
                       <td className="px-2">
                         <Link
                           className="text-gray-600 [text-decoration:none]"
-                          href="/brands"
+                          href={`${baseUrl}/brands`}
                         >
                           Brands
                         </Link>
@@ -79,7 +79,7 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
                       <td className="px-2">
                         <Link
                           className="text-gray-600 [text-decoration:none]"
-                          href="/categories"
+                          href={`${baseUrl}/categories`}
                         >
                           Categories
                         </Link>
@@ -87,7 +87,7 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
                       <td className="px-2">
                         <Link
                           className="text-gray-600 [text-decoration:none]"
-                          href="/contact-us"
+                          href={`${baseUrl}/contact-us`}
                         >
                           Contact
                         </Link>
@@ -95,7 +95,7 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
                       <td className="px-2">
                         <Link
                           className="text-gray-600 [text-decoration:none]"
-                          href="/about-us"
+                          href={`${baseUrl}/about-us`}
                         >
                           About
                         </Link>
