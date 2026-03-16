@@ -1,7 +1,6 @@
 import {
   Column,
   Container,
-  Head,
   Img,
   Link,
   Preview,
@@ -39,28 +38,10 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
 
   return (
     <html>
-      <Head>
-        <meta content="light dark" name="color-scheme" />
-        <meta content="light dark" name="supported-color-schemes" />
-
-        <style type="text/css">
-          {`
-            @media (prefers-color-scheme: dark) {
-              .logo.light {
-                display: none !important;
-              }
-              .logo.dark {
-                display: block !important;
-              }
-            }
-      `}
-        </style>
-      </Head>
-
       <Preview>Your Eurofit order #{order.id} has been received</Preview>
 
       <Tailwind>
-        <body className="bg-white font-sans text-black">
+        <body className="bg-gray-50 font-sans text-gray-900">
           <Container className="mx-auto max-w-150">
             {/* Header */}
             <Section className="my-6 px-4 py-6">
@@ -68,7 +49,7 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
                 <Column align="center">
                   <span className="logo light">
                     <Img
-                      alt="Eurofit Logo Dark"
+                      alt="Eurofit Logo Light"
                       height="28"
                       src={`${baseUrl}/logos/logo-light.png`}
                     />
@@ -240,6 +221,8 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
                 </Row>
               </Section>
 
+              <Section className="my-4 border-t border-gray-200" />
+
               <Text>
                 Once your order is packed and dispatched, we’ll keep you updated so you
                 always know where your package is.
@@ -329,7 +312,7 @@ export default function OrderConfirmation({ customer, order }: OrderConfirmation
                   <td align="center">
                     <span className="logo light">
                       <Img
-                        alt="Eurofit Logo Dark"
+                        alt="Eurofit Logo Light"
                         height="20"
                         src={`${baseUrl}/logos/logo-light.png`}
                       />
