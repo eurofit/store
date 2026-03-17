@@ -1,18 +1,5 @@
 import { Image } from '@react-pdf/renderer';
-import bwipjs from 'bwip-js';
-
-export async function generateBarcode(value: string) {
-  const png = await bwipjs.toBuffer({
-    bcid: 'code128',
-    text: value,
-    scale: 3,
-    height: 10,
-    includetext: true,
-    textxalign: 'center',
-  });
-
-  return `data:image/png;base64,${png.toString('base64')}`;
-}
+import { generateBarcode } from '../../utils/generate-barcode';
 
 type BarcodeProps = {
   value: string;
