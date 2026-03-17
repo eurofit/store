@@ -10,13 +10,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { sampleInvoice } from '@/pdf/invoice/data';
-import { InvoiceDoc } from '@/pdf/invoice/doc';
+import { site } from '@/constants/site';
 import { Order } from '@/types';
-import { pdf } from '@react-pdf/renderer';
 import { CellContext } from '@tanstack/react-table';
 import { Copy, CreditCard, FileText, Mail, MoreVertical } from 'lucide-react';
-import QrCode from 'qrcode';
 import { toast } from 'sonner';
 
 type ActionsCellProps = CellContext<Order, unknown>;
@@ -32,12 +29,6 @@ export function ActionsCell({ row }: ActionsCellProps) {
     } catch (error) {
       toast.error('Failed to copy order ID');
     }
-  };
-
-  const handlePrintInvoice = async () => {
-    const url = await getOrderInvoiceUrl();
-
-    window.open(url, '_blank');
   };
 
   return (
@@ -57,9 +48,15 @@ export function ActionsCell({ row }: ActionsCellProps) {
               Checkout
             </DropdownMenuItem>
           )}
-          <DropdownMenuItem className="cursor-pointer" onClick={handlePrintInvoice}>
-            <FileText />
-            Print Invoice
+          <DropdownMenuItem className="cursor-pointer" asChild>
+            <a
+              href={`${site.url}/orders/${order.id}/pdf`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FileText />
+              Print Invoice
+            </a>
           </DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer">
             <Mail />
@@ -79,15 +76,4 @@ export function ActionsCell({ row }: ActionsCellProps) {
     </div>
   );
   ``;
-}
-
-async function getOrderInvoiceUrl() {
-  const qrCode = await QrCode.toDataURL('https://share.google/84Zpx44Yhx0tfIhfP', {
-    margin: 0,
-  });
-  const blob = await pdf(<InvoiceDoc data={sampleInvoice} qrCode={qrCode} />).toBlob();
-
-  const url = URL.createObjectURL(blob);
-
-  return url;
 }
