@@ -1,12 +1,17 @@
-import { site } from '@/constants/site';
 import {
   getOrderConfirmationEmailHTML,
   getOrderConfirmationEmailText,
 } from '@/emails/order-confirmation';
 import { env } from '@/env.mjs';
 import { Order, Transaction, User } from '@/payload/types';
+import { sampleInvoice } from '@/pdf/invoice/data';
+import { InvoiceDoc } from '@/pdf/invoice/doc';
 import { orderItem, orderItemSnapShotSchema } from '@/schemas/order';
+import { generateBarcode } from '@/utils/generate-barcode';
+import { streamToBuffer } from '@/utils/stream-to-buffer';
+import { pdf } from '@react-pdf/renderer';
 import { CollectionAfterChangeHook } from 'payload';
+import QrCode from 'qrcode';
 import * as z from 'zod';
 
 export const sendOrderConfimationEmail: CollectionAfterChangeHook<Transaction> = async ({
@@ -61,6 +66,17 @@ export const sendOrderConfimationEmail: CollectionAfterChangeHook<Transaction> =
 
   const formattedItems = z.array(itemSchema).parse(items);
 
+  const qr = await QrCode.toDataURL('https://g.page/r/CS7vpFfn8OgQEAE/review', {
+    margin: 0,
+  });
+  const barcode = await generateBarcode(order.id.toString());
+
+  const stream = await pdf(
+    <InvoiceDoc data={sampleInvoice} qrCode={qr} barcode={barcode} />,
+  ).toBuffer();
+
+  const buffer = await streamToBuffer(stream);
+
   req.payload.sendEmail({
     from: `EUROFIT <${env.SMTP_USERNAME}>`,
     to: customer.email,
@@ -109,7 +125,7 @@ export const sendOrderConfimationEmail: CollectionAfterChangeHook<Transaction> =
     attachments: [
       {
         filename: `invoice-${order.id}.pdf`,
-        path: `${site.url}/orders/${order.id}/pdf`,
+        content: buffer,
         contentType: 'application/pdf',
       },
     ],
