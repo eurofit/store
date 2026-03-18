@@ -1,3 +1,4 @@
+import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { sampleInvoice } from '@/pdf/invoice/data';
 import { InvoiceDoc } from '@/pdf/invoice/doc';
 import { generateBarcode } from '@/utils/generate-barcode';
@@ -10,9 +11,12 @@ export const runtime = 'nodejs';
 
 export async function GET(
   _req: Request,
-  { params }: { params: Promise<{ id: string }> },
+  { params: paramsPromise }: { params: Promise<{ id: string }> },
 ) {
+  const [params, user] = await Promise.all([paramsPromise, getCurrentUser()]);
+
   const { id: orderId } = await params;
+
   const qr = await QrCode.toDataURL('https://g.page/r/CS7vpFfn8OgQEAE/review', {
     margin: 0,
   });

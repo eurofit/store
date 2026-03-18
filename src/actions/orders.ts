@@ -44,10 +44,7 @@ export async function getOrders(args: Args): Promise<Order[]> {
 }
 
 export async function getOrderById(id: number) {
-  const user = await getCurrentUser();
-  const payload = await getPayload({
-    config,
-  });
+  const [payload, user] = await Promise.all([getPayload({ config }), getCurrentUser()]);
 
   const { docs, totalDocs } = await payload.find({
     collection: 'orders',
