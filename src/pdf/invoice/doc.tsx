@@ -1,26 +1,26 @@
 import { site } from '@/constants/site';
+import { Invoice } from '@/schemas/invoice';
 import { formatWithCommas } from '@/utils/format-with-commas';
 import { Document, Image, Page, Text, View } from '@react-pdf/renderer';
 import { format } from 'date-fns';
 import truncate from 'lodash-es/truncate';
 import { PageNumber } from './page-number';
 import { styles } from './styles';
-import { InvoiceData } from './types';
 
 const Br = () => '\n';
 
 type InvoiceDocProps = {
-  data: InvoiceData;
+  data: Invoice;
   qrCode: string;
   barcode: string;
 };
 
-export function InvoiceDoc({ data, qrCode, barcode }: InvoiceDocProps) {
+export function InvoiceDoc({ data: invoice, qrCode, barcode }: InvoiceDocProps) {
   return (
     <Document
-      title={`Eurofit - Invoice #${data.invoiceNumber}`}
+      title={`Eurofit - Invoice #${invoice.id}`}
       author={site.name}
-      subject={`Invoice #${data.invoiceNumber}`}
+      subject={`Invoice #${invoice.id}`}
       keywords="invoice, eurofit, fitness, gym, supplements"
       creator={site.name}
       producer={site.name}
@@ -97,7 +97,7 @@ export function InvoiceDoc({ data, qrCode, barcode }: InvoiceDocProps) {
                     textTransform: 'capitalize',
                   }}
                 >
-                  <Text>{truncate(data.fao, { length: 17 })}</Text>
+                  <Text>{truncate(invoice.fao, { length: 17 })}</Text>
                 </View>
               </View>
               <View
@@ -134,7 +134,7 @@ export function InvoiceDoc({ data, qrCode, barcode }: InvoiceDocProps) {
                     paddingVertical: 2,
                   }}
                 >
-                  <Text>{truncate(data.accountNumber, { length: 17 })}</Text>
+                  <Text>{truncate(invoice.account, { length: 17 })}</Text>
                 </View>
               </View>
               <View
@@ -158,20 +158,6 @@ export function InvoiceDoc({ data, qrCode, barcode }: InvoiceDocProps) {
                   }}
                 >
                   <Text style={{ fontWeight: 600 }}>ORDER</Text>
-                </View>
-                <View
-                  style={{
-                    width: '65%',
-                    height: '100%',
-                    alignItems: 'flex-end',
-                    paddingHorizontal: 6,
-                    borderLeft: '1px solid black',
-                    textTransform: 'capitalize',
-                    justifyContent: 'center',
-                    paddingVertical: 2,
-                  }}
-                >
-                  <Text>{truncate(data.invoiceNumber, { length: 17 })}</Text>
                 </View>
               </View>
               <View
@@ -207,7 +193,7 @@ export function InvoiceDoc({ data, qrCode, barcode }: InvoiceDocProps) {
                     paddingVertical: 2,
                   }}
                 >
-                  <Text>{data.date}</Text>
+                  <Text>{invoice.date}</Text>
                 </View>
               </View>
               <View
@@ -258,7 +244,7 @@ export function InvoiceDoc({ data, qrCode, barcode }: InvoiceDocProps) {
         >
           <View style={{ flexGrow: 1 }}>
             <Text style={{ fontWeight: 700, fontSize: 12, marginBottom: 4 }}>
-              Billing Address
+              Shipping Address
             </Text>
             <View
               style={{
@@ -269,35 +255,16 @@ export function InvoiceDoc({ data, qrCode, barcode }: InvoiceDocProps) {
                 color: '#666',
               }}
             >
-              <Text>{data.billTo.name}</Text>
-              <Text>{data.billTo.address.line1}</Text>
-              <Text>{data.billTo.address.line2}</Text>
               <Text>
-                {data.billTo.address.city}, {data.billTo.address.country}
+                {invoice.shippingAddress.title} {invoice.shippingAddress.firstName}{' '}
+                {invoice.shippingAddress.lastName}
               </Text>
-              <Text>{data.billTo.phone}</Text>
-            </View>
-          </View>
-          <View style={{ flexGrow: 1 }}>
-            <Text style={{ fontWeight: 700, fontSize: 12, marginBottom: 4 }}>
-              Delivery Address
-            </Text>
-            <View
-              style={{
-                flexDirection: 'column',
-                gap: 2,
-                fontSize: 11,
-                fontWeight: 300,
-                color: '#666',
-              }}
-            >
-              <Text>{data.billTo.name}</Text>
-              <Text>{data.billTo.address.line1}</Text>
-              <Text>{data.billTo.address.line2}</Text>
+              <Text>{invoice.shippingAddress.line1}</Text>
+              <Text>{invoice.shippingAddress.line2}</Text>
               <Text>
-                {data.billTo.address.city}, {data.billTo.address.country}
+                {invoice.shippingAddress.city}, {invoice.shippingAddress.country}
               </Text>
-              <Text>{data.billTo.phone}</Text>
+              <Text>{invoice.shippingAddress.phone}</Text>
             </View>
           </View>
         </View>
@@ -383,13 +350,13 @@ export function InvoiceDoc({ data, qrCode, barcode }: InvoiceDocProps) {
             </View>
           </View>
           {/* ROWS */}
-          {data.items.map((item, index) => (
+          {invoice.items.map((item, index) => (
             <View
               key={item.sku}
               style={{
                 flexDirection: 'row',
                 borderBottom:
-                  index === data.items.length - 1 ? undefined : '1px solid black',
+                  index === invoice.items.length - 1 ? undefined : '1px solid black',
               }}
             >
               <View
@@ -415,7 +382,7 @@ export function InvoiceDoc({ data, qrCode, barcode }: InvoiceDocProps) {
                   padding: 4,
                 }}
               >
-                <Text style={{ fontWeight: 500 }}>{item.description}</Text>
+                <Text style={{ fontWeight: 500 }}>{item.title}</Text>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -441,7 +408,7 @@ export function InvoiceDoc({ data, qrCode, barcode }: InvoiceDocProps) {
                   padding: 4,
                 }}
               >
-                <Text>{item.qty}</Text>
+                <Text>{item.quantity}</Text>
               </View>
               <View
                 style={{
@@ -465,7 +432,7 @@ export function InvoiceDoc({ data, qrCode, barcode }: InvoiceDocProps) {
                   overflow: 'hidden',
                 }}
               >
-                <Text>{formatWithCommas(item.price * item.qty)}</Text>
+                <Text>{formatWithCommas(item.price * item.quantity)}</Text>
               </View>
             </View>
           ))}
@@ -542,7 +509,7 @@ export function InvoiceDoc({ data, qrCode, barcode }: InvoiceDocProps) {
                 <Text>
                   <Text style={{ fontSize: 9 }}>KSh</Text>
                   &nbsp;
-                  {formatWithCommas(data.subtotal)}
+                  {formatWithCommas(invoice.subtotal)}
                 </Text>
               </View>
             </View>
@@ -577,9 +544,7 @@ export function InvoiceDoc({ data, qrCode, barcode }: InvoiceDocProps) {
                 <Text>
                   <Text style={{ fontSize: 9, textTransform: 'none' }}>KSh</Text>
                   &nbsp;
-                  {data.vat == 0
-                    ? formatWithCommas(data.vat, { minimumFractionDigits: 2 })
-                    : formatWithCommas(data.vat)}
+                  {invoice.tax}
                 </Text>
               </View>
             </View>
@@ -614,9 +579,7 @@ export function InvoiceDoc({ data, qrCode, barcode }: InvoiceDocProps) {
                 <Text>
                   <Text style={{ fontSize: 9, textTransform: 'none' }}>KSh</Text>
                   &nbsp;
-                  {data.deliveryFee == 0
-                    ? formatWithCommas(data.deliveryFee, { minimumFractionDigits: 2 })
-                    : formatWithCommas(data.deliveryFee)}
+                  {invoice.deliveryFee}
                 </Text>
               </View>
             </View>
@@ -654,7 +617,7 @@ export function InvoiceDoc({ data, qrCode, barcode }: InvoiceDocProps) {
                 <Text>
                   <Text style={{ fontSize: 9, textTransform: 'none' }}>KSh</Text>
                   &nbsp;
-                  {formatWithCommas(data.grandTotal)}
+                  {invoice.total}
                 </Text>
               </View>
             </View>

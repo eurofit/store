@@ -30,7 +30,7 @@ export function formatCartItems(items: Pick<PayloadCart, 'items'>['items']): Car
       throw new Error(`Missing price in formatted product line: ${formatted.id}`);
     }
 
-    const formattedProductLine: Omit<ProductLine, 'isNotifyRequested' | 'expiryDate'> = {
+    const formattedProductLine: Omit<ProductLine, 'isNotifyRequested'> = {
       id: formatted.id,
       sku: formatted.sku,
       title: formatted.title,
@@ -41,6 +41,7 @@ export function formatCartItems(items: Pick<PayloadCart, 'items'>['items']): Car
       isBackorder: formatted.isBackorder,
       isLowStock: formatted.isLowStock,
       isOutOfStock: formatted.isOutOfStock,
+      expiryDate: formatted.expiryDate,
     };
 
     const cartItem = cartItemSchema.parse({

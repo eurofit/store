@@ -33,7 +33,7 @@ export const getCart = React.cache(async () => {
       or: [
         {
           user: {
-            equals: user?.id,
+            equals: user?.id ?? '',
           },
         },
         {
@@ -441,15 +441,11 @@ export async function removeItemFromCart(
     collection: 'carts',
     where: {
       or: [
-        ...[
-          user
-            ? {
-                user: {
-                  equals: user.id,
-                },
-              }
-            : {},
-        ],
+        {
+          user: {
+            equals: user?.id ?? '',
+          },
+        },
         {
           guestSessionId: {
             equals: guestSessionId,
@@ -467,6 +463,10 @@ export async function removeItemFromCart(
   }
 
   const cart = carts[0];
+
+  if (!cart) {
+    throw new CartNotFound();
+  }
 
   const cartItem = cart.items.find((cartItem) =>
     typeof cartItem.productLine === 'string'

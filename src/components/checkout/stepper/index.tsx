@@ -249,6 +249,8 @@ export function ReviewStep() {
         id: item.id,
         quantity: item.quantity,
         snapshot: {
+          sku: item.sku,
+          bbe: item.expiryDate,
           title: item.title,
           variant: item.variant ?? '',
           price: item.price,

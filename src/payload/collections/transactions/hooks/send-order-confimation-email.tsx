@@ -5,7 +5,6 @@ import {
 import { env } from '@/env.mjs';
 import { Order, Transaction, User } from '@/payload/types';
 import { orderItem, orderItemSnapShotSchema } from '@/schemas/order';
-import { getInvoiceBuffer } from '@/utils/getInvoiceBuffer';
 import { CollectionAfterChangeHook } from 'payload';
 import * as z from 'zod';
 
@@ -61,7 +60,7 @@ export const sendOrderConfimationEmail: CollectionAfterChangeHook<Transaction> =
 
   const formattedItems = z.array(itemSchema).parse(items);
 
-  const invoiceBuffer = await getInvoiceBuffer(order);
+  // const invoiceBuffer = await getInvoiceBuffer(order);
 
   req.payload.sendEmail({
     from: `EUROFIT <${env.SMTP_USERNAME}>`,
@@ -111,7 +110,7 @@ export const sendOrderConfimationEmail: CollectionAfterChangeHook<Transaction> =
     attachments: [
       {
         filename: `invoice-${order.id}.pdf`,
-        content: invoiceBuffer,
+        // content: invoiceBuffer,
         contentType: 'application/pdf',
       },
     ],

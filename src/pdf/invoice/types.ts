@@ -1,44 +1,31 @@
+type Item = {
+  id: string;
+  sku: string;
+  bbe: string;
+  title: string;
+  qty: string;
+  price: string;
+};
+
 export interface InvoiceData {
-  invoiceNumber: string;
-  date: string;
-  accountNumber: string;
+  id: string;
   fao: string;
-  billTo: {
+  account: string;
+  date: string;
+  dueDate: string;
+  status: string;
+  shippingAddress: {
     name: string;
-    contact: string;
-    address: {
-      line1: string;
-      line2: string;
-      city: string;
-      country: string;
-      postalCode: string;
-      postalAddress: string;
-    };
-    phone: string;
+    line1: string;
+    line2: string;
+    city: string;
+    county: string;
+    postalCode: string;
+    country: string;
   };
-  shipTo: {
-    name: string;
-    address: string[];
-    phone: string;
-  };
-  orderInfo: {
-    salesPerson: string;
-    poNumber: string;
-    requisitioner: string;
-    terms: string;
-    shippedVia: string;
-  };
-  items: Array<{
-    sku: string;
-    bbe: string;
-    qty: number;
-    description: string;
-    price: number;
-  }>;
-  subtotal: number;
-  vat: number;
-  deliveryFee: number;
-  grandTotal: number;
-  paid: number;
-  unpaidBalance: number;
+  items: Item[];
+  subtotal: string;
+  deliveryFee: string;
+  tax: string;
+  total: string;
 }

@@ -27,7 +27,7 @@ export type ProductLine = {
   title: string;
   stock: number;
   price: number | null;
-  expiryDate: string | null;
+  expiryDate?: string | null;
   variant?: string | null;
   barcode?: string | null;
   isBackorder: boolean;

@@ -12,9 +12,11 @@ const orderSnapShotSchema = z.object({
 });
 
 export const orderItemSnapShotSchema = z.object({
+  sku: z.string().length(6, 'Product line SKU must be exactly 6 characters'),
   variant: z.string().min(1, 'Product line variant is required'),
   price: z.number().min(0, 'Price must be a positive number'),
   title: z.string().min(1, 'Product line title is required'),
+  bbe: z.string().min(1, 'Product line BBE is required').nullable().optional(),
   product: productSchema,
 });
 

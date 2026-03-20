@@ -12,6 +12,7 @@ const cartProductLine = z.object({
   isBackorder: z.boolean().default(false),
   isLowStock: z.boolean().default(false),
   isOutOfStock: z.boolean().default(false),
+  expiryDate: z.string().optional().nullable(),
 });
 
 export const productSchema = z.object({
