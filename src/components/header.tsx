@@ -1,11 +1,10 @@
-import * as React from 'react';
-
 import { Logo } from '@/components/logo';
 import { Nav, NavSkeleton } from '@/components/nav';
 import { SearchBar, SearchBarSkeleton } from '@/components/searchbar';
+import * as React from 'react';
 import { UserButton, UserButtonSkeleton } from './auth/user-button';
 import { CartDynamic } from './cart/cart-dynamic';
-import { MenuSheet, MenuSheetSkeleton } from './menu-sheet';
+import { MenuSheet, MenuSheetSkeleton } from './mobile-menu';
 import { SearchSheetDynamic } from './search-sheet-dynamic';
 
 export function Header() {
