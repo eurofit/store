@@ -1,4 +1,4 @@
-import { NAMESPACE } from '@/constants/keys';
+import { COOKIES_NAMESPACE } from '@/constants/keys';
 import { site } from '@/constants/site';
 import { env } from '@/env.mjs';
 import { postgresAdapter } from '@payloadcms/db-postgres';
@@ -19,7 +19,7 @@ const dirname = path.dirname(filename);
 
 export default buildConfig({
   serverURL: site.url,
-  cookiePrefix: NAMESPACE,
+  cookiePrefix: COOKIES_NAMESPACE,
   admin: {
     user: users.slug,
     components: {

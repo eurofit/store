@@ -33,7 +33,11 @@ export const website: WithContext<WebSite> = {
   '@id': `${site.url}/#website`,
   url: site.url,
   name: site.name,
-  alternateName: site.legalName,
+  alternateName: [
+    site.legalName,
+    'Eurofit Supplements Shop',
+    'Eurofit Sports Nutrition Shop in Kenya',
+  ],
   publisher: { '@id': `${site.url}/#organization` },
   potentialAction: {
     '@type': 'SearchAction',

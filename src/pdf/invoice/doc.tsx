@@ -2,7 +2,7 @@ import { site } from '@/constants/site';
 import { Invoice } from '@/schemas/invoice';
 import { formatWithCommas } from '@/utils/format-with-commas';
 import { Document, Image, Page, Text, View } from '@react-pdf/renderer';
-import { format } from 'date-fns';
+import { format, formatDate } from 'date-fns';
 import truncate from 'lodash-es/truncate';
 import { PageNumber } from './page-number';
 import { styles } from './styles';
@@ -159,6 +159,19 @@ export function InvoiceDoc({ data: invoice, qrCode, barcode }: InvoiceDocProps) 
                 >
                   <Text style={{ fontWeight: 600 }}>ORDER</Text>
                 </View>
+                <View
+                  style={{
+                    width: '65%',
+                    height: '100%',
+                    alignItems: 'flex-end',
+                    paddingHorizontal: 6,
+                    borderLeft: '1px solid black',
+                    justifyContent: 'center',
+                    paddingVertical: 2,
+                  }}
+                >
+                  <Text>{invoice.id}</Text>
+                </View>
               </View>
               <View
                 style={{
@@ -193,7 +206,7 @@ export function InvoiceDoc({ data: invoice, qrCode, barcode }: InvoiceDocProps) 
                     paddingVertical: 2,
                   }}
                 >
-                  <Text>{invoice.date}</Text>
+                  <Text>{formatDate(invoice.date, 'dd/MM/yyyy')}</Text>
                 </View>
               </View>
               <View
@@ -300,6 +313,7 @@ export function InvoiceDoc({ data: invoice, qrCode, barcode }: InvoiceDocProps) 
             </View>
             <View
               style={{
+                width: '50%',
                 alignItems: 'flex-start',
                 borderRight: '1px solid black',
                 height: '100%',
@@ -322,7 +336,7 @@ export function InvoiceDoc({ data: invoice, qrCode, barcode }: InvoiceDocProps) 
             </View>
             <View
               style={{
-                width: '12%',
+                width: '15%',
                 alignItems: 'center',
                 borderRight: '1px solid black',
                 height: '100%',
@@ -357,6 +371,7 @@ export function InvoiceDoc({ data: invoice, qrCode, barcode }: InvoiceDocProps) 
                 flexDirection: 'row',
                 borderBottom:
                   index === invoice.items.length - 1 ? undefined : '1px solid black',
+                fontSize: 10,
               }}
             >
               <View
@@ -373,6 +388,7 @@ export function InvoiceDoc({ data: invoice, qrCode, barcode }: InvoiceDocProps) 
               </View>
               <View
                 style={{
+                  width: '50%',
                   display: 'flex',
                   alignItems: 'flex-start',
                   justifyContent: 'center',
@@ -382,7 +398,7 @@ export function InvoiceDoc({ data: invoice, qrCode, barcode }: InvoiceDocProps) 
                   padding: 4,
                 }}
               >
-                <Text style={{ fontWeight: 500 }}>{item.title}</Text>
+                <Text style={{ fontWeight: 500, lineHeight: 0.875 }}>{item.title}</Text>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -395,8 +411,12 @@ export function InvoiceDoc({ data: invoice, qrCode, barcode }: InvoiceDocProps) 
                   }}
                 >
                   <Text>SKU: {item.sku}</Text>
-                  <Text>|</Text>
-                  <Text>BBE: {item.bbe}</Text>
+                  {item.bbe && (
+                    <>
+                      <Text>|</Text>
+                      <Text>BBE: {formatDate(item.bbe, 'dd/MM/yyyy')}</Text>
+                    </>
+                  )}
                 </View>
               </View>
               <View
@@ -412,7 +432,7 @@ export function InvoiceDoc({ data: invoice, qrCode, barcode }: InvoiceDocProps) 
               </View>
               <View
                 style={{
-                  width: '12%',
+                  width: '15%',
                   alignItems: 'flex-end',
                   borderRight: '1px solid black',
                   height: '100%',
@@ -443,27 +463,6 @@ export function InvoiceDoc({ data: invoice, qrCode, barcode }: InvoiceDocProps) 
           style={{ flexDirection: 'row', marginTop: 24, alignItems: 'flex-start' }}
           wrap={false}
         >
-          {/* <View style={{ gap: 16 }}>
-            <View style={{ width: '37%' }}>
-              <Text style={{ fontWeight: 700, fontSize: 12 }}>Payment Instructions:</Text>
-              <Text style={{ marginTop: 4 }}>
-                Kindly send your payment via M-Pesa to{' '}
-                <Text style={{ fontWeight: 700 }}>0110990666</Text>. The name that will
-                appear is <Text style={{ fontWeight: 700 }}>Cabdiqani Maxamed</Text>.
-                THANK YOU!
-              </Text>
-            </View>
-            <View style={{ width: '37%' }}>
-              <Text style={{ fontWeight: 700, fontSize: 12 }}>Please Note:</Text>
-              <Text style={{ marginTop: 4 }}>
-                All items must be inspected upon delivery. By accepting this delivery, you
-                confirm that the goods were received in good and very acceptable
-                condition. All items are sold as-is, with no returns, and refunds. Any
-                issues or damage must be reported immediately at the time of delivery. No
-                claims will be accepted afterward.
-              </Text>
-            </View>
-          </View> */}
           {/* TABLE */}
           <View
             style={{
@@ -565,7 +564,7 @@ export function InvoiceDoc({ data: invoice, qrCode, barcode }: InvoiceDocProps) 
                   borderRight: '1px solid black',
                 }}
               >
-                <Text style={{ textTransform: 'uppercase' }}>Delivery Fee</Text>
+                <Text style={{ textTransform: 'uppercase' }}>Delivery</Text>
               </View>
               <View
                 style={{
@@ -587,10 +586,8 @@ export function InvoiceDoc({ data: invoice, qrCode, barcode }: InvoiceDocProps) 
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                border: '1px solid black',
-                fontWeight: 900,
                 textTransform: 'uppercase',
-                fontSize: 12,
+                backgroundColor: '#e5e5e5',
               }}
             >
               <View
@@ -599,10 +596,10 @@ export function InvoiceDoc({ data: invoice, qrCode, barcode }: InvoiceDocProps) 
                   textAlign: 'right',
                   justifyContent: 'flex-end',
                   width: '50%',
-                  borderRight: '2px solid black',
+                  borderRight: '1px solid black',
                 }}
               >
-                <Text>Grand Total</Text>
+                <Text>Total</Text>
               </View>
               <View
                 style={{

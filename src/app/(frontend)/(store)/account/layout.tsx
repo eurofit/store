@@ -50,7 +50,7 @@ export default async function SettingsLayout({ children }: SettingsLayoutProps) 
 
   return (
     <div className="space-y-6">
-      <PageHeading title="Dashboard" description="Manage your account and orders." />
+      <PageHeading title="Account" description="Manage your account and orders." />
       <Separator className="my-6" />
       <div className="flex flex-col space-y-8 lg:flex-row lg:space-y-0 lg:space-x-12">
         <aside className="w-full lg:w-1/5">
