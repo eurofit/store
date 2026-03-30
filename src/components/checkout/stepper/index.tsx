@@ -346,7 +346,7 @@ export function ReviewStep() {
                           alt={item.product.title}
                           width={64}
                           height={64}
-                          className="m-auto max-h-11/12 max-w-11/12 rounded-md object-contain"
+                          className="m-auto max-h-11/12 max-w-11/12 rounded-md bg-white object-contain"
                         />
                       ) : (
                         <ImageOff
@@ -490,7 +490,7 @@ function CartItem({ item }: CartItemProps) {
             alt={item.product.title}
             width={64}
             height={64}
-            className="m-auto max-h-11/12 max-w-11/12 rounded-md object-contain"
+            className="m-auto max-h-11/12 max-w-11/12 rounded-md bg-white object-contain"
           />
         ) : (
           <ImageOff
