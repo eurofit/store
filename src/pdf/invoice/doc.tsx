@@ -241,7 +241,7 @@ export function InvoiceDoc({ data: invoice, qrCode, barcode }: InvoiceDocProps) 
                     paddingVertical: 2,
                   }}
                 >
-                  <Text>Paid</Text>
+                  <Text>{invoice.status}</Text>
                 </View>
               </View>
             </View>
