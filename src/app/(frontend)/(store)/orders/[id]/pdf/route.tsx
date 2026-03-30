@@ -1,5 +1,7 @@
 import { getInvoice } from '@/actions/get-invoice';
+import { site } from '@/constants/site';
 import { getInvoiceBuffer } from '@/utils/getInvoiceBuffer';
+import { formatDate } from 'date-fns';
 import { NextResponse } from 'next/server';
 
 export async function GET(
@@ -11,10 +13,13 @@ export async function GET(
   const invoice = await getInvoice({ orderId: Number(orderId) });
   const invoiceBuffer = await getInvoiceBuffer(invoice);
 
+  const lowerCaseSiteName = site.name.toLowerCase();
+  const filename = `${lowerCaseSiteName}-invoice-${invoice.id}-${formatDate(invoice.date, 'yyyy-MM-dd')}.pdf`;
+
   return new NextResponse(invoiceBuffer, {
     headers: {
       'Content-Type': 'application/pdf',
-      'Content-Disposition': 'inline; filename="invoice.pdf"',
+      'Content-Disposition': `inline; filename="${filename}"`,
     },
   });
 }
