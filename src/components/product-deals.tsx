@@ -1,10 +1,9 @@
+import { Countdown } from '@/components/countdown';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { Badge } from '@/components/ui/badge';
 import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Counter } from './counter';
-import { AspectRatio } from './ui/aspect-ratio';
-import { Badge } from './ui/badge';
-import { Separator } from './ui/separator';
 
 type ProductDealsProps = {};
 
@@ -19,9 +18,13 @@ export function ProductDeals({}: ProductDealsProps) {
           <Link href="#">Supports Nutrition</Link>
         </h2>
 
-        <div className="flex space-x-2">
+        <div>
           <span className="capitalize">Time left</span>
-          <Counter startDate={now} endDate={end} className="font-bold" />
+          &nbsp;
+          <Countdown
+            end={end.toISOString()}
+            className="inline-flex w-30 font-bold tabular-nums"
+          />
         </div>
 
         <Link href="#" className="ml-auto flex items-center gap-2">
@@ -58,18 +61,14 @@ function Product({}: ProductProps) {
         <h3 className="leading-tight font-medium">
           ON GST 100% Whey Protein Powder (2.27kg)
         </h3>
-        <div className="flex items-center space-x-2 text-sm">
-          <span className="font-semibold">Ksh 11,650</span>
-          <span className="text-muted-foreground text-sm line-through">Ksh 11,650</span>
+        <div className="flex items-center space-x-2">
+          <ins className="font-bold no-underline">Ksh 11,650</ins>
+          <del className="before relative text-sm no-underline before:absolute before:top-1/2 before:right-0 before:left-0 before:-translate-y-1/2 before:rotate-5 before:border-t before:border-t-red-700 before:content-['']">
+            Ksh 11,650
+          </del>
         </div>
       </div>
-      <Separator />
-      {/* <div className="px-2">
-        <span className="text-sm font-medium text-green-700 selection:bg-green-700 selection:text-white">
-          Save - Ksh 1800
-        </span>
-      </div> */}
-      <Badge className="absolute top-2 right-2">56% OFF</Badge>
+      <Badge className="absolute top-2 right-2 bg-red-700 text-red-50">56% OFF</Badge>
     </div>
   );
 }
