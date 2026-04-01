@@ -3,10 +3,13 @@ import type { CollectionBeforeChangeHook } from 'payload';
 type Args = {
   field: string;
   startFrom?: number;
+  step?: number;
 };
+
 export function autoincrement({
   field,
   startFrom: defaultNumber = 1000,
+  step = 1,
 }: Args): CollectionBeforeChangeHook {
   return async ({ req, operation, collection, data }) => {
     if (operation !== 'create') return data;
@@ -15,7 +18,7 @@ export function autoincrement({
       limit: 1,
       sort: '-' + field,
     });
-    const next = (parseInt((highest.docs[0] as any)?.[field]) || defaultNumber) + 1;
+    const next = (parseInt((highest.docs[0] as any)?.[field]) || defaultNumber) + step;
     return { ...data, [field]: next };
   };
 }

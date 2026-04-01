@@ -138,7 +138,7 @@ export const orders: CollectionConfig = {
   hooks: {
     beforeChange: [
       validateOrderItems,
-      autoincrement({ field: 'id', startFrom: 31032025 }),
+      autoincrement({ field: 'id', startFrom: 31032025, step: 46 }),
     ],
   },
 };

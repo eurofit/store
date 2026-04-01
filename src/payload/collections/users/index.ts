@@ -180,7 +180,7 @@ export const users: CollectionConfig = {
   hooks: {
     beforeChange: [
       syncToPaystack,
-      autoincrement({ field: 'accountNumber', startFrom: 324842 }),
+      autoincrement({ field: 'accountNumber', startFrom: 324842, step: 13 }),
     ],
   },
 };

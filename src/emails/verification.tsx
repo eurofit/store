@@ -1,4 +1,3 @@
-import { site } from '@/constants/site';
 import { Button, render, Section, Text } from '@react-email/components';
 import { EmailLayout } from './layout';
 
@@ -8,14 +7,16 @@ type VerificationEmailProps = {
 };
 
 const VerificationEmail = ({ firstName, token }: VerificationEmailProps) => {
-  const verificationLink = `${site.url}/verify?token=${token}`;
+  const verificationLink = `http://localhost:3000/verify?token=${token}`;
   return (
     <EmailLayout
       preview={`You're almost there${firstName ? `, ${firstName}` : ''}! Confirm your email to access your new Eurofit account.`}
     >
       <Section className="px-6">
         <Text>Hi {firstName ?? 'there'},</Text>
-        <Text>Welcome to Eurofit — we&apos;re excited to have you on board!&nbsp;🎉</Text>
+        <Text>
+          Welcome to EUROFIT — we&apos;re really glad to have you with us!&nbsp;
+        </Text>
         <Text>
           To keep your account secure and confirm your identity, please verify your email
           address by clicking the button below:
@@ -31,11 +32,17 @@ const VerificationEmail = ({ firstName, token }: VerificationEmailProps) => {
           {verificationLink}
         </Text>
         <Text>
-          If you didn&apos;t create an account with us, please ignore this message.
+          For your security, this link will expire in <strong>1 hour</strong>. If it
+          expires or you need a new one, you can easily request another verification email
+          from your account settings.
+        </Text>
+        <Text>
+          If you didn&apos;t create an account with us, you can safely ignore this
+          message. Please don&apos;t share this email with anyone.
         </Text>
         <Text>
           Warm regards, <br />
-          <strong>The Eurofit Team</strong>
+          <strong>— The Eurofit Team</strong>
         </Text>
       </Section>
     </EmailLayout>
@@ -45,5 +52,10 @@ const VerificationEmail = ({ firstName, token }: VerificationEmailProps) => {
 export function generateVerificationEmailHTML(props: VerificationEmailProps) {
   return render(<VerificationEmail {...props} />);
 }
+
+VerificationEmail.PreviewProps = {
+  token: 'example-token',
+  firstName: 'John',
+};
 
 export default VerificationEmail;

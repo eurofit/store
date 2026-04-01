@@ -88,7 +88,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
                   name="email"
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel>Email</FieldLabel>
+                      <FieldLabel htmlFor="email">Email</FieldLabel>
                       <Input
                         id="email"
                         type="email"
@@ -111,13 +111,14 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
                         <FieldLabel htmlFor="password">Password</FieldLabel>
                         <Link
                           href="/forgot-password"
-                          className="text-foreground! ml-auto text-sm underline-offset-2 hover:underline"
+                          className="text-foreground! ml-auto text-sm underline underline-offset-2"
                         >
                           Forgot password?
                         </Link>
                       </div>
 
                       <PasswordInput
+                        id="password"
                         autoComplete="current-password"
                         {...field}
                         aria-invalid={fieldState.invalid}

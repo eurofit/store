@@ -33,7 +33,15 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 
   return (
     <div className="bg-muted flex min-h-svh p-6 md:p-10">
-      <div className="m-auto w-full max-w-sm space-y-4">
+      {/* <Image
+        src="/login-bg.svg"
+        alt="Login Background"
+        fill
+        objectFit="cover"
+        className="absolute select-none"
+        draggable={false}
+      /> */}
+      <div className="relative m-auto w-full max-w-sm space-y-4">
         <div className="flex items-center justify-center">
           <Logo className="text-xl" />
         </div>
