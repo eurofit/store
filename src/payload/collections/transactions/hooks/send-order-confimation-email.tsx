@@ -66,7 +66,7 @@ export const sendOrderConfimationEmail: CollectionAfterChangeHook<Transaction> =
   const invoiceBuffer = await getInvoiceBuffer(invoice);
 
   req.payload.sendEmail({
-    from: `EUROFIT <${env.SMTP_USERNAME}>`,
+    from: env.SMTP_USERNAME,
     to: customer.email,
     subject: 'Order Confirmation',
     text: getOrderConfirmationEmailText({

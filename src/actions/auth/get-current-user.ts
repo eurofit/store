@@ -2,11 +2,10 @@
 
 import config from '@/payload/config';
 import { safeUserSchema } from '@/schemas/safe-user';
-import { cache } from 'react';
 import { headers as getHeaders } from 'next/headers';
 import { getPayload } from 'payload';
 
-export const getCurrentUser = cache(async () => {
+export const getCurrentUser = async () => {
   const [headers, payload] = await Promise.all([getHeaders(), getPayload({ config })]);
 
   const { user } = await payload.auth({
@@ -23,6 +22,6 @@ export const getCurrentUser = cache(async () => {
         ?.filter((a) => typeof a !== 'string')
         .sort((a, b) => (b.isDefault ? 1 : 0) - (a.isDefault ? 1 : 0)) ?? [],
   });
-});
+};
 
 export type CurrentUser = Awaited<ReturnType<typeof getCurrentUser>>;

@@ -1,9 +1,9 @@
 import { generateForgotPasswordEmailHTML } from '@/emails/forgot-password';
 import { generateVerificationEmailHTML } from '@/emails/verification';
-import { autoincrement } from '@/payload/hooks/auto-increment';
 import type { CollectionConfig } from 'payload';
 import { getUserFullName } from './hooks/get-user-full-name';
 import { syncToPaystack } from './hooks/sync-to-paystack';
+import { welcome } from './hooks/welcome';
 
 export const users: CollectionConfig = {
   slug: 'users',
@@ -37,6 +37,7 @@ export const users: CollectionConfig = {
           token,
         }),
     },
+    tokenExpiration: 60 * 60, // 1 hour
   },
   disableDuplicate: true,
   forceSelect: {
@@ -56,33 +57,12 @@ export const users: CollectionConfig = {
       index: true,
     },
     {
-      name: 'accountNumber',
-      label: 'Account Number',
-      type: 'number',
-      required: true,
-      admin: {
-        description: 'The account number of the user.',
-      },
-      index: true,
-      saveToJWT: true,
-    },
-    {
       name: 'firstName',
       type: 'text',
       required: true,
       admin: {
         position: 'sidebar',
         description: 'The first name of the user.',
-      },
-      index: true,
-      saveToJWT: true,
-    },
-    {
-      name: 'middleName',
-      type: 'text',
-      admin: {
-        position: 'sidebar',
-        description: 'The middle name of the user.',
       },
       index: true,
       saveToJWT: true,
@@ -178,9 +158,7 @@ export const users: CollectionConfig = {
     },
   ],
   hooks: {
-    beforeChange: [
-      syncToPaystack,
-      autoincrement({ field: 'accountNumber', startFrom: 324842, step: 13 }),
-    ],
+    beforeChange: [syncToPaystack],
+    afterChange: [welcome],
   },
 };

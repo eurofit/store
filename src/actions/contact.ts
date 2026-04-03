@@ -34,7 +34,7 @@ export async function sendContactEmail(unsafeData: z.input<typeof contactFormSch
 
   // Email content
   const mailOptions: SendEmailOptions = {
-    from: `EUROFIT <${env.SMTP_USERNAME}>`,
+    from: env.SMTP_USERNAME,
     to: env.SMTP_INFO_USERNAME,
     subject:
       validatedData.subject || `New Contact Form Submission from ${validatedData.name}`,

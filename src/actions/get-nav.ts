@@ -1,10 +1,15 @@
 'use server';
 
 import config from '@/payload/config';
-import { cache } from 'react';
 import { getPayload } from 'payload';
+import { cacheLife, cacheTag } from 'next/cache';
 
-export const getNav = cache(async () => {
+export const getNav = async () => {
+  // "use cache"
+
+  // cacheTag("nav")
+  // cacheLife("hours")
+
   const payload = await getPayload({
     config,
   });
@@ -14,4 +19,4 @@ export const getNav = cache(async () => {
   });
 
   return nav.items;
-});
+}

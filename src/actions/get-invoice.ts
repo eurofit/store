@@ -38,7 +38,6 @@ export async function getInvoice(unsafeInput: Input): Promise<Invoice> {
     populate: {
       users: {
         fullName: true,
-        accountNumber: true,
       },
       addresses: {
         user: false,
@@ -61,10 +60,7 @@ export async function getInvoice(unsafeInput: Input): Promise<Invoice> {
   const formattedOrder = {
     ...order,
     fao: typeof order.customer === 'object' ? order.customer.fullName : order.customer,
-    account:
-      typeof order.customer === 'object'
-        ? order.customer.accountNumber.toString()
-        : order.customer,
+
     shippingAddress:
       typeof order.shippingAddress === 'object' ? order.shippingAddress : null,
     items: order.items.map(({ snapshot, ...item }) => ({

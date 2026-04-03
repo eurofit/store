@@ -57,7 +57,7 @@ export default buildConfig({
 
   email: resendAdapter({
     apiKey: env.RESEND_API_KEY,
-    defaultFromAddress: `${site.name} <${env.SMTP_USERNAME}>`,
+    defaultFromAddress: env.SMTP_USERNAME,
     defaultFromName: site.name,
   }),
   plugins: [

@@ -120,43 +120,6 @@ export function InvoiceDoc({ data: invoice, qrCode, barcode }: InvoiceDocProps) 
                     paddingVertical: 2,
                   }}
                 >
-                  <Text style={{ fontWeight: 600 }}>ACC NO</Text>
-                </View>
-                <View
-                  style={{
-                    width: '65%',
-                    height: '100%',
-                    alignItems: 'flex-end',
-                    paddingHorizontal: 6,
-                    borderLeft: '1px solid black',
-                    textTransform: 'capitalize',
-                    justifyContent: 'center',
-                    paddingVertical: 2,
-                  }}
-                >
-                  <Text>{truncate(invoice.account, { length: 17 })}</Text>
-                </View>
-              </View>
-              <View
-                style={{
-                  position: 'relative',
-                  width: '100%',
-                  display: 'flex',
-                  flexDirection: 'row',
-                  flexGrow: 1,
-                  borderBottom: '1px solid black',
-                }}
-              >
-                <View
-                  style={{
-                    width: '35%',
-                    textAlign: 'right',
-                    alignItems: 'flex-end',
-                    justifyContent: 'center',
-                    paddingHorizontal: 6,
-                    paddingVertical: 2,
-                  }}
-                >
                   <Text style={{ fontWeight: 600 }}>ORDER</Text>
                 </View>
                 <View

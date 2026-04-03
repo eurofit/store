@@ -1,6 +1,8 @@
+import { getCurrentUser } from '@/actions/auth/get-current-user';
 import { SignupForm } from '@/components/forms/signup';
 import { Logo } from '@/components/logo';
 import { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: 'Signup',
@@ -14,7 +16,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Page() {
+export default async function Page() {
+  const user = await getCurrentUser();
+
+  if (user) {
+    redirect('/');
+  }
+
   return (
     <div className="bg-muted flex min-h-svh p-6 md:p-10">
       <div className="m-auto w-full max-w-md space-y-4">

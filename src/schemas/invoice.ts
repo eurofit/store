@@ -14,7 +14,6 @@ export const invoiceItemSchema = z.object({
 export const invoiceSchema = z.object({
   id: z.string(),
   fao: z.string(),
-  account: z.string(),
   date: z.string(),
   dueDate: z.string(),
   status: z.string(),

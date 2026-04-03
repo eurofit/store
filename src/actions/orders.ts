@@ -73,7 +73,6 @@ export async function getOrderById(id: number) {
       },
       users: {
         fullName: true,
-        accountNumber: true,
       },
       addresses: {
         title: true,

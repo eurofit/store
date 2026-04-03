@@ -200,17 +200,9 @@ export interface Media {
 export interface User {
   id: string;
   /**
-   * The account number of the user.
-   */
-  accountNumber: number;
-  /**
    * The first name of the user.
    */
   firstName: string;
-  /**
-   * The middle name of the user.
-   */
-  middleName?: string | null;
   /**
    * The last name of the user.
    */
@@ -948,9 +940,7 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
-  accountNumber?: T;
   firstName?: T;
-  middleName?: T;
   lastName?: T;
   fullName?: T;
   gender?: T;

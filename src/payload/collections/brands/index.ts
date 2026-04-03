@@ -1,3 +1,4 @@
+import { revalidateBrandsTag } from './hooks/revalidate-brands-tag';
 import { titleCase } from '@/payload/hooks/title-case';
 import type { CollectionConfig } from 'payload';
 import { slugField } from 'payload';
@@ -39,7 +40,6 @@ export const brands: CollectionConfig = {
       },
     },
     slugField(),
-
     {
       name: 'srcImage',
       type: 'text',
@@ -93,4 +93,5 @@ export const brands: CollectionConfig = {
   hooks: {
     // afterChange: [revalidateBrandsTag],
   },
+ 
 };

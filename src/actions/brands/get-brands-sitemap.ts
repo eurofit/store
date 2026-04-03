@@ -1,9 +1,17 @@
+
+
 import { site } from '@/constants/site';
 import payloadConfig from '@/payload/config';
 import { MetadataRoute } from 'next';
+import { cacheLife, cacheTag } from 'next/cache';
 import { getPayload } from 'payload';
 
 export async function getBrandsSitemap(): Promise<MetadataRoute.Sitemap> {
+  // "use cache"
+
+  // cacheTag("brands-sitemap");
+  // cacheLife("hours")
+  
   const config = await payloadConfig;
   const payload = await getPayload({
     config,

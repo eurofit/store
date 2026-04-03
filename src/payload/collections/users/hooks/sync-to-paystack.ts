@@ -4,12 +4,10 @@ import { paystackCustomerSchema } from '@/schemas/paystack-customer-code';
 import { APIError, CollectionBeforeChangeHook } from 'payload';
 
 export const syncToPaystack: CollectionBeforeChangeHook<User> = async ({
-  req,
   operation,
   data,
 }) => {
   if (operation !== 'create') return;
-  1;
 
   const {
     email,

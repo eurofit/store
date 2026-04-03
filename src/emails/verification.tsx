@@ -1,3 +1,4 @@
+import { site } from '@/constants/site';
 import { Button, render, Section, Text } from '@react-email/components';
 import { EmailLayout } from './layout';
 
@@ -7,7 +8,7 @@ type VerificationEmailProps = {
 };
 
 const VerificationEmail = ({ firstName, token }: VerificationEmailProps) => {
-  const verificationLink = `http://localhost:3000/verify?token=${token}`;
+  const verificationLink = `${site.url}/verify?token=${token}`;
   return (
     <EmailLayout
       preview={`You're almost there${firstName ? `, ${firstName}` : ''}! Confirm your email to access your new Eurofit account.`}

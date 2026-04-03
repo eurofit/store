@@ -12,8 +12,9 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { LoginData } from '@/schemas/login';
+import { LoginData, loginSchema } from '@/schemas/login';
 import { cn } from '@/utils/cn';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useSetAtom } from 'jotai';
 import Link from 'next/link';
@@ -31,6 +32,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
 
   // TODO: Handle merging anonymous cart with user cart after login
   const form = useForm<LoginData>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: '',
       password: '',
