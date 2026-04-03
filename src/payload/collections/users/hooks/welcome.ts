@@ -9,9 +9,6 @@ export const welcome: CollectionAfterChangeHook<User> = async ({
 }) => {
   if (operation !== 'update') return;
 
-  console.log('doc', doc);
-  console.log('previousDoc', previousDoc);
-
   // Check if the user just became verified
   if (doc._verified === true && previousDoc._verified === false) {
     await req.payload.sendEmail({
