@@ -7,7 +7,8 @@ type CountdownProps = {
 };
 
 export function useCountdown({ end }: CountdownProps) {
-  const [timeLeft, setTimeLeft] = React.useState(new Date(end).getTime() - Date.now());
+  const now = new Date().getTime();
+  const [timeLeft, setTimeLeft] = React.useState(new Date(end).getTime() - now);
 
   React.useEffect(() => {
     const interval = setInterval(() => {

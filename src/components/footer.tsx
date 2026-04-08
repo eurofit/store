@@ -3,6 +3,7 @@ import { Input } from '@/components/ui/input';
 import { site } from '@/constants/site';
 import { SendHorizonal } from 'lucide-react';
 import Link from 'next/link';
+import CurrentYear from './current-year';
 import { Logo } from './logo';
 
 const QUICK_LINKS = [
@@ -182,7 +183,7 @@ export async function Footer() {
       <div className="text-muted-foreground mt-12 flex flex-col items-center justify-between gap-6 border-t pt-8 text-xs sm:flex-row">
         <div className="flex flex-col items-center gap-2 sm:flex-row">
           <p>
-            © {new Date().getFullYear()} {site.name.toUpperCase()}. All Rights Reserved.
+            © <CurrentYear /> {site.name.toUpperCase()}. All Rights Reserved.
           </p>
           <p className="hidden sm:block" aria-hidden="true">
             |

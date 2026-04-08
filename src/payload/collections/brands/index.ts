@@ -1,4 +1,3 @@
-import { revalidateBrandsTag } from './hooks/revalidate-brands-tag';
 import { titleCase } from '@/payload/hooks/title-case';
 import type { CollectionConfig } from 'payload';
 import { slugField } from 'payload';
@@ -17,6 +16,11 @@ export const brands: CollectionConfig = {
     useAsTitle: 'title',
     listSearchableFields: ['id', 'title', 'slug'],
     defaultColumns: ['srcImage', 'title'],
+  },
+  versions: {
+    drafts: {
+      autosave: false,
+    },
   },
   defaultPopulate: {
     slug: true,
@@ -93,5 +97,4 @@ export const brands: CollectionConfig = {
   hooks: {
     // afterChange: [revalidateBrandsTag],
   },
- 
 };

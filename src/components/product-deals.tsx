@@ -1,3 +1,5 @@
+'use client';
+
 import { Countdown } from '@/components/countdown';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Badge } from '@/components/ui/badge';
