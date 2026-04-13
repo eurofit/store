@@ -12,7 +12,8 @@ import {
 } from '@/components/product-filters';
 import { FilterGroup } from '@/types';
 import { FunnelIcon } from 'lucide-react';
-import { ProductFilterGroupVirtualizedList } from './products-filter-group-list';
+import { FilterItem } from './filter-item';
+import { ScrollArea } from './ui/scroll-area';
 
 type BrandFiltersProps = {
   getFilters: (...args: any) => Promise<FilterGroup[]>;
@@ -47,7 +48,13 @@ export async function ProductFilters({ getFilters }: BrandFiltersProps) {
                 </div>
                 <FilterGroupClearButton queryKey={key} />
               </ProductFilterHeader>
-              <ProductFilterGroupVirtualizedList queryKey={key} items={items} />
+              <ScrollArea className="flex max-h-72 flex-col overflow-y-auto">
+                <div className="space-y-2 pr-2">
+                  {items.map((item) => (
+                    <FilterItem key={item.slug} queryKey={key} item={item} />
+                  ))}
+                </div>
+              </ScrollArea>
             </ProductFilterGroup>
           );
         })}

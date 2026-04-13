@@ -13,6 +13,7 @@ import { fileURLToPath } from 'url';
 import { collections } from './collections';
 import { users } from './collections/users';
 import { globals } from './globals';
+import { blocks } from './blocks';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -39,6 +40,7 @@ export default buildConfig({
     graphQLPlayground: '/payload/graphql-playground',
   },
   globals,
+  blocks,
   collections,
   editor: lexicalEditor(),
   secret: env.PAYLOAD_SECRET,

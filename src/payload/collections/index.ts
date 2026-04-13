@@ -1,21 +1,23 @@
-import { addresses } from './addresses';
-import { brands } from './brands';
-import { carts } from './carts';
-import { categories } from './categories';
-import { events } from './events';
-import { inventory } from './inventory';
-import { media } from './media';
-import { orders } from './orders';
-import { orderStatus } from './orders/order-status';
-import { productLines } from './product-lines';
-import { products } from './products';
-import { StockAlerts } from './stock-alerts';
-import { transactions } from './transactions';
-import { users } from './users';
+import { addresses } from '@/payload/collections/addresses';
+import { brands } from '@/payload/collections/brands';
+import { carts } from '@/payload/collections/carts';
+import { categories } from '@/payload/collections/categories';
+import { events } from '@/payload/collections/events';
+import { inventory } from '@/payload/collections/inventory';
+import { media } from '@/payload/collections/media';
+import { orders } from '@/payload/collections/orders';
+import { orderStatus } from '@/payload/collections/orders/order-status';
+import { pages } from '@/payload/collections/pages';
+import { productLines } from '@/payload/collections/product-lines';
+import { products } from '@/payload/collections/products';
+import { StockAlerts } from '@/payload/collections/stock-alerts';
+import { transactions } from '@/payload/collections/transactions';
+import { users } from '@/payload/collections/users';
 
 export const collections = [
   media,
   users,
+  pages,
   addresses,
   brands,
   products,

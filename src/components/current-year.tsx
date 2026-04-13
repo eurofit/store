@@ -2,5 +2,5 @@
 
 export default function CurrentYear() {
   const year = new Date().getFullYear();
-  return <div>{year}</div>;
+  return <span>{year}</span>;
 }

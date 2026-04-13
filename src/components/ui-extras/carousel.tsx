@@ -1,3 +1,5 @@
+'use client';
+
 import { type EmblaCarouselType } from 'embla-carousel';
 
 import { cn } from '@/utils/cn';
@@ -46,11 +48,19 @@ export const useDotButton = (
   };
 };
 
-export const CarouselDots = () => {
+type CarouselDotsProps = React.ComponentProps<'div'>;
+
+export const CarouselDots = ({ className, ...props }: CarouselDotsProps) => {
   const { api } = useCarousel();
   const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton(api);
   return (
-    <div className="absolute bottom-2 left-1/2 z-99 flex -translate-x-1/2 items-center gap-2">
+    <div
+      className={cn(
+        'absolute bottom-2 left-1/2 z-99 flex -translate-x-1/2 items-center gap-2',
+        className,
+      )}
+      {...props}
+    >
       {scrollSnaps.map((_, index) => (
         <Button
           key={index}

@@ -1,7 +1,6 @@
 'use client';
 
 import { cn } from '@/utils/cn';
-import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useRouter } from 'nextjs-toploader/app';
 import * as React from 'react';
@@ -55,15 +54,9 @@ export function FilterItem({
   return (
     <div className={cn('group flex items-start gap-2', className)} {...props}>
       <Checkbox id={id} checked={isChecked} onCheckedChange={handleCheckboxChange} />
-      <Link
-        href={nextUrl}
-        className="text-sm hover:underline hover:underline-offset-4"
-        replace
-        shallow
-        scroll={false}
-      >
+      <a href={nextUrl} className="text-sm hover:underline hover:underline-offset-4">
         {title}&nbsp;({count})
-      </Link>
+      </a>
     </div>
   );
 }

@@ -21,7 +21,7 @@ export function MobileMenuClient({ items }: MobileMenuClientProps) {
       <Button
         variant="ghost"
         size="icon-lg"
-        className="-mt-px animate-pulse md:hidden"
+        className="-mt-px md:hidden"
         onClick={toggle}
         aria-label="Toggle menu"
       >
@@ -41,10 +41,10 @@ export function MobileMenuClient({ items }: MobileMenuClientProps) {
 
       {isOpen && (
         <div
-          className="absolute top-20 h-[calc(100vh-5rem)] w-full bg-black/50 supports-backdrop-filter:backdrop-blur-xs md:hidden"
+          className="absolute top-26 z-999 -mx-4 h-[calc(100vh-6.5rem)] w-[calc(100%+2rem)] bg-black/50 transition-colors duration-150 supports-backdrop-filter:backdrop-blur-xs md:hidden"
           onClick={toggle}
         >
-          <div className="bg-popover text-popover-foreground p-4">
+          <div className="text-popover-foreground bg-popover border p-4">
             <ul>
               {items.map((item) => (
                 <li key={item.id}>

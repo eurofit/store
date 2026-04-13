@@ -1,7 +1,7 @@
 'use client';
 
 import { FilterItem as TFilterItem } from '@/types';
-import { FilterItemSuspense } from './filter-item-suspense';
+import { FilterItem } from './filter-item';
 import { ScrollArea } from './ui/scroll-area';
 
 type VirtualizedProductFilterListProps = {
@@ -17,7 +17,7 @@ export function ProductFilterGroupVirtualizedList({
     <ScrollArea className="max-h-72">
       <div className="space-y-2 pr-4">
         {items.map((item) => (
-          <FilterItemSuspense key={item.slug} queryKey={key} item={item} />
+          <FilterItem key={item.slug} queryKey={key} item={item} />
         ))}
       </div>
     </ScrollArea>

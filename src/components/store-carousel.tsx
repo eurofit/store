@@ -7,10 +7,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import { useToggle } from '@/hooks/use-toggle';
+import { cn } from '@/utils/cn';
 import AutoPlay from 'embla-carousel-autoplay';
 import Image from 'next/image';
-import { useIdle } from 'react-use';
 import { CarouselDots } from './ui-extras/carousel';
 
 const slides = [
@@ -31,42 +30,24 @@ const slides = [
   },
   {
     id: 2,
-    title: 'Combat Protein Powder',
-    subtitle: 'Premium muscle building formula',
-    discount: 'SAVE 65% TODAY',
+    title: 'Gold Standard 100% Whey ',
+    subtitle: 'Best deals online on Sports nutrition',
+    discount: 'UP to 80% OFF',
     price: {
-      current: 39.99,
-      original: 79.99,
+      current: 49.99,
+      original: 89.99,
     },
-    rating: 4.6,
-    reviews: 1872,
+    rating: 4.8,
+    reviews: 2456,
     image: '/supplements.png',
-    badge: 'NEW ARRIVAL',
-    color: 'bg-gradient-to-r from-blue-50 to-blue-100',
-  },
-  {
-    id: 3,
-    title: 'Serious Mass Gainer',
-    subtitle: 'Maximum calorie formula for mass',
-    discount: 'SPECIAL OFFER 70% OFF',
-    price: {
-      current: 54.99,
-      original: 99.99,
-    },
-    rating: 4.7,
-    reviews: 1345,
-    image: '/supplements.png',
-    badge: 'TRENDING',
-    color: 'bg-gradient-to-r from-green-50 to-green-100',
+    badge: 'BESTSELLER',
+    color: 'bg-gradient-to-r from-amber-50 to-amber-100',
   },
 ];
 
 type StoreCarouselProps = React.ComponentProps<typeof Carousel>;
 
-export function StoreCarousel({ className }: StoreCarouselProps) {
-  const isIdle = useIdle();
-  const { value: isActive, setOn, setOff } = useToggle(!isIdle);
-
+export function StoreCarousel(props: StoreCarouselProps) {
   return (
     <Carousel
       className="relative w-full shadow-sm select-none"
@@ -79,18 +60,25 @@ export function StoreCarousel({ className }: StoreCarouselProps) {
       ]}
     >
       <CarouselContent>
-        <CarouselItem className="relative w-full">
-          <div className="relative h-auto w-full max-w-[1900px]">
-            <Image
-              src="/iso-xp.png"
-              alt="Banner"
-              fill
-              priority
-              sizes="100vw"
-              className="h-auto w-full object-cover object-[24%_center]"
-            />
-          </div>
-        </CarouselItem>
+        {slides.map((slide) => (
+          <CarouselItem
+            key={slide.id}
+            className={cn('relative basis-full', {
+              'basis-8/10': slides.length > 1,
+            })}
+          >
+            <div className="relative h-80 w-full max-w-475">
+              <Image
+                src="/iso-xp.png"
+                alt="Banner"
+                fill
+                priority
+                sizes="100vw"
+                className="h-auto w-full object-cover object-[24%_center]"
+              />
+            </div>
+          </CarouselItem>
+        ))}
       </CarouselContent>
       <CarouselPrevious className="-left-4 z-50 bg-slate-900 text-white" />
       <CarouselNext className="-right-4 bg-slate-900 text-white" />

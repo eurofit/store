@@ -90,17 +90,30 @@ export function SearchSheet() {
     });
   };
 
+  const reset = () => {
+    setQuery('');
+    setProducts([]);
+    setTotalProducts(0);
+    setHasSearched(false);
+  };
+
+  const handleClose = () => {
+    setOff();
+    reset();
+  };
+
   return (
     <search className="md:hidden">
       <Button
-        variant="outline"
-        size="icon"
+        variant="secondary"
+        size="lg"
         onClick={setOn}
         aria-expanded={isOpen}
         aria-label="Search products"
+        className="text-muted-foreground -mx-1 h-10 w-[calc(100%+8px)] justify-start"
       >
-        <Search aria-hidden="true" />
-        <span className="sr-only">Search products</span>
+        <Search aria-hidden="true" className="size-5.5" />
+        Search products, brands and categories
       </Button>
 
       {isOpen && (
@@ -109,7 +122,7 @@ export function SearchSheet() {
             className="bg-background absolute inset-x-0 top-0 z-50 h-dvh space-y-6 p-6"
             style={{ overscrollBehavior: 'contain' }}
           >
-            <div className="flex gap-2">
+            <div className="flex w-full grow items-center gap-1.5">
               <form action="/search" className="grow">
                 <InputGroup>
                   <InputGroupAddon>
@@ -124,15 +137,10 @@ export function SearchSheet() {
                     autoComplete="off"
                     autoFocus
                   />
-                  {totalProducts > 0 && (
-                    <InputGroupAddon align="inline-end">
-                      {totalProducts} {pluralize('result', totalProducts)}
-                    </InputGroupAddon>
-                  )}
                 </InputGroup>
               </form>
 
-              <Button variant="ghost" onClick={setOff} className="ml-auto">
+              <Button variant="ghost" onClick={handleClose} className="ml-auto">
                 Cancel
               </Button>
             </div>

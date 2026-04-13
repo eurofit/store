@@ -6,7 +6,7 @@ function ProductFilter({ className, ...props }: React.ComponentProps<'aside'>) {
   return (
     <aside
       {...props}
-      className={cn('hidden h-full basis-1/5 space-y-6 md:block', className)}
+      className={cn('mb-4 hidden h-full basis-1/5 md:flex md:flex-col', className)}
     />
   );
 }
@@ -28,11 +28,11 @@ function ProductFilterTitle({ className, ...props }: React.ComponentProps<'heade
 }
 
 function ProductFilterContent(props: React.ComponentProps<'nav'>) {
-  return <nav {...props} />;
+  return <nav {...props} className="space-y-6" />;
 }
 
 function ProductFilterGroup(props: React.ComponentProps<'section'>) {
-  return <section {...props} className={cn('not-last:mb-6')} />;
+  return <section {...props} />;
 }
 
 function ProductFilterGroupHeader({ className, ...props }: React.ComponentProps<'div'>) {

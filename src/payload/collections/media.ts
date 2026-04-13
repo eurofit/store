@@ -2,6 +2,9 @@ import { CollectionConfig } from 'payload';
 
 export const media: CollectionConfig = {
   slug: 'media',
+  access: {
+    read: () => true,
+  },
   upload: {
     disableLocalStorage: true,
     pasteURL: {

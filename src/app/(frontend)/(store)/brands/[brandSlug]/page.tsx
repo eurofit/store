@@ -61,7 +61,7 @@ export default async function BrandPage({ params, searchParams }: BrandPageProps
         <BrandBreadcrumbs slug={brandSlug} />
       </React.Suspense>
 
-      <div className="relative flex md:min-h-[calc(100vh-4rem)] md:gap-8 lg:gap-16">
+      <div className="relative flex overflow-auto md:min-h-[calc(100vh-4rem)] md:gap-8 lg:gap-16">
         {/* SIDEBAR  */}
         <React.Suspense fallback={<FilterSkeleton />}>
           <ProductFilters getFilters={() => getBrandFilters(brandSlug)} />
