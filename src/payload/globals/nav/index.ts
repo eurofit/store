@@ -1,5 +1,4 @@
 import { GlobalConfig } from 'payload';
-import { revalidateNavTag } from './hooks/revalidate-nav-tag';
 
 export const nav: GlobalConfig = {
   slug: 'nav',
