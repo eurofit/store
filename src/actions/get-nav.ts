@@ -2,7 +2,6 @@
 
 import config from '@/payload/config';
 import { getPayload } from 'payload';
-import { cacheLife, cacheTag } from 'next/cache';
 
 export const getNav = async () => {
   // "use cache"
@@ -19,4 +18,4 @@ export const getNav = async () => {
   });
 
   return nav.items;
-}
+};
