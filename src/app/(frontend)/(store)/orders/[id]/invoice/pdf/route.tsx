@@ -14,7 +14,8 @@ export async function GET(
   const invoiceBuffer = await getInvoiceBuffer(invoice);
 
   const lowerCaseSiteName = site.name.toLowerCase();
-  const filename = `${lowerCaseSiteName}-invoice-${invoice.id}-${formatDate(invoice.date, 'yyyy-MM-dd')}.pdf`;
+  const invoiceDate = formatDate(invoice.date, 'yyyy-MM-dd');
+  const filename = `${lowerCaseSiteName}-invoice-${invoice.id}-at-${invoiceDate}.pdf`;
 
   return new NextResponse(invoiceBuffer, {
     headers: {

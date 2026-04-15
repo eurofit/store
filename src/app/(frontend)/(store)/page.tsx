@@ -1,3 +1,4 @@
+import { ProductDeals } from '@/components/product-deals';
 import { RenderBlocks } from '@/payload/blocks/render-blocks';
 import config from '@/payload/config';
 import { getPayload } from 'payload';
@@ -21,10 +22,9 @@ export default async function Home() {
   const page = pages[0];
 
   return (
-    <div className="space-y-10 lg:space-y-14">
-      <RenderBlocks blocks={page.layout} />
-      {/* <StoreCarousel /> */}
-      {/* <ProductDeals /> */}
+    <div className="relative w-full space-y-10 lg:space-y-14">
+      <RenderBlocks blocks={page?.layout} />
+      <ProductDeals />
       {/* <CategoriesList /> */}
       {/* <TopBrandsCarousel /> */}
       {/* <DailyEssentials /> */}

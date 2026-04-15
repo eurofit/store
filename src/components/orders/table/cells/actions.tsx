@@ -50,7 +50,7 @@ export function ActionsCell({ row }: ActionsCellProps) {
           )}
           <DropdownMenuItem className="cursor-pointer" asChild>
             <a
-              href={`${site.url}/orders/${order.id}/pdf`}
+              href={`${site.url}/orders/${order.id}/invoice/pdf`}
               target="_blank"
               rel="noopener noreferrer"
             >

@@ -176,7 +176,12 @@ export interface UserAuthOperations {
  */
 export interface Slider {
   slides: {
-    image: string | Media;
+    images: {
+      image: string | Media;
+      isDefault: boolean;
+      isMobile: boolean;
+      id?: string | null;
+    }[];
     link?: string | null;
     id?: string | null;
   }[];

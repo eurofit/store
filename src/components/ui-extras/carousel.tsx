@@ -38,6 +38,9 @@ export const useDotButton = (
   useEffect(() => {
     if (!emblaApi) return;
 
+    onInit(emblaApi);
+    onSelect(emblaApi);
+
     emblaApi.on('reInit', onInit).on('select', onSelect);
   }, [emblaApi, onInit, onSelect]);
 
@@ -56,7 +59,7 @@ export const CarouselDots = ({ className, ...props }: CarouselDotsProps) => {
   return (
     <div
       className={cn(
-        'absolute bottom-2 left-1/2 z-99 flex -translate-x-1/2 items-center gap-2',
+        'absolute bottom-2 left-1/2 z-2 flex -translate-x-1/2 items-center gap-2',
         className,
       )}
       {...props}

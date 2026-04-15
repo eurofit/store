@@ -13,19 +13,18 @@ export function ProductDeals({}: ProductDealsProps) {
   const now = new Date();
   const end = new Date(now.getTime() + 4 * 60 * 60 * 1000);
   return (
-    <section>
-      <div className="bg-destructive border-t-md grid grid-cols-3 place-items-center p-2 text-white">
+    <section className="bg-destructive 8 p-2 md:px-4">
+      <div className="bg-destructive border-t-md flex items-center justify-between p-2 text-white">
         <h2 className="scroll-m-20 space-x-2 text-lg font-medium">
-          <span> Grab the best deals on</span>
-          <Link href="#">Supports Nutrition</Link>
+          Best Deals on Supports Nutrition
         </h2>
 
-        <div>
+        <div className="mx-auto">
           <span className="capitalize">Time left</span>
           &nbsp;
           <Countdown
             end={end.toISOString()}
-            className="inline-flex w-30 font-bold tabular-nums"
+            className="inline-flex w-32 font-bold tabular-nums"
           />
         </div>
 
@@ -49,8 +48,11 @@ type ProductProps = {};
 
 function Product({}: ProductProps) {
   return (
-    <div className="relative space-y-2 rounded-lg shadow-sm">
-      <AspectRatio ratio={4 / 3} className="bg-muted flex items-center justify-center">
+    <div className="bg-card text-card-foreground relative space-y-2 rounded-lg shadow-sm">
+      <AspectRatio
+        ratio={4 / 3}
+        className="bg-muted flex items-center justify-center rounded-t-lg"
+      >
         <Image
           alt="Whey protein"
           src="/whey.png"
@@ -70,7 +72,9 @@ function Product({}: ProductProps) {
           </del>
         </div>
       </div>
-      <Badge className="absolute top-2 right-2 bg-red-700 text-red-50">56% OFF</Badge>
+      <Badge className="bg-destructive absolute top-2 right-2 font-bold text-white">
+        56% OFF
+      </Badge>
     </div>
   );
 }

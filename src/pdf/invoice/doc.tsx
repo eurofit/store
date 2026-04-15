@@ -18,7 +18,7 @@ type InvoiceDocProps = {
 export function InvoiceDoc({ data: invoice, qrCode, barcode }: InvoiceDocProps) {
   return (
     <Document
-      title={`Eurofit - Invoice #${invoice.id}`}
+      title={`Eurofit - Invoice #${invoice.id} at ${formatDate(invoice.date, 'dd/MM/yyyy')}`}
       author={site.name}
       subject={`Invoice #${invoice.id}`}
       keywords="invoice, eurofit, fitness, gym, supplements"
@@ -577,7 +577,7 @@ export function InvoiceDoc({ data: invoice, qrCode, barcode }: InvoiceDocProps) 
                 <Text>
                   <Text style={{ fontSize: 9, textTransform: 'none' }}>KSh</Text>
                   &nbsp;
-                  {invoice.total}
+                  {invoice.total ? formatWithCommas(invoice.total) : 'N/A'}
                 </Text>
               </View>
             </View>
