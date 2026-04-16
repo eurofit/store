@@ -43,7 +43,7 @@ export async function CategoryProducts({
 
   const { page, brand, sort, size, flavourColour } = searchParams;
 
-  const { products, totalProducts, totalPages, hasNextPage, hasPrevPage } =
+  const { products, totalProducts, totalPages, hasNextPage } =
     await getProductsByCategory({
       slug,
       page,

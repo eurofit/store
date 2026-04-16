@@ -6,6 +6,9 @@ export const pages: CollectionConfig = {
   access: {
     read: () => true,
   },
+  admin: {
+    useAsTitle: 'title',
+  },
   fields: [
     {
       name: 'title',
@@ -21,7 +24,7 @@ export const pages: CollectionConfig = {
       name: 'layout',
       label: 'Layout',
       type: 'blocks',
-      blockReferences: ['slider'],
+      blockReferences: ['slider', 'collection'],
       blocks: [],
       required: true,
     },

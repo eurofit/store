@@ -2,6 +2,7 @@ import { addresses } from '@/payload/collections/addresses';
 import { brands } from '@/payload/collections/brands';
 import { carts } from '@/payload/collections/carts';
 import { categories } from '@/payload/collections/categories';
+import { collections as collectionsConfig } from '@/payload/collections/collections';
 import { events } from '@/payload/collections/events';
 import { inventory } from '@/payload/collections/inventory';
 import { media } from '@/payload/collections/media';
@@ -21,6 +22,7 @@ export const collections = [
   addresses,
   brands,
   products,
+  collectionsConfig,
   productLines,
   categories,
   carts,

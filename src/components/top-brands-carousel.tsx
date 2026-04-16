@@ -1,18 +1,21 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import AutoPlay from 'embla-carousel-autoplay';
 import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ComponentProps } from 'react';
+import { CarouselDots } from './ui-extras/carousel';
 import { Badge } from './ui/badge';
+import { Carousel, CarouselContent, CarouselItem } from './ui/carousel';
 
 type TopBrandsCarouselProps = {};
 
 export function TopBrandsCarousel({}: TopBrandsCarouselProps) {
   return (
     <section className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between bg-green-800 text-white">
         <h2 className="scroll-m-20 space-x-2 text-lg font-medium capitalize">
           <span>Top</span>
           <Link
@@ -29,6 +32,25 @@ export function TopBrandsCarousel({}: TopBrandsCarouselProps) {
           </Link>
         </Button>
       </div>
+      <Carousel
+        className="h-56 w-full select-none"
+        opts={{
+          loop: true,
+          slidesToScroll: 3,
+        }}
+        plugins={[AutoPlay()]}
+      >
+        <CarouselContent>
+          {Array(18)
+            .fill(null)
+            .map((_, index) => (
+              <CarouselItem key={index} className="relative h-56 basis-1/3">
+                <BrandSlide />
+              </CarouselItem>
+            ))}
+        </CarouselContent>
+        <CarouselDots className="-bottom-4" />
+      </Carousel>
     </section>
   );
 }
@@ -80,26 +102,3 @@ function BrandSlide({ className }: BrandSlideProps) {
     </div>
   );
 }
-
-/* 
-
-   <Carousel
-        className="h-56 w-full select-none"
-        opts={{
-          loop: true,
-          slidesToScroll: 3,
-        }}
-        plugins={[AutoPlay()]}
-      >
-        <CarouselContent>
-          {Array(18)
-            .fill(null)
-            .map((_, index) => (
-              <CarouselItem key={index} className="relative h-56 basis-1/3">
-                <BrandSlide />
-              </CarouselItem>
-            ))}
-        </CarouselContent>
-        <CarouselDots className="-bottom-4" />
-      </Carousel>
-*/

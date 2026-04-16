@@ -2,6 +2,7 @@ import { Block } from 'payload';
 
 export const slider: Block = {
   slug: 'slider',
+  interfaceName: 'SliderBlock',
   fields: [
     {
       name: 'slides',
@@ -40,6 +41,24 @@ export const slider: Block = {
         },
       ],
       required: true,
+    },
+    {
+      type: 'group',
+      label: 'Config',
+      fields: [
+        {
+          name: 'showArrows',
+          label: 'Show Arrows',
+          type: 'checkbox',
+          defaultValue: true,
+        },
+        {
+          name: 'showDots',
+          label: 'Show Dots',
+          type: 'checkbox',
+          defaultValue: true,
+        },
+      ],
     },
   ],
 };

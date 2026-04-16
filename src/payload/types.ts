@@ -66,7 +66,8 @@ export interface Config {
     users: UserAuthOperations;
   };
   blocks: {
-    slider: Slider;
+    slider: SliderBlock;
+    collection: CollectionBlock;
   };
   collections: {
     media: Media;
@@ -75,6 +76,7 @@ export interface Config {
     addresses: Address;
     brands: Brand;
     products: Product;
+    collections: Collection;
     'product-lines': ProductLine;
     categories: Category;
     carts: Cart;
@@ -118,6 +120,7 @@ export interface Config {
     addresses: AddressesSelect<false> | AddressesSelect<true>;
     brands: BrandsSelect<false> | BrandsSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
+    collections: CollectionsSelect<false> | CollectionsSelect<true>;
     'product-lines': ProductLinesSelect<false> | ProductLinesSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     carts: CartsSelect<false> | CartsSelect<true>;
@@ -172,9 +175,9 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "slider".
+ * via the `definition` "SliderBlock".
  */
-export interface Slider {
+export interface SliderBlock {
   slides: {
     images: {
       image: string | Media;
@@ -185,6 +188,8 @@ export interface Slider {
     link?: string | null;
     id?: string | null;
   }[];
+  showArrows?: boolean | null;
+  showDots?: boolean | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'slider';
@@ -215,6 +220,341 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CollectionBlock".
+ */
+export interface CollectionBlock {
+  collection: string | Collection;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'collection';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "collections".
+ */
+export interface Collection {
+  id: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  title: string;
+  description: string;
+  href?: string | null;
+  products: (string | Product)[];
+  styles?: {
+    headerBg?: string | null;
+    headerFg?: string | null;
+    contentBg?: string | null;
+    contentFg?: string | null;
+  };
+  timer?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products".
+ */
+export interface Product {
+  id: string;
+  /**
+   * Indicates whether the product is currently active.
+   */
+  active?: boolean | null;
+  /**
+   * Select the brand associated with this product.
+   */
+  brand: string | Brand;
+  /**
+   * A descriptive title for the product, used for display purposes.
+   */
+  title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  /**
+   * Specify the origin of the product, such as country or region.
+   */
+  origin?: string | null;
+  images?: (string | Media)[] | null;
+  /**
+   * Enter the URL of the product image provided by the supplier or your source.
+   */
+  srcImage?: string | null;
+  /**
+   * Provide detailed information about the product, including features, specifications, and usage instructions.
+   */
+  productInformation?: string | null;
+  /**
+   * Provide nutritional information for the product.
+   */
+  nutritionalInformation?: string | null;
+  /**
+   * Enter the URL of the product page on the supplier's website.
+   */
+  srcUrl?: string | null;
+  productLines: {
+    docs?: (string | ProductLine)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  /**
+   * Select categories that this product belongs to.
+   */
+  categories?: (string | Category)[] | null;
+  relatedProducts: {
+    products?:
+      | {
+          slug: string;
+          title: string;
+          image?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    total: number;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Manage brands associated with products in the store.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "brands".
+ */
+export interface Brand {
+  id: string;
+  /**
+   * The name of the brand, used for display and identification.
+   */
+  title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  /**
+   * The main image like logo of the brand. This is used as the primary image for the brand. If you have specified the image, this will be used as a fallback.
+   */
+  srcImage?: string | null;
+  /**
+   * The logo of the brand. If you have specified the srcImage, this will be used first and the srcImage will be used as a fallback.
+   */
+  logo?: (string | null) | Media;
+  /**
+   * The URL of the brand in providers website
+   */
+  srcUrl?: string | null;
+  active: boolean;
+  products?: {
+    docs?: (string | Product)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-lines".
+ */
+export interface ProductLine {
+  id: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  /**
+   * Used in URLs like "/products/optimum-whey-900g". Auto-generated from the product title but can be edited.
+   */
+  slug: string;
+  /**
+   * Unique internal ID for managing inventory.
+   */
+  sku: string;
+  /**
+   * Uncheck to hide this product from the store.
+   */
+  active: boolean;
+  /**
+   * Full name of the product, e.g. "Optimum Nutrition Whey 900g Banana".
+   */
+  title: string;
+  /**
+   * Package size, e.g. "900g".
+   */
+  size?: string | null;
+  /**
+   * Flavor or color of this product variant.
+   */
+  flavorColor?: string | null;
+  /**
+   * Display name like "900g / Banana Cream". Auto or manual.
+   */
+  variant?: string | null;
+  /**
+   * The main product this variation belongs to.
+   */
+  product: string | Product;
+  /**
+   * Product type like "Protein", "Vitamins".
+   */
+  category?: string | null;
+  /**
+   * Upload up to 6 images for this product. If none, it will use the parent product image.
+   */
+  images?: (string | Media)[] | null;
+  /**
+   * Original price from the supplier in GBP.
+   */
+  srcPrice?: number | null;
+  /**
+   * Discounted supplier price, if any.
+   */
+  srcDiscountedPrice?: number | null;
+  /**
+   * Customer price in KES (calculated from source price, shipping, margin).
+   */
+  retailPrice?: number | null;
+  /**
+   * Bulk buyer price in KES (lower margin).
+   */
+  wholesalePrice?: number | null;
+  /**
+   * Units you have on hand.
+   */
+  stock: number;
+  /**
+   * Units available from manufacturer / distributor or any external source.
+   */
+  srcStock?: number | null;
+  /**
+   * How many units fit on one pallet.
+   */
+  onPallet?: number | null;
+  /**
+   * How many units in one box / case.
+   */
+  inCase?: number | null;
+  /**
+   * Product expiration (if applies).
+   */
+  expiryDate?: string | null;
+  /**
+   * Used for shipping cost calc.
+   */
+  weight?: number | null;
+  /**
+   * How much product is in the pack (helps predict how long it lasts).
+   */
+  servingSizePerContainer?: number | null;
+  /**
+   * Recommended daily amount. Used to estimate finish date.
+   */
+  servingSize?: number | null;
+  /**
+   * Supplier’s product code.
+   */
+  srcProductCode?: string | null;
+  /**
+   * Retail scan code (EAN/UPC).
+   */
+  barcode?: string | null;
+  /**
+   * Customs / HS code for export.
+   */
+  exportCommodityCode?: string | null;
+  /**
+   * Indicates if a customer has requested notification for back-in-stock status. Managed programmatically.
+   */
+  isNotifyRequested: boolean;
+  /**
+   * Indicates if the product stock is below the low stock threshold. Managed programmatically.
+   */
+  isLowStock: boolean;
+  /**
+   * Indicates if the product is out of stock. Managed programmatically.
+   */
+  isOutOfStock: boolean;
+  /**
+   * Indicates if the product is back-orderable. Managed programmatically.
+   */
+  isBackorder: boolean;
+  inventory?: {
+    docs?: (string | InventoryItem)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  inventoryStock?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "inventory".
+ */
+export interface InventoryItem {
+  id: string;
+  item: string | ProductLine;
+  title?: string | null;
+  retailPrice: number;
+  stock: number;
+  expiryDate?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  /**
+   * Enter the name of the category.
+   */
+  title: string;
+  type?: ('product' | 'post')[] | null;
+  /**
+   * Provide a brief description of the category.
+   */
+  description?: string | null;
+  /**
+   * This is the URL of the supplier's page for this category.
+   */
+  srcUrl?: string | null;
+  /**
+   * Indicates whether the category is currently active.
+   */
+  active?: boolean | null;
+  products?: {
+    docs?: (string | Product)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  breadcrumbs?:
+    | {
+        doc?: (string | null) | Category;
+        url?: string | null;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  parent?: (string | null) | Category;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -392,306 +732,6 @@ export interface Cart {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "product-lines".
- */
-export interface ProductLine {
-  id: string;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  /**
-   * Used in URLs like "/products/optimum-whey-900g". Auto-generated from the product title but can be edited.
-   */
-  slug: string;
-  /**
-   * Unique internal ID for managing inventory.
-   */
-  sku: string;
-  /**
-   * Uncheck to hide this product from the store.
-   */
-  active: boolean;
-  /**
-   * Full name of the product, e.g. "Optimum Nutrition Whey 900g Banana".
-   */
-  title: string;
-  /**
-   * Package size, e.g. "900g".
-   */
-  size?: string | null;
-  /**
-   * Flavor or color of this product variant.
-   */
-  flavorColor?: string | null;
-  /**
-   * Display name like "900g / Banana Cream". Auto or manual.
-   */
-  variant?: string | null;
-  /**
-   * The main product this variation belongs to.
-   */
-  product: string | Product;
-  /**
-   * Product type like "Protein", "Vitamins".
-   */
-  category?: string | null;
-  /**
-   * Upload up to 6 images for this product. If none, it will use the parent product image.
-   */
-  images?: (string | Media)[] | null;
-  /**
-   * Original price from the supplier in GBP.
-   */
-  srcPrice?: number | null;
-  /**
-   * Discounted supplier price, if any.
-   */
-  srcDiscountedPrice?: number | null;
-  /**
-   * Customer price in KES (calculated from source price, shipping, margin).
-   */
-  retailPrice?: number | null;
-  /**
-   * Bulk buyer price in KES (lower margin).
-   */
-  wholesalePrice?: number | null;
-  /**
-   * Units you have on hand.
-   */
-  stock: number;
-  /**
-   * Units available from manufacturer / distributor or any external source.
-   */
-  srcStock?: number | null;
-  /**
-   * How many units fit on one pallet.
-   */
-  onPallet?: number | null;
-  /**
-   * How many units in one box / case.
-   */
-  inCase?: number | null;
-  /**
-   * Product expiration (if applies).
-   */
-  expiryDate?: string | null;
-  /**
-   * Used for shipping cost calc.
-   */
-  weight?: number | null;
-  /**
-   * How much product is in the pack (helps predict how long it lasts).
-   */
-  servingSizePerContainer?: number | null;
-  /**
-   * Recommended daily amount. Used to estimate finish date.
-   */
-  servingSize?: number | null;
-  /**
-   * Supplier’s product code.
-   */
-  srcProductCode?: string | null;
-  /**
-   * Retail scan code (EAN/UPC).
-   */
-  barcode?: string | null;
-  /**
-   * Customs / HS code for export.
-   */
-  exportCommodityCode?: string | null;
-  /**
-   * Indicates if a customer has requested notification for back-in-stock status. Managed programmatically.
-   */
-  isNotifyRequested: boolean;
-  /**
-   * Indicates if the product stock is below the low stock threshold. Managed programmatically.
-   */
-  isLowStock: boolean;
-  /**
-   * Indicates if the product is out of stock. Managed programmatically.
-   */
-  isOutOfStock: boolean;
-  /**
-   * Indicates if the product is back-orderable. Managed programmatically.
-   */
-  isBackorder: boolean;
-  inventory?: {
-    docs?: (string | InventoryItem)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  inventoryStock?: number | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "products".
- */
-export interface Product {
-  id: string;
-  /**
-   * Indicates whether the product is currently active.
-   */
-  active?: boolean | null;
-  /**
-   * Select the brand associated with this product.
-   */
-  brand: string | Brand;
-  /**
-   * A descriptive title for the product, used for display purposes.
-   */
-  title: string;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  /**
-   * Specify the origin of the product, such as country or region.
-   */
-  origin?: string | null;
-  images?: (string | Media)[] | null;
-  /**
-   * Enter the URL of the product image provided by the supplier or your source.
-   */
-  srcImage?: string | null;
-  /**
-   * Provide detailed information about the product, including features, specifications, and usage instructions.
-   */
-  productInformation?: string | null;
-  /**
-   * Provide nutritional information for the product.
-   */
-  nutritionalInformation?: string | null;
-  /**
-   * Enter the URL of the product page on the supplier's website.
-   */
-  srcUrl?: string | null;
-  productLines: {
-    docs?: (string | ProductLine)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  /**
-   * Select categories that this product belongs to.
-   */
-  categories?: (string | Category)[] | null;
-  relatedProducts: {
-    products?:
-      | {
-          slug: string;
-          title: string;
-          image?: string | null;
-          id?: string | null;
-        }[]
-      | null;
-    total: number;
-  };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * Manage brands associated with products in the store.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "brands".
- */
-export interface Brand {
-  id: string;
-  /**
-   * The name of the brand, used for display and identification.
-   */
-  title: string;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  /**
-   * The main image like logo of the brand. This is used as the primary image for the brand. If you have specified the image, this will be used as a fallback.
-   */
-  srcImage?: string | null;
-  /**
-   * The logo of the brand. If you have specified the srcImage, this will be used first and the srcImage will be used as a fallback.
-   */
-  logo?: (string | null) | Media;
-  /**
-   * The URL of the brand in providers website
-   */
-  srcUrl?: string | null;
-  active: boolean;
-  products?: {
-    docs?: (string | Product)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
- */
-export interface Category {
-  id: string;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  /**
-   * Enter the name of the category.
-   */
-  title: string;
-  type?: ('product' | 'post')[] | null;
-  /**
-   * Provide a brief description of the category.
-   */
-  description?: string | null;
-  /**
-   * This is the URL of the supplier's page for this category.
-   */
-  srcUrl?: string | null;
-  /**
-   * Indicates whether the category is currently active.
-   */
-  active?: boolean | null;
-  products?: {
-    docs?: (string | Product)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  breadcrumbs?:
-    | {
-        doc?: (string | null) | Category;
-        url?: string | null;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  parent?: (string | null) | Category;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "inventory".
- */
-export interface InventoryItem {
-  id: string;
-  item: string | ProductLine;
-  title?: string | null;
-  retailPrice: number;
-  stock: number;
-  expiryDate?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "stock-alerts".
  */
 export interface StockAlert {
@@ -715,7 +755,7 @@ export interface Page {
    */
   generateSlug?: boolean | null;
   slug: string;
-  layout: Slider[];
+  layout: (SliderBlock | CollectionBlock)[];
   updatedAt: string;
   createdAt: string;
 }
@@ -880,6 +920,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'products';
         value: string | Product;
+      } | null)
+    | ({
+        relationTo: 'collections';
+        value: string | Collection;
       } | null)
     | ({
         relationTo: 'product-lines';
@@ -1097,6 +1141,29 @@ export interface ProductsSelect<T extends boolean = true> {
             };
         total?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "collections_select".
+ */
+export interface CollectionsSelect<T extends boolean = true> {
+  generateSlug?: T;
+  slug?: T;
+  title?: T;
+  description?: T;
+  href?: T;
+  products?: T;
+  styles?:
+    | T
+    | {
+        headerBg?: T;
+        headerFg?: T;
+        contentBg?: T;
+        contentFg?: T;
+      };
+  timer?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -1,0 +1,95 @@
+import { Countdown } from '@/components/countdown';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { Badge } from '@/components/ui/badge';
+import { CollectionBlock, type Product } from '@/payload/types';
+import { ChevronRight, ImageOff } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+
+export function Collection({ collection }: CollectionBlock) {
+  if (!collection || typeof collection !== 'object') return null;
+
+  const { title, timer, href, products, styles } = collection;
+
+  const formattedProducts = products.filter((product) => typeof product === 'object');
+
+  return (
+    <section
+      className="py-2 max-md:-mx-4 max-md:px-4 md:px-4"
+      style={{
+        backgroundColor: styles?.contentBg ?? undefined,
+        color: styles?.contentFg ?? undefined,
+      }}
+    >
+      <div
+        className="border-t-md flex items-center justify-between p-2"
+        style={{
+          backgroundColor: styles?.headerBg ?? undefined,
+          color: styles?.headerFg ?? undefined,
+        }}
+      >
+        <h2 className="scroll-m-20 space-x-2 text-lg font-bold">{title}</h2>
+        {timer && (
+          <div className="mx-auto">
+            <span className="capitalize">Time left</span>
+            &nbsp;
+            <Countdown end={timer} className="inline-flex w-40 font-bold tabular-nums" />
+          </div>
+        )}
+        {href && (
+          <Link href={href} className="ml-auto flex items-center gap-2">
+            <span>View more</span>
+            <ChevronRight className="size-4" />
+          </Link>
+        )}
+      </div>
+      <div className="grid gap-6 py-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        {formattedProducts.map((product, index) => (
+          <Product key={index} product={product} />
+        ))}
+      </div>
+    </section>
+  );
+}
+type ProductProps = {
+  product: Product;
+};
+
+function Product({ product }: ProductProps) {
+  const { slug, title, srcImage } = product;
+  return (
+    <Link
+      href={`/products/${slug}`}
+      className="bg-card text-card-foreground relative space-y-2 rounded-lg shadow-sm"
+    >
+      <AspectRatio
+        ratio={4 / 3}
+        className="flex items-center justify-center rounded-t-lg bg-white"
+      >
+        {srcImage ? (
+          <Image
+            alt={title}
+            src={srcImage}
+            fill
+            className="object-contain"
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+          />
+        ) : (
+          <ImageOff className="text-muted-foreground m-auto size-12" />
+        )}
+      </AspectRatio>
+      <div className="space-y-2 px-2">
+        <h3 className="leading-tight font-medium">{title}</h3>
+        <div className="flex items-center space-x-2">
+          <ins className="font-bold no-underline">Ksh 11,650</ins>
+          <del className="before relative text-sm no-underline before:absolute before:top-1/2 before:right-0 before:left-0 before:-translate-y-1/2 before:rotate-5 before:border-t before:border-t-red-700 before:content-['']">
+            Ksh 11,650
+          </del>
+        </div>
+      </div>
+      <Badge className="bg-destructive absolute top-2 right-2 font-bold text-white">
+        56% OFF
+      </Badge>
+    </Link>
+  );
+}

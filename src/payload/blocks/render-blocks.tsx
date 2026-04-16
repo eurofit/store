@@ -1,9 +1,6 @@
 import { Page } from '@/payload/types';
+import { Collection } from './collections/component';
 import { Slider } from './slider/component';
-
-const blockComponents = {
-  slider: Slider,
-};
 
 type RenderBlocksProps = {
   blocks: NonNullable<Page['layout']>[number][];
@@ -15,13 +12,16 @@ export function RenderBlocks({ blocks }: RenderBlocksProps) {
   }
   return (
     <>
-      {blocks.map(({ blockType, id, ...block }) => {
-        const Block = blockComponents[blockType];
-
-        if (Block) {
-          return <Block key={id} {...block} />;
+      {blocks.map((block, index) => {
+        const { blockType, id } = block;
+        switch (blockType) {
+          case 'slider':
+            return <Slider key={id ?? index} {...block} />;
+          case 'collection':
+            return <Collection key={id ?? index} {...block} />;
+          default:
+            return null;
         }
-        return null;
       })}
     </>
   );

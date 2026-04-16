@@ -9,16 +9,19 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { useInView } from '@/hooks/use-in-view';
-import { type Slider } from '@/payload/types';
+import { type SliderBlock } from '@/payload/types';
 import Autoplay from 'embla-carousel-autoplay';
 import Link from 'next/link';
 
-type SliderProps = Omit<Slider, 'id' | 'blockType' | 'blockName'>;
-
-export function Slider({ slides }: SliderProps) {
+export function Slider({ slides, showArrows, showDots }: SliderBlock) {
   const { ref, isInView } = useInView();
 
   const isActive = isInView && slides.length > 1;
+  const hasSlides = slides.length > 0;
+
+  if (!hasSlides) {
+    return null;
+  }
 
   return (
     <Carousel
@@ -53,18 +56,18 @@ export function Slider({ slides }: SliderProps) {
           );
         })}
       </CarouselContent>
-      {slides.length > 1 && (
+      {hasSlides && showArrows && (
         <>
           <CarouselPrevious variant="default" className="-left-4" />
           <CarouselNext variant="default" className="-right-4" />
-          <CarouselDots className="-bottom-6" />
         </>
       )}
+      {hasSlides && showDots && <CarouselDots className="-bottom-4" />}
     </Carousel>
   );
 }
 
-function getImageSources(images: SliderProps['slides'][number]['images']) {
+function getImageSources(images: SliderBlock['slides'][number]['images']) {
   const defaultImage = images.find((img) => img.isDefault);
 
   const sources = images
