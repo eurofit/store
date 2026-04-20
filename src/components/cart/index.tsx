@@ -7,7 +7,6 @@ import uniqBy from 'lodash-es/uniqBy';
 import { ChevronRight, ShoppingBag, ShoppingBasket, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
 import { Fragment } from 'react';
-import { Large, Muted } from '../typography';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
@@ -103,23 +102,23 @@ export function Cart() {
               <div className="flex items-center justify-between">
                 <dl className="flex w-full items-center justify-between gap-2">
                   <dt className="max-w-3/5">
-                    <Large>Subtotal</Large>
-                    <Muted className="text-balance">
+                    <p className="text-lg font-semibold">Subtotal</p>
+                    <p className="text-muted-foreground text-sm text-balance">
                       Shipping & taxes calculated at checkout.
-                    </Muted>
+                    </p>
                   </dt>
                   <div className="flex items-center">
                     <dd className="flex items-center">
                       <span className="text-muted-foreground">Ksh</span>
                       &nbsp;
-                      <Large className="font-variant-numeric-tabular-nums">
+                      <p className="font-variant-numeric-tabular-nums text-lg font-semibold">
                         {formatWithCommas(
                           cart.items.reduce(
                             (total, item) => total + item.price * item.quantity,
                             0,
                           ),
                         )}
-                      </Large>
+                      </p>
                     </dd>
                   </div>
                 </dl>

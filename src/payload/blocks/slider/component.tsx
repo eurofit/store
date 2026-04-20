@@ -33,9 +33,9 @@ export function Slider({ slides, showArrows, showDots }: SliderBlock) {
           stopOnInteraction: false,
         }),
       ]}
-      className="relative w-full rounded shadow select-none!"
+      className="relative aspect-3/2 w-full rounded shadow select-none! md:aspect-4/1"
     >
-      <CarouselContent className="h-60 rounded md:h-76">
+      <CarouselContent className="h-full rounded">
         {slides.map(({ images, link }, index) => {
           const { defaultUrl, sources } = getImageSources(images);
           return (

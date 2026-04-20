@@ -3,7 +3,7 @@ import { getProductBySlug } from '@/actions/products/get-product-by-slug';
 import { ImageWithRetry } from '@/components/image-with-retry';
 import { JsonLd } from '@/components/json-ld';
 import { ProductLinesList } from '@/components/product-lines-list';
-import { Heading } from '@/components/typography';
+import { H1 } from '@/components/typography';
 import { Badge } from '@/components/ui/badge';
 import {
   Breadcrumb,
@@ -73,7 +73,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
         <div className="flex w-full flex-col items-start gap-16 md:flex-row">
           <div className="relative grow space-y-10">
-            <Heading>{title}</Heading>
+            <H1>{title}</H1>
             <main className="flex w-full flex-col items-start gap-6 md:flex-row md:gap-10">
               <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-white max-md:w-full md:max-w-xl md:basis-3/5">
                 {image && (
