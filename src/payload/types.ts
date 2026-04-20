@@ -68,6 +68,7 @@ export interface Config {
   blocks: {
     slider: SliderBlock;
     collection: CollectionBlock;
+    richText: RichTextBlock;
   };
   collections: {
     media: Media;
@@ -558,6 +559,30 @@ export interface Category {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "RichTextBlock".
+ */
+export interface RichTextBlock {
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'richText';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -755,7 +780,7 @@ export interface Page {
    */
   generateSlug?: boolean | null;
   slug: string;
-  layout: (SliderBlock | CollectionBlock)[];
+  layout: (SliderBlock | CollectionBlock | RichTextBlock)[];
   updatedAt: string;
   createdAt: string;
 }

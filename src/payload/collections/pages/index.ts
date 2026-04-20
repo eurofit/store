@@ -24,9 +24,12 @@ export const pages: CollectionConfig = {
       name: 'layout',
       label: 'Layout',
       type: 'blocks',
-      blockReferences: ['slider', 'collection'],
+      blockReferences: ['slider', 'collection', 'richText'],
       blocks: [],
       required: true,
+      admin: {
+        initCollapsed: true,
+      },
     },
   ],
 };

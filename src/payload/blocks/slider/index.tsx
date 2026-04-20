@@ -7,6 +7,9 @@ export const slider: Block = {
     {
       name: 'slides',
       type: 'array',
+      admin: {
+        initCollapsed: true,
+      },
       fields: [
         {
           name: 'images',

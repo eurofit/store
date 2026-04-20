@@ -1,90 +1,47 @@
-import { cn } from '@/utils/cn';
-import { cva, VariantProps } from 'class-variance-authority';
-import * as React from 'react';
+import React from 'react';
 
-/* -------------------------------------------------
- * Heading
- * -------------------------------------------------*/
+type H1Props = React.ComponentProps<'h1'>;
+type H2Props = React.ComponentProps<'h2'>;
+type H3Props = React.ComponentProps<'h3'>;
+type H4Props = React.ComponentProps<'h4'>;
+type H5Props = React.ComponentProps<'h5'>;
+type H6Props = React.ComponentProps<'h6'>;
+type PProps = React.ComponentProps<'p'>;
 
-export const headingVariants = cva('scroll-m-20 tracking-tight text-balance', {
-  variants: {
-    variant: {
-      h1: 'text-4xl font-extrabold',
-      h2: 'border-b pb-2 text-3xl font-semibold first:mt-0',
-      h3: 'text-2xl font-semibold',
-      h4: 'text-xl font-semibold',
-    },
-  },
-  defaultVariants: {
-    variant: 'h1',
-  },
-});
-
-type HeadingProps = React.HTMLAttributes<HTMLHeadingElement> &
-  VariantProps<typeof headingVariants> & {
-    as?: 'h1' | 'h2' | 'h3' | 'h4';
-  };
-
-export function Heading({ as, variant, className, ...props }: HeadingProps) {
-  const Comp = as ?? variant ?? 'h1';
-
-  return <Comp className={cn(headingVariants({ variant }), className)} {...props} />;
-}
-
-// Text & Others
-type TextProps = React.HTMLAttributes<HTMLElement>;
-
-export function Text({ className, ...props }: TextProps) {
-  return <p className={cn('leading-7 not-first:mt-6', className)} {...props} />;
-}
-
-export function Blockquote({ className, ...props }: TextProps) {
+export function H1(props: H1Props) {
   return (
-    <blockquote className={cn('mt-6 border-l-2 pl-6 italic', className)} {...props} />
-  );
-}
-
-export function Table({ className, ...props }: TextProps) {
-  return <div className={cn('my-6 w-full overflow-y-auto', className)} {...props} />;
-}
-
-export function List({ className, ...props }: TextProps) {
-  return (
-    <ul className={cn('my-6 ml-6 list-disc not-first:mt-2', className)} {...props} />
-  );
-}
-
-export function InlineCode({ className, ...props }: TextProps) {
-  return (
-    <code
-      className={cn(
-        'bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold',
-        className,
-      )}
+    <h1
+      className="scroll-m-20 text-4xl font-extrabold tracking-tight text-balance"
       {...props}
     />
   );
 }
 
-export function Lead({ className, ...props }: TextProps) {
+export function H2(props: H2Props) {
   return (
-    <p
-      className={cn('text-muted-foreground text-xl text-pretty', className)}
+    <h2
+      className="mt-6 scroll-m-20 py-2 text-3xl font-semibold tracking-tight"
       {...props}
     />
   );
 }
 
-export function Large({ className, ...props }: TextProps) {
-  return <div className={cn('text-lg font-semibold', className)} {...props} />;
+export function H3(props: H3Props) {
+  return <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight" {...props} />;
 }
 
-export function Small({ className, ...props }: TextProps) {
-  return (
-    <small className={cn('text-sm leading-none font-medium', className)} {...props} />
-  );
+export function H4(props: H4Props) {
+  return <h4 className="scroll-m-20 text-xl font-semibold tracking-tight" {...props} />;
 }
 
-export function Muted({ className, ...props }: TextProps) {
-  return <p className={cn('text-muted-foreground text-sm', className)} {...props} />;
+export function H5(props: H5Props) {
+  return <h5 className="scroll-m-20 text-lg font-medium tracking-tight" {...props} />;
+}
+
+export function H6(props: H6Props) {
+  return <h6 className="scroll-m-20 text-base font-medium tracking-tight" {...props} />;
+}
+
+export function P(props: PProps) {
+  return <p className="leading-7 not-first:mt-4" {...props} />;
 }
