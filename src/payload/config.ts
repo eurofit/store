@@ -1,19 +1,20 @@
 import { COOKIES_NAMESPACE } from '@/constants/keys';
 import { site } from '@/constants/site';
-import { env } from '@/env.mjs';
+import { env, publicUrl } from '@/env.mjs';
 import { postgresAdapter } from '@payloadcms/db-postgres';
 import { resendAdapter } from '@payloadcms/email-resend';
 import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs';
+import { seoPlugin } from '@payloadcms/plugin-seo';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
 import { s3Storage } from '@payloadcms/storage-s3';
 import path from 'path';
 import { buildConfig } from 'payload';
 import sharp from 'sharp';
 import { fileURLToPath } from 'url';
+import { blocks } from './blocks';
 import { collections } from './collections';
 import { users } from './collections/users';
 import { globals } from './globals';
-import { blocks } from './blocks';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -85,6 +86,12 @@ export default buildConfig({
       collections: ['categories'],
       generateLabel: (_, doc) => String(doc.title ?? ''),
       generateURL: (docs) => docs.reduce((url, doc) => `${url}/${doc.slug}`, ''),
+    }),
+
+    seoPlugin({
+      collections: ['pages'],
+      uploadsCollection: 'media',
+      generateURL: ({ doc }) => publicUrl + '/' + doc.slug,
     }),
   ],
   sharp,

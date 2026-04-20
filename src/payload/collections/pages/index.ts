@@ -24,7 +24,7 @@ export const pages: CollectionConfig = {
       name: 'layout',
       label: 'Layout',
       type: 'blocks',
-      blockReferences: ['slider', 'collection', 'richText'],
+      blockReferences: ['slider', 'collection', 'faq', 'richText'],
       blocks: [],
       required: true,
       admin: {

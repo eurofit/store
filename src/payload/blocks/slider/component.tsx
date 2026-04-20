@@ -33,7 +33,7 @@ export function Slider({ slides, showArrows, showDots }: SliderBlock) {
           stopOnInteraction: false,
         }),
       ]}
-      className="relative aspect-3/2 w-full rounded shadow select-none! md:aspect-4/1"
+      className="aspect-1.53/1 relative w-full rounded shadow select-none! md:aspect-4/1"
     >
       <CarouselContent className="h-full rounded">
         {slides.map(({ images, link }, index) => {

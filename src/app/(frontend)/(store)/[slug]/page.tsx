@@ -5,16 +5,27 @@ import { getFaqJsonLd } from '@/utils/json-ld/get-faqs-json-ld';
 import { convertLexicalToPlaintext } from '@payloadcms/richtext-lexical/plaintext';
 import { getPayload } from 'payload';
 
-export default async function Home() {
-  const payload = await getPayload({
-    config,
-  });
+type Props = {
+  params: Promise<{
+    slug: string;
+  }>;
+};
+
+export default async function Page({ params: paramsPromise }: Props) {
+  const [params, payload] = await Promise.all([
+    paramsPromise,
+    getPayload({
+      config,
+    }),
+  ]);
+
+  const { slug } = params;
 
   const { docs: pages } = await payload.find({
     collection: 'pages',
     where: {
       slug: {
-        equals: 'home',
+        equals: slug,
       },
     },
     populate: {
@@ -33,6 +44,7 @@ export default async function Home() {
   });
 
   const page = pages[0];
+
   const faqs = page.layout
     .filter((block) => block.blockType == 'faq')
     .flatMap((block) =>
@@ -49,10 +61,6 @@ export default async function Home() {
       <JsonLd jsonLd={faqJsonLd} />
       <div className="relative w-full space-y-10 lg:space-y-14">
         <RenderBlocks blocks={page?.layout} />
-        {/* <CategoriesList /> */}
-        {/* <TopBrandsCarousel /> */}
-        {/* <DailyEssentials /> */}
-        {/* <Component /> */}
       </div>
     </>
   );

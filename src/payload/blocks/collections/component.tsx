@@ -2,6 +2,7 @@ import { Countdown } from '@/components/countdown';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Badge } from '@/components/ui/badge';
 import { CollectionBlock, type Product } from '@/payload/types';
+import { isFuture } from 'date-fns';
 import { ChevronRight, ImageOff } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -29,11 +30,11 @@ export function Collection({ collection }: CollectionBlock) {
         }}
       >
         <h2 className="scroll-m-20 space-x-2 text-lg font-bold">{title}</h2>
-        {timer && (
-          <div className="mx-auto">
+        {timer && isFuture(timer) && (
+          <div className="mx-auto tracking-tight">
             <span className="capitalize">Time left</span>
             &nbsp;
-            <Countdown end={timer} className="inline-flex w-40 font-bold tabular-nums" />
+            <Countdown date={timer} />
           </div>
         )}
         {href && (

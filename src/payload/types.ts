@@ -68,6 +68,7 @@ export interface Config {
   blocks: {
     slider: SliderBlock;
     collection: CollectionBlock;
+    faq: FAQBlock;
     richText: RichTextBlock;
   };
   collections: {
@@ -559,6 +560,35 @@ export interface Category {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FAQBlock".
+ */
+export interface FAQBlock {
+  faqs: {
+    question: string;
+    answer: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+    id?: string | null;
+  }[];
+  center: boolean;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'faq';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "RichTextBlock".
  */
 export interface RichTextBlock {
@@ -780,7 +810,15 @@ export interface Page {
    */
   generateSlug?: boolean | null;
   slug: string;
-  layout: (SliderBlock | CollectionBlock | RichTextBlock)[];
+  layout: (SliderBlock | CollectionBlock | FAQBlock | RichTextBlock)[];
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -1090,6 +1128,13 @@ export interface PagesSelect<T extends boolean = true> {
   generateSlug?: T;
   slug?: T;
   layout?: T | {};
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
