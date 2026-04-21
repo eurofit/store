@@ -27,21 +27,29 @@ export function H2(props: H2Props) {
 }
 
 export function H3(props: H3Props) {
-  return <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight" {...props} />;
+  return (
+    <h3 className="mt-4 scroll-m-20 text-2xl font-semibold tracking-tight" {...props} />
+  );
 }
 
 export function H4(props: H4Props) {
-  return <h4 className="scroll-m-20 text-xl font-semibold tracking-tight" {...props} />;
+  return (
+    <h4 className="mt-2 scroll-m-20 text-xl font-semibold tracking-tight" {...props} />
+  );
 }
 
 export function H5(props: H5Props) {
-  return <h5 className="scroll-m-20 text-lg font-medium tracking-tight" {...props} />;
+  return (
+    <h5 className="mt-2 scroll-m-20 text-lg font-medium tracking-tight" {...props} />
+  );
 }
 
 export function H6(props: H6Props) {
-  return <h6 className="scroll-m-20 text-base font-medium tracking-tight" {...props} />;
+  return (
+    <h6 className="mt-2 scroll-m-20 text-base font-medium tracking-tight" {...props} />
+  );
 }
 
 export function P(props: PProps) {
-  return <p className="leading-7 not-first:mt-4" {...props} />;
+  return <p className="mt-2 leading-7 not-first:mt-4" {...props} />;
 }
