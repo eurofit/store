@@ -26,7 +26,7 @@ export const smConverters: JSXConvertersFunction<NodeTypes> = ({
 
     return (
       <Comp
-        className={cn('my-3 ml-3 [&>li]:mt-2', {
+        className={cn('my-3 ml-3 text-sm [&>li]:mt-2', {
           'list-disc': node.listType === 'bullet',
           'list-decimal': node.listType === 'number',
           'list-inside [&>li]:before:content-["✓"]': node.listType === 'check',
