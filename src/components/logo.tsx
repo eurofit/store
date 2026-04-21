@@ -22,7 +22,7 @@ type LogoProps = {
 } & VariantProps<typeof logoVariants> &
   React.HTMLAttributes<HTMLDivElement>;
 
-export function Logo({ variant, rootClass, className, as = 'h1' }: LogoProps) {
+export function Logo({ variant, rootClass, className, as = 'span' }: LogoProps) {
   const Comp = as;
   return (
     <Link href="/" aria-label={site.name} className={cn(rootClass)}>
