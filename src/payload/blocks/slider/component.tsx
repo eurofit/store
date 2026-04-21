@@ -58,8 +58,8 @@ export function Slider({ slides, showArrows, showDots }: SliderBlock) {
       </CarouselContent>
       {hasSlides && showArrows && (
         <>
-          <CarouselPrevious variant="default" className="-left-4" />
-          <CarouselNext variant="default" className="-right-4" />
+          <CarouselPrevious variant="default" className="-left-4" size="icon" />
+          <CarouselNext variant="default" className="-right-4" size="icon" />
         </>
       )}
       {hasSlides && showDots && <CarouselDots className="-bottom-4" />}
