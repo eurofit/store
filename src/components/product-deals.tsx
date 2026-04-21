@@ -1,6 +1,5 @@
 'use client';
 
-import { Countdown } from '@/components/countdown';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Badge } from '@/components/ui/badge';
 import { ChevronRight } from 'lucide-react';
@@ -22,10 +21,10 @@ export function ProductDeals({}: ProductDealsProps) {
         <div className="mx-auto">
           <span className="capitalize">Time left</span>
           &nbsp;
-          <Countdown
+          {/* <Countdown
             end={end.toISOString()}
             className="inline-flex w-32 font-bold tabular-nums"
-          />
+          /> */}
         </div>
 
         <Link href="#" className="ml-auto flex items-center gap-2">
