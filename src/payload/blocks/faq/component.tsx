@@ -1,3 +1,4 @@
+import { smConverters } from '@/components/rich-text/converters/sm';
 import {
   Accordion,
   AccordionContent,
@@ -21,7 +22,7 @@ export function Faq({ faqs, center }: FAQBlock) {
           <AccordionItem key={index} value={`faq-item-${index + 1}`} className="">
             <AccordionTrigger className="text-base">{faq.question}</AccordionTrigger>
             <AccordionContent>
-              <RichText data={faq.answer} />
+              <RichText data={faq.answer} converters={smConverters} />
             </AccordionContent>
           </AccordionItem>
         ))}
