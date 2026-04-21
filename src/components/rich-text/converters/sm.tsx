@@ -11,13 +11,7 @@ export const smConverters: JSXConvertersFunction<NodeTypes> = ({
   paragraph: ({ node, nodesToJSX }) => {
     const content = nodesToJSX({ nodes: node.children });
 
-    const text =
-      typeof content === 'string'
-        ? content
-        : Array.isArray(content)
-          ? content.join('')
-          : '';
-    return <p className="leading-6 not-first:mt-2">{text}</p>;
+    return <p className="leading-6 not-first:mt-2">{content}</p>;
   },
   list: ({ node, nodesToJSX }) => {
     const content = nodesToJSX({ nodes: node.children });
