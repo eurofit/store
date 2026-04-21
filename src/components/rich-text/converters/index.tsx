@@ -11,4 +11,5 @@ export const converters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters
   ...headingConverter,
   ...paragraphConverter,
   ...listConverter,
+  horizontalrule: () => <hr className="my-4" />,
 });
