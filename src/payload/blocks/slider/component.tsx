@@ -9,11 +9,13 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { useInView } from '@/hooks/use-in-view';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { type SliderBlock } from '@/payload/types';
 import Autoplay from 'embla-carousel-autoplay';
 import Link from 'next/link';
 
 export function Slider({ slides, showArrows, showDots }: SliderBlock) {
+  const isMobile = useIsMobile();
   const { ref, isInView } = useInView();
 
   const isActive = isInView && slides.length > 1;
@@ -58,8 +60,16 @@ export function Slider({ slides, showArrows, showDots }: SliderBlock) {
       </CarouselContent>
       {hasSlides && showArrows && (
         <>
-          <CarouselPrevious variant="default" className="-left-4" size="icon" />
-          <CarouselNext variant="default" className="-right-4" size="icon" />
+          <CarouselPrevious
+            variant="default"
+            className="-left-4"
+            size={isMobile ? 'icon' : 'icon-lg'}
+          />
+          <CarouselNext
+            variant="default"
+            className="-right-4"
+            size={isMobile ? 'icon' : 'icon-lg'}
+          />
         </>
       )}
       {hasSlides && showDots && <CarouselDots className="-bottom-4" />}
