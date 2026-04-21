@@ -31,7 +31,7 @@ export function Slider({ slides, showArrows, showDots }: SliderBlock) {
       opts={{ loop: true, active: isActive }}
       plugins={[
         Autoplay({
-          delay: 5000,
+          delay: 4000,
           stopOnInteraction: false,
         }),
       ]}
