@@ -3,6 +3,7 @@ import { site } from '@/constants/site';
 import { env, publicUrl } from '@/env.mjs';
 import { postgresAdapter } from '@payloadcms/db-postgres';
 import { resendAdapter } from '@payloadcms/email-resend';
+import { formBuilderPlugin } from '@payloadcms/plugin-form-builder';
 import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs';
 import { seoPlugin } from '@payloadcms/plugin-seo';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
@@ -93,6 +94,8 @@ export default buildConfig({
       uploadsCollection: 'media',
       generateURL: ({ doc }) => publicUrl + '/' + doc.slug,
     }),
+
+    formBuilderPlugin({}),
   ],
   sharp,
 });
