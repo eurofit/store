@@ -1,45 +1,12 @@
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { site } from '@/constants/site';
 import config from '@/payload/config';
-import { SendHorizonal } from 'lucide-react';
+import { slugify } from '@/utils/slugify';
 import Link from 'next/link';
 import { getPayload } from 'payload';
 import CurrentYear from './current-year';
 import { Logo } from './logo';
+import { Newsletter } from './newsletter';
 
-const QUICK_LINKS = [
-  'Products',
-  'About Us',
-  'Store Locator',
-  'Careers',
-  'Contact',
-  'FAQ',
-];
-const CUSTOMER_SERVICE = [
-  'Shipping Info',
-  'Returns',
-  'Order Tracking',
-  'Size Guide',
-  'Gift Cards',
-  'Help Center',
-];
-const RESOURCES = [
-  'Blog',
-  'Fitness Tips',
-  'Nutrition Guide',
-  'Workout Plans',
-  'Product Reviews',
-  'Community',
-];
-const COMPANY = [
-  'Our Story',
-  'Wholesale',
-  'Partnerships',
-  'Sustainability',
-  'Press Kit',
-  'Affiliates',
-];
 const LEGAL = ['Terms of Service', 'Privacy Policy', 'Cookie Policy', 'Returns Policy'];
 
 export async function Footer() {
@@ -53,13 +20,13 @@ export async function Footer() {
 
   return (
     <footer
-      className="no-italic border-t px-6 py-12 md:py-16"
+      className="no-italic relative w-full border-t px-6 py-12 md:py-16"
       aria-labelledby="footer-heading"
     >
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
-      <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-10">
+      <div className="flex grow flex-wrap items-start justify-between gap-10">
         {/* Brand Section */}
         <div className="flex flex-col items-start gap-4">
           <div>
@@ -93,10 +60,10 @@ export async function Footer() {
           </div>
         </div>
 
-        <nav>
-          {footer.nav.map(({ label, links }) => (
-            <section className="grid gap-2" aria-labelledby="quick-links-heading">
-              <h2 id="quick-links-heading" className="text-sm font-semibold">
+        <nav className="grid grow grid-cols-3 gap-6 md:mx-auto md:flex md:flex-wrap md:items-start md:justify-evenly">
+          {footer.nav.map(({ label, links, id }) => (
+            <section key={id} className="grid gap-2">
+              <h2 id={slugify(label)} className="text-sm font-semibold">
                 {label}
               </h2>
               {links?.map(({ label, url, id }) => (
@@ -113,35 +80,7 @@ export async function Footer() {
           ))}
         </nav>
 
-        {/* Newsletter */}
-        <div className="grid max-w-xs gap-2 max-sm:col-span-full max-sm:row-start-3 md:col-span-2 lg:col-span-1">
-          <p className="text-sm font-semibold">Stay Updated</p>
-          <p className="text-muted-foreground text-sm">
-            Subscribe for exclusive offers & tips.
-          </p>
-          <form className="flex flex-col gap-2" aria-label="Newsletter signup">
-            <div className="flex gap-2">
-              <Input
-                type="email"
-                placeholder="you@example.com"
-                className="h-9"
-                autoComplete="email"
-                spellCheck={false}
-                required
-                aria-label="Email address"
-              />
-              <Button
-                type="submit"
-                size="sm"
-                className="h-9"
-                aria-label="Subscribe to newsletter"
-              >
-                <SendHorizonal className="h-4 w-4" aria-hidden="true" />
-                <span className="sr-only">Subscribe</span>
-              </Button>
-            </div>
-          </form>
-        </div>
+        <Newsletter />
       </div>
 
       {/* Bottom Section */}

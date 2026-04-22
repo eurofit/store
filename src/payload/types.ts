@@ -70,7 +70,7 @@ export interface Config {
     collection: CollectionBlock;
     faq: FAQBlock;
     richText: RichTextBlock;
-    form: Form;
+    form: FormBlock;
   };
   collections: {
     media: Media;
@@ -89,7 +89,7 @@ export interface Config {
     inventory: InventoryItem;
     'stock-alerts': StockAlert;
     events: Event;
-    forms: Form1;
+    forms: Form;
     'form-submissions': FormSubmission;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -620,10 +620,10 @@ export interface RichTextBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "form".
+ * via the `definition` "FormBlock".
  */
-export interface Form {
-  form: string | Form1;
+export interface FormBlock {
+  form: string | Form;
   id?: string | null;
   blockName?: string | null;
   blockType: 'form';
@@ -632,7 +632,7 @@ export interface Form {
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "forms".
  */
-export interface Form1 {
+export interface Form {
   id: string;
   title: string;
   fields?:
@@ -1133,7 +1133,7 @@ export interface Event {
  */
 export interface FormSubmission {
   id: string;
-  form: string | Form1;
+  form: string | Form;
   submissionData?:
     | {
         field: string;
@@ -1234,7 +1234,7 @@ export interface PayloadLockedDocument {
       } | null)
     | ({
         relationTo: 'forms';
-        value: string | Form1;
+        value: string | Form;
       } | null)
     | ({
         relationTo: 'form-submissions';
