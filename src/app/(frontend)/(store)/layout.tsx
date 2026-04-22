@@ -17,7 +17,9 @@ export default async function StoreLayout({ children }: StoreLayoutProps) {
       <div className="relative min-h-[calc(100vh-5rem)] p-4 md:min-h-[calc(100vh-4rem)] md:p-6">
         {children}
       </div>
-      <Footer />
+      <React.Suspense fallback={<div>Loading footer...</div>}>
+        <Footer />
+      </React.Suspense>
     </div>
   );
 }

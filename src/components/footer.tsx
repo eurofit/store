@@ -1,8 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { site } from '@/constants/site';
+import config from '@/payload/config';
 import { SendHorizonal } from 'lucide-react';
 import Link from 'next/link';
+import { getPayload } from 'payload';
 import CurrentYear from './current-year';
 import { Logo } from './logo';
 
@@ -41,6 +43,14 @@ const COMPANY = [
 const LEGAL = ['Terms of Service', 'Privacy Policy', 'Cookie Policy', 'Returns Policy'];
 
 export async function Footer() {
+  const payload = await getPayload({
+    config,
+  });
+
+  const footer = await payload.findGlobal({
+    slug: 'footer',
+  });
+
   return (
     <footer
       className="no-italic border-t px-6 py-12 md:py-16"
@@ -83,68 +93,23 @@ export async function Footer() {
           </div>
         </div>
 
-        {/* Quick Links */}
-        <nav className="grid gap-2" aria-labelledby="quick-links-heading">
-          <p id="quick-links-heading" className="text-sm font-semibold">
-            Quick Links
-          </p>
-          {QUICK_LINKS.map((item, index) => (
-            <Link
-              key={`quick-links-${index}`}
-              href="#"
-              className="animated-underline text-muted-foreground hover:text-primary w-fit text-sm transition-colors"
-              prefetch={false}
-            >
-              {item}
-            </Link>
-          ))}
-        </nav>
-        {/* Customer Service */}
-        <nav className="grid gap-2" aria-labelledby="customer-service-heading">
-          <p id="customer-service-heading" className="text-sm font-semibold">
-            Customer Service
-          </p>
-          {CUSTOMER_SERVICE.map((item, index) => (
-            <Link
-              key={`customer-service-${index}`}
-              href="#"
-              className="animated-underline text-muted-foreground hover:text-primary w-fit text-sm transition-colors"
-              prefetch={false}
-            >
-              {item}
-            </Link>
-          ))}
-        </nav>
-        {/* Resources */}
-        <nav className="grid gap-2" aria-labelledby="resources-heading">
-          <p id="resources-heading" className="text-sm font-semibold">
-            Resources
-          </p>
-          {RESOURCES.map((item, index) => (
-            <Link
-              key={`resources-${index}`}
-              href="#"
-              className="animated-underline text-muted-foreground hover:text-primary w-fit text-sm transition-colors"
-              prefetch={false}
-            >
-              {item}
-            </Link>
-          ))}
-        </nav>
-        {/* Company */}
-        <nav className="grid gap-2" aria-labelledby="company-heading">
-          <p id="company-heading" className="text-sm font-semibold">
-            Company
-          </p>
-          {COMPANY.map((item, index) => (
-            <Link
-              key={`company-${index}`}
-              href="#"
-              className="animated-underline text-muted-foreground hover:text-primary w-fit text-sm transition-colors"
-              prefetch={false}
-            >
-              {item}
-            </Link>
+        <nav>
+          {footer.nav.map(({ label, links }) => (
+            <section className="grid gap-2" aria-labelledby="quick-links-heading">
+              <h2 id="quick-links-heading" className="text-sm font-semibold">
+                {label}
+              </h2>
+              {links?.map(({ label, url, id }) => (
+                <Link
+                  key={id}
+                  href={url}
+                  className="animated-underline text-muted-foreground hover:text-primary w-fit text-sm transition-colors"
+                  prefetch={false}
+                >
+                  {label}
+                </Link>
+              ))}
+            </section>
           ))}
         </nav>
 
