@@ -31,7 +31,7 @@ export const footer: GlobalConfig = {
         },
       ],
       required: true,
-      minRows: 4,
+      //   minRows: 4,
     },
   ],
 };
