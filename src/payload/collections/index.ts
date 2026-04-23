@@ -14,6 +14,7 @@ import { products } from '@/payload/collections/products';
 import { StockAlerts } from '@/payload/collections/stock-alerts';
 import { transactions } from '@/payload/collections/transactions';
 import { users } from '@/payload/collections/users';
+import { discounts } from './discounts';
 
 export const collections = [
   media,
@@ -23,6 +24,7 @@ export const collections = [
   brands,
   products,
   collectionsConfig,
+  discounts,
   productLines,
   categories,
   carts,

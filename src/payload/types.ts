@@ -80,6 +80,7 @@ export interface Config {
     brands: Brand;
     products: Product;
     collections: Collection;
+    discounts: Discount;
     'product-lines': ProductLine;
     categories: Category;
     carts: Cart;
@@ -126,6 +127,7 @@ export interface Config {
     brands: BrandsSelect<false> | BrandsSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     collections: CollectionsSelect<false> | CollectionsSelect<true>;
+    discounts: DiscountsSelect<false> | DiscountsSelect<true>;
     'product-lines': ProductLinesSelect<false> | ProductLinesSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     carts: CartsSelect<false> | CartsSelect<true>;
@@ -1015,6 +1017,22 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "discounts".
+ */
+export interface Discount {
+  id: string;
+  type: 'amount' | 'buy-x-get-y';
+  valueType?: ('fixed' | 'percentage') | null;
+  value?: number | null;
+  appliesTo?: ('products' | 'collections' | 'categories') | null;
+  productLines?: (string | ProductLine)[] | null;
+  startDate: string;
+  endDate?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "orders".
  */
 export interface Order {
@@ -1195,6 +1213,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'collections';
         value: string | Collection;
+      } | null)
+    | ({
+        relationTo: 'discounts';
+        value: string | Discount;
       } | null)
     | ({
         relationTo: 'product-lines';
@@ -1450,6 +1472,21 @@ export interface CollectionsSelect<T extends boolean = true> {
         contentFg?: T;
       };
   timer?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "discounts_select".
+ */
+export interface DiscountsSelect<T extends boolean = true> {
+  type?: T;
+  valueType?: T;
+  value?: T;
+  appliesTo?: T;
+  productLines?: T;
+  startDate?: T;
+  endDate?: T;
   updatedAt?: T;
   createdAt?: T;
 }
