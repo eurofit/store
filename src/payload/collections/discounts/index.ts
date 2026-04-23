@@ -85,7 +85,7 @@ export const discounts: CollectionConfig = {
       relationTo: 'product-lines',
       hasMany: true,
       admin: {
-        condition: (data) => data?.appliesTo === 'products',
+        condition: (data) => data?.appliesTo === 'products' && data.type === 'amount',
       },
     },
     {
@@ -93,10 +93,21 @@ export const discounts: CollectionConfig = {
       type: 'date',
       required: true,
       defaultValue: new Date().toISOString(),
+      admin: {
+        date: {
+          pickerAppearance: 'dayAndTime',
+        },
+      },
     },
     {
       name: 'endDate',
       type: 'date',
+      admin: {
+        date: {
+          pickerAppearance: 'dayAndTime',
+          minDate: new Date(),
+        },
+      },
     },
   ],
 };
