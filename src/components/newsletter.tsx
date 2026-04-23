@@ -14,8 +14,14 @@ import { ButtonGroup } from './ui/button-group';
 import { Spinner } from './ui/spinner';
 
 export function Newsletter() {
-  const { mutateAsync: subscribe, isPending: isSubscribing } = useMutation({
+  const { mutate: subscribe, isPending: isSubscribing } = useMutation({
     mutationFn: subscribeToNewsletter,
+    onSuccess: () => {
+      toast.success('Subscribed to newsletter successfully!');
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
   });
 
   const form = useForm({
@@ -26,11 +32,7 @@ export function Newsletter() {
   });
 
   const onSubmit = (data: NewsLetterData) => {
-    toast.promise(subscribe(data), {
-      loading: 'Subscribing...',
-      success: 'Subscribed successfully!',
-      error: 'Failed to subscribe. Please try again.',
-    });
+    subscribe(data);
   };
 
   return (
