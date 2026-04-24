@@ -129,12 +129,13 @@ export async function getProductsByBrand(opts: GetProductsByBrandArgs) {
       productLines: (product.productLines.docs
         ?.filter((pl) => typeof pl === 'object')
         .map((productLine) => {
-          const { srcStock, retailPrice, ...pl } = productLine;
+          const { srcStock, retailPrice, discounts, ...pl } = productLine;
 
           return {
             ...pl,
             stock: pl.stock || (srcStock ?? 0),
             price: retailPrice ?? null,
+            discounts: discounts?.docs?.filter((d) => typeof d === 'object') || [],
           };
         }) || []) as unknown as ProductLine[],
     };

@@ -1,9 +1,9 @@
+import { titleCase } from '@/payload/hooks/title-case';
 import { CollectionConfig, slugField } from 'payload';
 import { checkIfBackOrder } from './hooks/check-if-back-ordered';
 import { checkIfLowStock } from './hooks/check-if-low-stock';
 import { checkIfOutOfStock } from './hooks/check-if-out-stock';
 import { checkIfNotfiyRequested } from './hooks/check-notify-requested';
-import { titleCase } from '@/payload/hooks/title-case';
 
 export const productLines: CollectionConfig = {
   slug: 'product-lines',
@@ -162,19 +162,42 @@ export const productLines: CollectionConfig = {
       label: 'Pricing',
       fields: [
         {
-          name: 'srcPrice',
-          type: 'number',
-          label: 'Source Price (GBP)',
-          admin: {
-            description: 'Original price from the supplier in GBP.',
-          },
+          type: 'row',
+          fields: [
+            {
+              name: 'srcPrice',
+              type: 'number',
+              label: 'Source Price (GBP)',
+              admin: {
+                description: 'Original price from the supplier in GBP.',
+              },
+            },
+            {
+              name: 'srcDiscountedPrice',
+              type: 'number',
+              label: 'Source Discounted Price (GBP)',
+              admin: {
+                description: 'Discounted supplier price, if any.',
+              },
+            },
+            {
+              name: 'priceFetchedAt',
+              type: 'date',
+              label: 'Price Fetched At',
+              admin: {
+                description:
+                  'When the source price was last updated. Used to determine if price refresh is needed.',
+              },
+            },
+          ],
         },
         {
-          name: 'srcDiscountedPrice',
+          name: 'costPrice',
           type: 'number',
-          label: 'Source Discounted Price (GBP)',
+          label: 'Cost Price (KES)',
           admin: {
-            description: 'Discounted supplier price, if any.',
+            description:
+              'Calculated cost price in KES (from source price + shipping + import costs). Used for margin calculations.',
           },
         },
         {
@@ -290,6 +313,14 @@ export const productLines: CollectionConfig = {
             },
           ],
         },
+        {
+          name: 'supplier',
+          type: 'relationship',
+          relationTo: 'suppliers',
+          admin: {
+            description: 'The supplier providing this product line.',
+          },
+        },
       ],
     },
 
@@ -399,6 +430,12 @@ export const productLines: CollectionConfig = {
       type: 'number',
       virtual: true,
       defaultValue: 0,
+    },
+    {
+      name: 'discounts',
+      type: 'join',
+      collection: 'discounts',
+      on: 'productLines',
     },
   ],
 

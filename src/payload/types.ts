@@ -77,6 +77,7 @@ export interface Config {
     users: User;
     pages: Page;
     addresses: Address;
+    suppliers: Supplier;
     brands: Brand;
     products: Product;
     collections: Collection;
@@ -111,6 +112,7 @@ export interface Config {
     };
     'product-lines': {
       inventory: 'inventory';
+      discounts: 'discounts';
     };
     categories: {
       products: 'products';
@@ -124,6 +126,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     addresses: AddressesSelect<false> | AddressesSelect<true>;
+    suppliers: SuppliersSelect<false> | SuppliersSelect<true>;
     brands: BrandsSelect<false> | BrandsSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     collections: CollectionsSelect<false> | CollectionsSelect<true>;
@@ -432,6 +435,14 @@ export interface ProductLine {
    */
   srcDiscountedPrice?: number | null;
   /**
+   * When the source price was last updated. Used to determine if price refresh is needed.
+   */
+  priceFetchedAt?: string | null;
+  /**
+   * Calculated cost price in KES (from source price + shipping + import costs). Used for margin calculations.
+   */
+  costPrice?: number | null;
+  /**
    * Customer price in KES (calculated from source price, shipping, margin).
    */
   retailPrice?: number | null;
@@ -472,6 +483,10 @@ export interface ProductLine {
    */
   servingSize?: number | null;
   /**
+   * The supplier providing this product line.
+   */
+  supplier?: (string | null) | Supplier;
+  /**
    * Supplier’s product code.
    */
   srcProductCode?: string | null;
@@ -505,6 +520,38 @@ export interface ProductLine {
     totalDocs?: number;
   };
   inventoryStock?: number | null;
+  discounts?: {
+    docs?: (string | Discount)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "suppliers".
+ */
+export interface Supplier {
+  id: string;
+  name: string;
+  /**
+   * The supplier's website URL.
+   */
+  url?: string | null;
+  email?: string | null;
+  /**
+   * The supplier's contact phone number.
+   */
+  phone?: string | null;
+  /**
+   * The supplier's Whatsapp contact number.
+   */
+  whatsapp?: string | null;
+  /**
+   * The name of the supplier's sales contact person.
+   */
+  salesPerson?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -519,6 +566,22 @@ export interface InventoryItem {
   retailPrice: number;
   stock: number;
   expiryDate?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "discounts".
+ */
+export interface Discount {
+  id: string;
+  type: 'amount' | 'buy-x-get-y';
+  valueType?: ('fixed' | 'percentage') | null;
+  value?: number | null;
+  appliesTo?: ('products' | 'collections' | 'categories') | null;
+  productLines?: (string | ProductLine)[] | null;
+  startDate: string;
+  endDate?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1017,22 +1080,6 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "discounts".
- */
-export interface Discount {
-  id: string;
-  type: 'amount' | 'buy-x-get-y';
-  valueType?: ('fixed' | 'percentage') | null;
-  value?: number | null;
-  appliesTo?: ('products' | 'collections' | 'categories') | null;
-  productLines?: (string | ProductLine)[] | null;
-  startDate: string;
-  endDate?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "orders".
  */
 export interface Order {
@@ -1201,6 +1248,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'addresses';
         value: string | Address;
+      } | null)
+    | ({
+        relationTo: 'suppliers';
+        value: string | Supplier;
       } | null)
     | ({
         relationTo: 'brands';
@@ -1403,6 +1454,20 @@ export interface AddressesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "suppliers_select".
+ */
+export interface SuppliersSelect<T extends boolean = true> {
+  name?: T;
+  url?: T;
+  email?: T;
+  phone?: T;
+  whatsapp?: T;
+  salesPerson?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "brands_select".
  */
 export interface BrandsSelect<T extends boolean = true> {
@@ -1508,6 +1573,8 @@ export interface ProductLinesSelect<T extends boolean = true> {
   images?: T;
   srcPrice?: T;
   srcDiscountedPrice?: T;
+  priceFetchedAt?: T;
+  costPrice?: T;
   retailPrice?: T;
   wholesalePrice?: T;
   stock?: T;
@@ -1518,6 +1585,7 @@ export interface ProductLinesSelect<T extends boolean = true> {
   weight?: T;
   servingSizePerContainer?: T;
   servingSize?: T;
+  supplier?: T;
   srcProductCode?: T;
   barcode?: T;
   exportCommodityCode?: T;
@@ -1527,6 +1595,7 @@ export interface ProductLinesSelect<T extends boolean = true> {
   isBackorder?: T;
   inventory?: T;
   inventoryStock?: T;
+  discounts?: T;
   updatedAt?: T;
   createdAt?: T;
 }

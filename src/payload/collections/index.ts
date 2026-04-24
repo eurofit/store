@@ -15,12 +15,14 @@ import { StockAlerts } from '@/payload/collections/stock-alerts';
 import { transactions } from '@/payload/collections/transactions';
 import { users } from '@/payload/collections/users';
 import { discounts } from './discounts';
+import { suppliers } from './suppliets';
 
 export const collections = [
   media,
   users,
   pages,
   addresses,
+  suppliers,
   brands,
   products,
   collectionsConfig,

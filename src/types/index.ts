@@ -2,6 +2,8 @@
 // nextjs
 // =======================
 
+import { Discount } from '@/payload/types';
+
 export type SearchParams = {
   [key: string]: string | string[] | undefined;
 };
@@ -34,6 +36,7 @@ export type ProductLine = {
   isOutOfStock: boolean;
   isLowStock: boolean;
   isNotifyRequested: boolean;
+  discounts?: Discount[];
 };
 
 export type Product = {

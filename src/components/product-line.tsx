@@ -153,7 +153,7 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
     });
   }, [line.stock, debouncedCommitChange]);
 
-  // TODO: refactor qty input to separate component be reusable in cart sheet and checkout item
+  const discount = line.discounts?.[0];
 
   return (
     <div
@@ -178,9 +178,11 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
               {line.variant}
             </h3>
           )}
-          {false && (
+          {discount && discount.type === 'amount' && (
             <Badge variant="destructive" className="text-xs">
-              {52}%
+              {discount.valueType === 'percentage' && `${discount.value}% Off`}
+              {discount.valueType === 'fixed' &&
+                `Ksh ${formatWithCommas(discount.value!)} Off`}
             </Badge>
           )}
         </div>
