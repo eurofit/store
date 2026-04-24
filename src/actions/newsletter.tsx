@@ -2,19 +2,60 @@
 
 import config from '@/payload/config';
 import { NewsLetterData, newsletterSchema } from '@/schemas/newsletter';
-import { APIError, getPayload } from 'payload';
+import { getPayload } from 'payload';
+import { z } from 'zod';
 
-export async function subscribeToNewsletter(unsafeData: NewsLetterData) {
-  const { email } = newsletterSchema.parse(unsafeData);
+export type NewletterActionState = true | z.core.$ZodErrorTree<NewsLetterData> | null;
+
+export async function subscribeToNewsletter(
+  _prevState: NewletterActionState,
+  formData: FormData,
+) {
+  if (!(formData instanceof FormData)) {
+    return {
+      errors: ['Invalid form data'],
+    };
+  }
+
+  const unsafeData = Object.fromEntries(formData.entries());
+
+  const validationRes = newsletterSchema.safeParse(unsafeData);
+
+  if (!validationRes.success) {
+    return z.treeifyError<NewsLetterData>(validationRes.error);
+  }
+
+  const { email } = validationRes.data;
 
   const payload = await getPayload({
     config,
   });
 
-  const isEmailSubscribed = await checkIfEmailSubscribedToNewsletter(email);
+  // check if email is already subscribed to the newsletter
 
-  if (isEmailSubscribed) {
-    throw new Error('Email is already subscribed to the newsletter');
+  const { totalDocs } = await payload.count({
+    collection: 'form-submissions',
+    where: {
+      'form.title': {
+        equals: 'Newsletter',
+      },
+      and: [
+        {
+          'submissionData.field': {
+            equals: 'email',
+          },
+          'submissionData.value': {
+            equals: email,
+          },
+        },
+      ],
+    },
+  });
+
+  if (totalDocs > 0) {
+    return {
+      errors: ['Email is already subscribed to the newsletter'],
+    };
   }
 
   const {
@@ -43,42 +84,10 @@ export async function subscribeToNewsletter(unsafeData: NewsLetterData) {
     });
     return true;
   } catch (e) {
-    if (e instanceof APIError) {
-      throw new Error(
-        'Something went wrong while subscribing to the newsletter. Please try again later.',
-      );
-    }
-    if (e instanceof Error) {
-      throw new Error(e.message);
-    }
-
-    throw new Error('Failed to subscribe to newsletter');
-  }
-}
-
-async function checkIfEmailSubscribedToNewsletter(email: string) {
-  const payload = await getPayload({
-    config,
-  });
-
-  const { totalDocs } = await payload.count({
-    collection: 'form-submissions',
-    where: {
-      'form.title': {
-        equals: 'Newsletter',
-      },
-      and: [
-        {
-          'submissionData.field': {
-            equals: 'email',
-          },
-          'submissionData.value': {
-            equals: email,
-          },
-        },
+    return {
+      errors: [
+        'Unexpected error occurred while subscribing to the newsletter. Please try again later.',
       ],
-    },
-  });
-
-  return totalDocs > 0;
+    };
+  }
 }

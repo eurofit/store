@@ -4,36 +4,50 @@ import { subscribeToNewsletter } from '@/actions/newsletter';
 import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldGroup, FieldSet } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { NewsLetterData, newsletterSchema } from '@/schemas/newsletter';
+import { newsletterSchema } from '@/schemas/newsletter';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
 import { SendHorizonal } from 'lucide-react';
+import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { ButtonGroup } from './ui/button-group';
 import { Spinner } from './ui/spinner';
 
 export function Newsletter() {
-  const { mutate: subscribe, isPending: isSubscribing } = useMutation({
-    mutationFn: subscribeToNewsletter,
-    onSuccess: () => {
-      toast.success('Subscribed to newsletter successfully!');
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  });
+  const [state, action, isSubscribing] = React.useActionState(
+    subscribeToNewsletter,
+    null,
+  );
+
+  React.useEffect(() => {
+    if (!state) return;
+
+    if (state === true) {
+      toast.success('Subscribed to newsletter!');
+      return;
+    }
+
+    // incase the error is not produced by fields
+    if ('errors' in state && !('properties' in state)) {
+      toast.error(state.errors.join('\n') ?? 'Something went wrong!');
+      return;
+    }
+
+    if ('properties' in state) {
+      toast.error(state.properties?.email?.errors.join('\n') ?? 'Something went wrong!');
+      form.setError('email', {
+        message: state.properties?.email?.errors.join('\n'),
+      });
+    }
+  }, [state]);
 
   const form = useForm({
     resolver: zodResolver(newsletterSchema),
     defaultValues: {
       email: '',
     },
+    mode: 'onTouched',
   });
-
-  const onSubmit = (data: NewsLetterData) => {
-    subscribe(data);
-  };
 
   return (
     <div className="grid max-w-xs gap-2 max-sm:col-span-full max-sm:row-start-3 md:col-span-2 lg:col-span-1">
@@ -44,7 +58,7 @@ export function Newsletter() {
       <form
         className="flex flex-col gap-2"
         aria-label="Newsletter signup"
-        onSubmit={form.handleSubmit(onSubmit)}
+        action={action}
       >
         <FieldSet>
           <FieldGroup>
