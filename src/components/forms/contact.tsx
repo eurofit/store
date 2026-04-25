@@ -229,7 +229,7 @@ export function ContactForm() {
               className="cf-turnstile"
               data-sitekey={env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITEKEY}
               data-theme="light"
-              data-size="invisible"
+              data-size="flexible"
               data-callback="onTurnstileSuccess"
               data-error-callback="onTurnstileError"
               data-expired-callback="onTurnstileExpired"
