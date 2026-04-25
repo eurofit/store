@@ -4,8 +4,10 @@ import { subscribeToNewsletter } from '@/actions/newsletter';
 import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldGroup, FieldSet } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { env } from '@/env.mjs';
 import { newsletterSchema } from '@/schemas/newsletter';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Turnstile } from '@marsidev/react-turnstile';
 import { SendHorizonal } from 'lucide-react';
 import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -50,7 +52,7 @@ export function Newsletter() {
   });
 
   return (
-    <div className="grid max-w-xs gap-2 max-sm:col-span-full max-sm:row-start-3 md:col-span-2 lg:col-span-1">
+    <div className="w-full max-w-sm space-y-2">
       <p className="text-sm font-semibold">Stay Updated</p>
       <p className="text-muted-foreground text-sm">
         Subscribe for exclusive offers & tips.
@@ -105,6 +107,16 @@ export function Newsletter() {
                 </Field>
               )}
             />
+            <Field>
+              <Turnstile
+                siteKey={env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITEKEY}
+                options={{
+                  theme: 'light',
+                  responseFieldName: 'cfTurnstileResponse',
+                  size: 'flexible',
+                }}
+              />
+            </Field>
           </FieldGroup>
         </FieldSet>
       </form>

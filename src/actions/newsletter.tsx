@@ -1,7 +1,9 @@
 'use server';
 
+import { env } from '@/env.mjs';
 import config from '@/payload/config';
 import { NewsLetterData, newsletterSchema } from '@/schemas/newsletter';
+import { TurnstileServerValidationResponse } from '@marsidev/react-turnstile';
 import { getPayload } from 'payload';
 import { z } from 'zod';
 
@@ -25,7 +27,31 @@ export async function subscribeToNewsletter(
     return z.treeifyError<NewsLetterData>(validationRes.error);
   }
 
-  const { email } = validationRes.data;
+  const { email, cfTurnstileResponse } = validationRes.data;
+
+  // verify turnstile token
+  const turnstileResponse = await fetch(
+    `https://challenges.cloudflare.com/turnstile/v0/siteverify`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        secret: env.CLOUDFLARE_TURNSTILE_SECRET_KEY,
+        response: cfTurnstileResponse,
+      }),
+    },
+  );
+
+  const turnstileData =
+    (await turnstileResponse.json()) as TurnstileServerValidationResponse;
+
+  if (!turnstileData.success) {
+    return {
+      errors: ['Failed to verify CAPTCHA'],
+    };
+  }
 
   const payload = await getPayload({
     config,
