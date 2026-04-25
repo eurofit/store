@@ -38,7 +38,7 @@ export async function subscribeToNewsletter(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        secret: env.CLOUDFLARE_TURNSTILE_SECRET_KEY,
+        secret: env.CLOUDFLARE_TURNSTILE_INVISIBLE_SECRET_KEY,
         response: cfTurnstileResponse,
       }),
     },

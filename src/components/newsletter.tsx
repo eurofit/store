@@ -109,11 +109,11 @@ export function Newsletter() {
             />
             <Field>
               <Turnstile
-                siteKey={env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITEKEY}
+                siteKey={env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_INVISIBLE_SITEKEY}
                 options={{
                   theme: 'light',
                   responseFieldName: 'cfTurnstileResponse',
-                  size: 'flexible',
+                  size: 'invisible',
                 }}
               />
             </Field>
