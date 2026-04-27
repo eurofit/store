@@ -56,16 +56,21 @@ export const slider: Block = {
           defaultValue: true,
         },
         {
-          name: 'showArrows',
-          label: 'Show Arrows',
-          type: 'checkbox',
-          defaultValue: true,
-        },
-        {
-          name: 'showDots',
-          label: 'Show Dots',
-          type: 'checkbox',
-          defaultValue: true,
+          type: 'row',
+          fields: [
+            {
+              name: 'showArrows',
+              label: 'Show Arrows',
+              type: 'checkbox',
+              defaultValue: true,
+            },
+            {
+              name: 'showDots',
+              label: 'Show Dots',
+              type: 'checkbox',
+              defaultValue: true,
+            },
+          ],
         },
       ],
     },
