@@ -428,6 +428,7 @@ export const productLines: CollectionConfig = {
       type: 'join',
       collection: 'discounts',
       on: 'productLines',
+      maxDepth: 7,
     },
   ],
 

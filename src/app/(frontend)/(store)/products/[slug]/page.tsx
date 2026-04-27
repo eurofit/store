@@ -55,6 +55,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <>
+      <pre>{JSON.stringify(product, null, 2)}</pre>
       <JsonLd jsonLd={jsonLd} />
       <div className="space-y-10">
         <Breadcrumb>

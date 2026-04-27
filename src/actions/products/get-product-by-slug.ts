@@ -43,6 +43,7 @@ export const getProductBySlug = cache(async (slug: string) => {
         isOutOfStock: true,
         isNotifyRequested: true,
         category: true,
+        discounts: true,
       },
       categories: {
         slug: true,
@@ -69,7 +70,8 @@ export const getProductBySlug = cache(async (slug: string) => {
     },
     limit: 1,
     pagination: false,
-    depth: 3,
+    depth: 6,
+    user: user?.id,
   });
 
   if (!docs.length) return null;
@@ -93,6 +95,7 @@ export const getProductBySlug = cache(async (slug: string) => {
         ...pl,
         stock: pl.stock || (srcStock ?? 0),
         price: retailPrice ?? null,
+        discounts: pl.discounts?.docs,
       };
     }) || []) as unknown as ProductLine[];
 

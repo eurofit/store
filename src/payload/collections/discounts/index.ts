@@ -39,6 +39,9 @@ const APPLIES_TO_OPTIONS = [
 
 export const discounts: CollectionConfig = {
   slug: 'discounts',
+  access: {
+    read: () => true,
+  },
   fields: [
     {
       name: 'type',
