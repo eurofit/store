@@ -1,8 +1,10 @@
 import { ContactCard } from '@/components/cards/contact';
 import { ContactForm } from '@/components/forms/contact';
 import { Whatsapp } from '@/components/icons/whatsapp';
+import config from '@/payload/config';
 import { Mail, MapPin, Phone } from 'lucide-react';
 import type { Metadata } from 'next';
+import { getPayload } from 'payload';
 
 const contacts = [
   {
@@ -58,32 +60,47 @@ export const metadata: Metadata = {
   description: 'Get in touch with our team for any inquiries or support.',
 };
 
-export default function ContactUs() {
+export default async function ContactUs() {
+  const payload = await getPayload({
+    config,
+  });
+
+  const {
+    docs: [form],
+  } = await payload.find({
+    collection: 'forms',
+    where: {
+      title: {
+        equals: 'Contact us',
+      },
+    },
+    limit: 1,
+    pagination: false,
+  });
+
   return (
-    <>
-      <div className="container mx-auto max-w-5xl p-6 pb-16">
-        <hgroup className="mx-auto flex max-w-3xl flex-col items-center space-y-2 text-center">
-          <span className="text-muted-foreground text-sm font-medium tracking-widest uppercase">
-            Reach us
-          </span>
-          <h1 className="scroll-m-20 text-3xl font-bold tracking-tight">
-            Speak With our Friendly team
-          </h1>
-          <p className="text-muted-foreground max-w-lg text-lg text-pretty">
-            Have a question about products, bulk orders, delivery, or partnerships? Our
-            Nairobi team is ready to help. Fill in the form or contact us directly below.
-          </p>
-        </hgroup>
-        <div className="mt-10 flex flex-wrap gap-10 max-md:flex-col">
-          <div className="flex-1">
-            <ContactsSection />
-          </div>
-          <div className="flex-1">
-            <ContactForm />
-          </div>
+    <div className="container mx-auto max-w-5xl p-6 pb-16">
+      <hgroup className="mx-auto flex max-w-3xl flex-col items-center space-y-2 text-center">
+        <span className="text-muted-foreground text-sm font-medium tracking-widest uppercase">
+          Reach us
+        </span>
+        <h1 className="scroll-m-20 text-3xl font-bold tracking-tight">
+          Speak With our Friendly team
+        </h1>
+        <p className="text-muted-foreground max-w-lg text-lg text-pretty">
+          Have a question about products, bulk orders, delivery, or partnerships? Our
+          Nairobi team is ready to help. Fill in the form or contact us directly below.
+        </p>
+      </hgroup>
+      <div className="mt-10 flex flex-wrap gap-10 max-md:flex-col">
+        <div className="flex-1">
+          <ContactsSection />
+        </div>
+        <div className="flex-1">
+          <ContactForm form={form} />
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

@@ -13,16 +13,23 @@ import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
 import { env } from '@/env.mjs';
-import { contactFormSchema, ContactFormValues } from '@/schemas/contact';
+import { Form } from '@/payload/types';
 import { cn } from '@/utils/cn';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Turnstile } from '@marsidev/react-turnstile';
 import { useMutation } from '@tanstack/react-query';
-import Script from 'next/script';
-import { useEffect } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, UseFormReturn } from 'react-hook-form';
 import { toast } from 'sonner';
+import { z } from 'zod';
 
-export function ContactForm() {
+const schema = z.record(z.string(), z.union([z.string(), z.number(), z.boolean()]));
+type FormData = z.infer<typeof schema>;
+
+type ContactFormProps = {
+  form: Form;
+};
+
+export function ContactForm({ form: serverForm }: ContactFormProps) {
   const { mutate: sendEmail, isPending: isSending } = useMutation({
     mutationKey: ['contact-email'],
     mutationFn: sendContactEmail,
@@ -40,216 +47,115 @@ export function ContactForm() {
     },
   });
 
-  const form = useForm<ContactFormValues>({
-    resolver: zodResolver(contactFormSchema),
+  const serverFormDefaultValues = serverForm.fields?.reduce((defaultValues, field) => {
+    if ('name' in field && 'defaultValue' in field) {
+      return {
+        ...defaultValues,
+        [field.name]: field.defaultValue ?? '',
+      };
+    }
+    return defaultValues;
+  }, {} as FormData);
+
+  const form = useForm<FormData>({
+    resolver: zodResolver(schema),
     defaultValues: {
-      name: '',
-      email: '',
-      subject: '',
-      message: '',
-      'cf-turnstile-response': '',
+      ...(serverFormDefaultValues ?? {}),
+      cfTurnstileResponse: '',
     },
   });
 
-  useEffect(() => {
-    // SUCCESS
-    // @ts-ignore
-    window.onTurnstileSuccess = (token: string) => {
-      form.setValue('cf-turnstile-response', token, {
-        shouldValidate: true,
-      });
-    };
+  const hasFields = serverForm.fields && serverForm.fields.length > 0;
 
-    const resetTurnstile = () => {
-      // @ts-ignore
-      if (window.turnstile) {
-        // reset specific widget
-        // @ts-ignore
-        window.turnstile.reset('#turnstile-widget');
-      }
-    };
-
-    const reExecute = () => {
-      // @ts-ignore
-      if (window.turnstile) {
-        // @ts-ignore
-        window.turnstile.execute('#turnstile-widget');
-      }
-    };
-
-    // ERROR
-    // @ts-ignore
-    window.onTurnstileError = () => {
-      form.setValue('cf-turnstile-response', '');
-      form.setError('cf-turnstile-response', {
-        type: 'manual',
-        message: 'Human verification failed. Retrying...',
-      });
-
-      resetTurnstile();
-      reExecute();
-    };
-
-    // EXPIRED
-    // @ts-ignore
-    window.onTurnstileExpired = () => {
-      form.setValue('cf-turnstile-response', '');
-      form.setError('cf-turnstile-response', {
-        type: 'manual',
-        message: 'Verification expired. Retrying...',
-      });
-
-      resetTurnstile();
-      reExecute();
-    };
-
-    // TIMEOUT
-    // @ts-ignore
-    window.onTurnstileTimeout = () => {
-      form.setValue('cf-turnstile-response', '');
-      form.setError('cf-turnstile-response', {
-        type: 'manual',
-        message: 'Verification timed out. Retrying...',
-      });
-
-      resetTurnstile();
-      reExecute();
-    };
-
-    return () => {
-      // cleanup
-      // @ts-ignore
-      delete window.onTurnstileSuccess;
-      // @ts-ignore
-      delete window.onTurnstileError;
-      // @ts-ignore
-      delete window.onTurnstileExpired;
-      // @ts-ignore
-      delete window.onTurnstileTimeout;
-    };
-  }, [form]);
-
-  const handleSendEmail = (data: ContactFormValues) => {
-    sendEmail(data);
-  };
+  if (!hasFields) {
+    return null;
+  }
 
   return (
-    <>
-      <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
-
-      <form
-        id="contact-form"
-        className="max-w-md space-y-4 p-6 shadow-md"
-        onSubmit={form.handleSubmit(handleSendEmail)}
-        method="post"
-      >
-        {form.formState.errors['cf-turnstile-response']?.message && (
-          <div className="text-destructive">
-            {form.formState.errors['cf-turnstile-response']?.message}
-          </div>
-        )}
-        <FieldSet>
-          <FieldGroup>
-            <Controller
-              control={form.control}
-              name="name"
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>Name</FieldLabel>
-
-                  <Input
-                    placeholder="Your name"
-                    aria-invalid={fieldState.invalid}
-                    autoComplete="name"
-                    {...field}
-                  />
-
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                </Field>
-              )}
-            />
-            <Controller
-              control={form.control}
-              name="email"
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>Email</FieldLabel>
-                  <Input
-                    placeholder="you@example.com"
-                    aria-invalid={fieldState.invalid}
-                    type="email"
-                    autoComplete="email"
-                    spellCheck={false}
-                    {...field}
-                  />
-
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                </Field>
-              )}
-            />
-
-            <Controller
-              control={form.control}
-              name="subject"
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>Subject</FieldLabel>
-
-                  <Input
-                    placeholder="Subject…"
-                    data-invalid={fieldState.invalid}
-                    autoComplete="off"
-                    {...field}
-                  />
-
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                </Field>
-              )}
-            />
-
-            <Controller
-              control={form.control}
-              name="message"
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>Message</FieldLabel>
-
-                  <Textarea
-                    placeholder="Your message…"
-                    aria-invalid={fieldState.invalid}
-                    {...field}
-                  />
-
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                </Field>
-              )}
-            />
-            <div
-              id="turnstile-widget"
-              className="cf-turnstile"
-              data-sitekey={env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITEKEY}
-              data-theme="light"
-              data-size="flexible"
-              data-callback="onTurnstileSuccess"
-              data-error-callback="onTurnstileError"
-              data-expired-callback="onTurnstileExpired"
-              data-timeout-callback="onTurnstileTimeout"
-            />
-
-            <Button
-              type="submit"
-              className={cn('w-full', {
-                'bg-destructive text-white':
-                  form.formState.errors['cf-turnstile-response']?.message,
-              })}
-              disabled={isSending}
-            >
-              {isSending && <Spinner aria-hidden="true" />}
-              {isSending ? 'Sending…' : 'Send Message'}
-            </Button>
-          </FieldGroup>
-        </FieldSet>
-      </form>
-    </>
+    <form id="contact-form" className="max-w-md space-y-4 p-6 shadow-md" method="post">
+      {form.formState.errors['cf-turnstile-response']?.message && (
+        <div className="text-destructive">
+          {form.formState.errors['cf-turnstile-response']?.message}
+        </div>
+      )}
+      <FieldSet>
+        <FieldGroup>
+          {serverForm.fields && serverForm.fields.map((f) => renderFormField(form, f))}
+          <Turnstile
+            siteKey={env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITEKEY}
+            injectScript={false}
+            options={{
+              theme: 'light',
+              responseFieldName: 'cfTurnstileResponse',
+              size: 'flexible',
+            }}
+          />
+          <Button
+            type="submit"
+            className={cn('w-full', {
+              'bg-destructive text-white':
+                form.formState.errors['cfTurnstileResponse']?.message,
+            })}
+            disabled={isSending}
+          >
+            {isSending && <Spinner aria-hidden="true" />}
+            {isSending ? 'Sending…' : 'Send Message'}
+          </Button>
+        </FieldGroup>
+      </FieldSet>
+    </form>
   );
+}
+
+function renderFormField(
+  form: UseFormReturn,
+  formField: NonNullable<Form['fields']>[number],
+) {
+  if (formField.blockType === 'text') {
+    return (
+      <Controller
+        control={form.control}
+        name={formField.name}
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel>{formField.label}</FieldLabel>
+            <Input aria-invalid={fieldState.invalid} {...field} />
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
+    );
+  }
+
+  if (formField.blockType === 'email') {
+    return (
+      <Controller
+        control={form.control}
+        name={formField.name}
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel>{formField.label}</FieldLabel>
+            <Input type="email" aria-invalid={fieldState.invalid} {...field} />
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
+    );
+  }
+  if (formField.blockType === 'textarea') {
+    return (
+      <Controller
+        control={form.control}
+        name={formField.name}
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel>{formField.label}</FieldLabel>
+            <Textarea aria-invalid={fieldState.invalid} {...field} />
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
+    );
+  }
+  return null;
 }

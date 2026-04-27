@@ -22,6 +22,7 @@ const dirname = path.dirname(filename);
 
 export default buildConfig({
   serverURL: site.url,
+  cors: [publicUrl],
   cookiePrefix: COOKIES_NAMESPACE,
   admin: {
     user: users.slug,
@@ -44,6 +45,7 @@ export default buildConfig({
   globals,
   blocks,
   collections,
+
   editor: lexicalEditor(),
   secret: env.PAYLOAD_SECRET,
   typescript: {

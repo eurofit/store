@@ -110,6 +110,7 @@ export function Newsletter() {
             <Field>
               <Turnstile
                 siteKey={env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_INVISIBLE_SITEKEY}
+                injectScript={false}
                 options={{
                   theme: 'light',
                   responseFieldName: 'cfTurnstileResponse',

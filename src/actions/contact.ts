@@ -3,11 +3,20 @@
 import { env } from '@/env.mjs';
 import config from '@/payload/config';
 import { contactFormSchema } from '@/schemas/contact';
+import { TurnstileServerValidationResponse } from '@marsidev/react-turnstile';
 import { getPayload, SendEmailOptions } from 'payload';
 import { z } from 'zod';
 
-export async function sendContactEmail(unsafeData: z.input<typeof contactFormSchema>) {
-  const validatedData = contactFormSchema.parse(unsafeData);
+
+const schema = z.record(z.string(), z.union([z.string(), z.number(), z.boolean()])).;
+
+export async function sendContactEmail(_prevState: any, unsafeFormData: FormData) {
+  const unsafeData = Object.fromEntries(unsafeFormData.entries())
+  const validationResult = schema.safeParse(unsafeData);
+
+  if(!validationResult.success){
+    return z.treeifyError(validationResult.error)
+  }
 
   // verify turnstile token
   const turnstileResponse = await fetch(
@@ -19,12 +28,12 @@ export async function sendContactEmail(unsafeData: z.input<typeof contactFormSch
       },
       body: JSON.stringify({
         secret: env.CLOUDFLARE_TURNSTILE_SECRET_KEY,
-        response: validatedData['cf-turnstile-response'],
+        response: validationResult.data['cfTurnstileResponse'],
       }),
     },
   );
 
-  const turnstileData = await turnstileResponse.json();
+  const turnstileData = (await turnstileResponse.json()) as TurnstileServerValidationResponse;
 
   if (!turnstileData.success) {
     throw new Error('Failed to verify CAPTCHA');
@@ -37,15 +46,15 @@ export async function sendContactEmail(unsafeData: z.input<typeof contactFormSch
     from: env.SMTP_USERNAME,
     to: env.SMTP_INFO_USERNAME,
     subject:
-      validatedData.subject || `New Contact Form Submission from ${validatedData.name}`,
+      validationResult.subject || `New Contact Form Submission from ${validationResult.name}`,
     html: `
         <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${validatedData.name}</p>
-        <p><strong>Email:</strong> ${validatedData.email}</p>
+        <p><strong>Name:</strong> ${validationResult.name}</p>
+        <p><strong>Email:</strong> ${validationResult.email}</p>
         <p><strong>Message:</strong></p>
-        <p>${validatedData.message.replace(/\n/g, '<br>')}</p>
+        <p>${validationResult.message.replace(/\n/g, '<br>')}</p>
       `,
-    replyTo: validatedData.email,
+    replyTo: validationResult.email,
   };
 
   await payload.sendEmail(mailOptions);
