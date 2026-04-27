@@ -577,6 +577,7 @@ export interface InventoryItem {
  */
 export interface Discount {
   id: string;
+  isActive: boolean;
   type: 'amount' | 'buy-x-get-y';
   valueType?: ('fixed' | 'percentage') | null;
   value?: number | null;
@@ -1548,6 +1549,7 @@ export interface CollectionsSelect<T extends boolean = true> {
  * via the `definition` "discounts_select".
  */
 export interface DiscountsSelect<T extends boolean = true> {
+  isActive?: T;
   type?: T;
   valueType?: T;
   value?: T;

@@ -11,7 +11,7 @@ import { cn } from '@/utils/cn';
 import { formatWithCommas } from '@/utils/format-with-commas';
 import { format, isFuture } from 'date-fns';
 import { clamp } from 'lodash-es';
-import { Minus, Plus } from 'lucide-react';
+import { Clock, Minus, Plus } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 import { useDebouncedCallback } from 'use-debounce';
@@ -180,18 +180,15 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
             </h3>
           )}
           {discount && discount.type === 'amount' && (
-            <div>
-              <Badge
-                className={cn('bg-destructive text-xs text-white uppercase', {
-                  'rounded-e-none': !!discount.endDate && isFuture(discount.endDate),
-                })}
-              >
+            <div className="flex items-center gap-1.5">
+              <Badge className="text-xs uppercase">
                 {discount.valueType === 'percentage' && `${discount.value}% Off`}
                 {discount.valueType === 'fixed' &&
                   `Ksh ${formatWithCommas(discount.value!)} Off`}
               </Badge>
               {discount.endDate && isFuture(discount.endDate) && (
-                <Badge className="rounded-s-none text-xs uppercase">
+                <Badge className="bg-destructive text-xs text-white uppercase">
+                  <Clock />
                   <Countdown
                     date={discount.endDate}
                     className="w-fit text-xs font-medium lowercase"
@@ -214,22 +211,14 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
           )}
         </div>
 
-        <div className="mt-3 flex items-center gap-3">
-          {line.price && (
-            <span className="font-variant-numeric-tabular-nums font-semibold">
-              <span className="text-muted-foreground text-xs">Ksh</span>
-              {formatWithCommas(line.price)}
-            </span>
-          )}
+        <div className="mt-3 flex items-center gap-3 text-sm">
           {line.isLowStock && (
-            <span className="font-variant-numeric-tabular-nums text-xs font-medium text-red-600">
+            <span className="font-medium text-red-600 tabular-nums">
               Only {line.stock} Left
             </span>
           )}
           {!line.isLowStock && !line.isOutOfStock && (
-            <span className="font-variant-numeric-tabular-nums text-xs text-green-600">
-              {line.stock} in Stock
-            </span>
+            <span className="text-green-600 tabular-nums">{line.stock} in Stock</span>
           )}
           {line.isOutOfStock && (
             <span className="text-xs text-gray-500">Out of Stock</span>
@@ -237,7 +226,13 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
         </div>
       </div>
 
-      <div>
+      <div className="flex flex-col gap-y-2">
+        {line.price && (
+          <span className="ml-auto text-right text-lg font-bold tabular-nums">
+            <span className="text-muted-foreground">Ksh</span>
+            {formatWithCommas(line.price)}
+          </span>
+        )}
         {line.isOutOfStock && (
           <NotifyMeButton
             userId={userId}

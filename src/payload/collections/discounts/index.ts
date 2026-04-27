@@ -44,6 +44,15 @@ export const discounts: CollectionConfig = {
   },
   fields: [
     {
+      name: 'isActive',
+      type: 'checkbox',
+      required: true,
+      defaultValue: true,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
       name: 'type',
       type: 'select',
       options: DISCOUNT_TYPES,

@@ -113,6 +113,7 @@ export async function getProductsByBrand(opts: GetProductsByBrandArgs) {
         isLowStock: true,
         isOutOfStock: true,
         isNotifyRequested: true,
+        discounts: true,
       },
     },
     sort: title === 'desc' ? '-title' : 'title',
