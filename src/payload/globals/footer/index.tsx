@@ -4,6 +4,12 @@ export const footer: GlobalConfig = {
   slug: 'footer',
   fields: [
     {
+      name: 'tagline',
+      label: 'Tagline',
+      type: 'text',
+      required: true,
+    },
+    {
       name: 'nav',
       label: 'Navigation',
       type: 'array',
