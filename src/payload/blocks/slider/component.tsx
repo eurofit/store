@@ -14,7 +14,7 @@ import { type SliderBlock } from '@/payload/types';
 import Autoplay from 'embla-carousel-autoplay';
 import Link from 'next/link';
 
-export function Slider({ slides, active, showArrows, showDots }: SliderBlock) {
+export function Slider({ slides, active, showArrows, showDots, snaps }: SliderBlock) {
   const isMobile = useIsMobile();
   const { ref, isInView } = useInView();
 
@@ -41,7 +41,13 @@ export function Slider({ slides, active, showArrows, showDots }: SliderBlock) {
         {slides.map(({ images, link }, index) => {
           const { defaultUrl, sources } = getImageSources(images);
           return (
-            <CarouselItem key={index} className="rounded">
+            <CarouselItem
+              key={index}
+              className="rounded"
+              style={{
+                flexBasis: getSnapBasis(snaps),
+              }}
+            >
               <picture>
                 {sources.map((src) => (
                   <source key={src.srcSet} srcSet={src.srcSet} media={src.media} />
@@ -98,4 +104,13 @@ function getImageSources(images: SliderBlock['slides'][number]['images']) {
         : defaultImage?.image?.url,
     sources,
   };
+}
+
+function getSnapBasis(snaps: SliderBlock['snaps']) {
+  switch (snaps) {
+    case '3':
+      return 'calc(100%/3)';
+    default:
+      return '100%';
+  }
 }

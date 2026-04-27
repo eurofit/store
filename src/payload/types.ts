@@ -202,6 +202,7 @@ export interface SliderBlock {
     link?: string | null;
     id?: string | null;
   }[];
+  snaps: '1' | '3';
   active: boolean;
   showArrows?: boolean | null;
   showDots?: boolean | null;
