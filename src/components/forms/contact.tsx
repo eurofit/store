@@ -34,8 +34,7 @@ export function ContactForm() {
         duration: 5000,
       });
       form.reset();
-      turnstileRef.current?.render();
-
+      turnstileRef.current?.reset();
       return;
     }
 
