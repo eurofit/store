@@ -313,14 +313,6 @@ export const productLines: CollectionConfig = {
             },
           ],
         },
-        {
-          name: 'supplier',
-          type: 'relationship',
-          relationTo: 'suppliers',
-          admin: {
-            description: 'The supplier providing this product line.',
-          },
-        },
       ],
     },
 

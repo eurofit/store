@@ -316,6 +316,10 @@ export interface Product {
    * Enter the URL of the product page on the supplier's website.
    */
   srcUrl?: string | null;
+  /**
+   * The supplier providing this product line.
+   */
+  supplier?: (string | null) | Supplier;
   productLines: {
     docs?: (string | ProductLine)[];
     hasNextPage?: boolean;
@@ -377,6 +381,33 @@ export interface Brand {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "suppliers".
+ */
+export interface Supplier {
+  id: string;
+  name: string;
+  /**
+   * The supplier's website URL.
+   */
+  url?: string | null;
+  email?: string | null;
+  /**
+   * The supplier's contact phone number.
+   */
+  phone?: string | null;
+  /**
+   * The supplier's Whatsapp contact number.
+   */
+  whatsapp?: string | null;
+  /**
+   * The name of the supplier's sales contact person.
+   */
+  salesPerson?: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -485,10 +516,6 @@ export interface ProductLine {
    */
   servingSize?: number | null;
   /**
-   * The supplier providing this product line.
-   */
-  supplier?: (string | null) | Supplier;
-  /**
    * Supplier’s product code.
    */
   srcProductCode?: string | null;
@@ -527,33 +554,6 @@ export interface ProductLine {
     hasNextPage?: boolean;
     totalDocs?: number;
   };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "suppliers".
- */
-export interface Supplier {
-  id: string;
-  name: string;
-  /**
-   * The supplier's website URL.
-   */
-  url?: string | null;
-  email?: string | null;
-  /**
-   * The supplier's contact phone number.
-   */
-  phone?: string | null;
-  /**
-   * The supplier's Whatsapp contact number.
-   */
-  whatsapp?: string | null;
-  /**
-   * The name of the supplier's sales contact person.
-   */
-  salesPerson?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1501,6 +1501,7 @@ export interface ProductsSelect<T extends boolean = true> {
   productInformation?: T;
   nutritionalInformation?: T;
   srcUrl?: T;
+  supplier?: T;
   productLines?: T;
   categories?: T;
   relatedProducts?:
@@ -1587,7 +1588,6 @@ export interface ProductLinesSelect<T extends boolean = true> {
   weight?: T;
   servingSizePerContainer?: T;
   servingSize?: T;
-  supplier?: T;
   srcProductCode?: T;
   barcode?: T;
   exportCommodityCode?: T;
