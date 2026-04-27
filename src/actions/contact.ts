@@ -2,21 +2,28 @@
 
 import { env } from '@/env.mjs';
 import config from '@/payload/config';
-import { contactFormSchema } from '@/schemas/contact';
+import { contactFormSchema, ContactFormValues } from '@/schemas/contact';
 import { TurnstileServerValidationResponse } from '@marsidev/react-turnstile';
-import { getPayload, SendEmailOptions } from 'payload';
+import { getPayload } from 'payload';
 import { z } from 'zod';
 
+export type ContactFormActionReturn =
+  | true
+  | z.core.$ZodErrorTree<ContactFormValues>
+  | null;
 
-const schema = z.record(z.string(), z.union([z.string(), z.number(), z.boolean()])).;
+export async function submitContactForm(
+  _prevState: ContactFormActionReturn,
+  unsafeFormData: FormData,
+): Promise<ContactFormActionReturn> {
+  const unsafeData = Object.fromEntries(unsafeFormData.entries());
+  const validationResult = contactFormSchema.safeParse(unsafeData);
 
-export async function sendContactEmail(_prevState: any, unsafeFormData: FormData) {
-  const unsafeData = Object.fromEntries(unsafeFormData.entries())
-  const validationResult = schema.safeParse(unsafeData);
-
-  if(!validationResult.success){
-    return z.treeifyError(validationResult.error)
+  if (!validationResult.success) {
+    return z.treeifyError(validationResult.error);
   }
+
+  const { cfTurnstileResponse, ...data } = validationResult.data;
 
   // verify turnstile token
   const turnstileResponse = await fetch(
@@ -28,36 +35,45 @@ export async function sendContactEmail(_prevState: any, unsafeFormData: FormData
       },
       body: JSON.stringify({
         secret: env.CLOUDFLARE_TURNSTILE_SECRET_KEY,
-        response: validationResult.data['cfTurnstileResponse'],
+        response: cfTurnstileResponse,
       }),
     },
   );
 
-  const turnstileData = (await turnstileResponse.json()) as TurnstileServerValidationResponse;
+  const turnstileRes =
+    (await turnstileResponse.json()) as TurnstileServerValidationResponse;
 
-  if (!turnstileData.success) {
-    throw new Error('Failed to verify CAPTCHA');
+  if (!turnstileRes.success) {
+    return {
+      errors: ['Failed to verify CAPTCHA'],
+    };
   }
 
   const payload = await getPayload({ config });
 
-  // Email content
-  const mailOptions: SendEmailOptions = {
-    from: env.SMTP_USERNAME,
-    to: env.SMTP_INFO_USERNAME,
-    subject:
-      validationResult.subject || `New Contact Form Submission from ${validationResult.name}`,
-    html: `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${validationResult.name}</p>
-        <p><strong>Email:</strong> ${validationResult.email}</p>
-        <p><strong>Message:</strong></p>
-        <p>${validationResult.message.replace(/\n/g, '<br>')}</p>
-      `,
-    replyTo: validationResult.email,
-  };
+  const {
+    docs: [form],
+  } = await payload.find({
+    collection: 'forms',
+    where: {
+      title: {
+        equals: 'Contact us',
+      },
+    },
+    limit: 0,
+    pagination: false,
+  });
 
-  await payload.sendEmail(mailOptions);
+  await payload.create({
+    collection: 'form-submissions',
+    data: {
+      form: form.id,
+      submissionData: Object.entries(data).map(([field, value]) => ({
+        field,
+        value: value.toString(),
+      })),
+    },
+  });
 
   return true;
 }
