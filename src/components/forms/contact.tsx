@@ -16,12 +16,13 @@ import { env } from '@/env.mjs';
 import { contactFormSchema, ContactFormValues } from '@/schemas/contact';
 import { cn } from '@/utils/cn';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Turnstile } from '@marsidev/react-turnstile';
+import { Turnstile, TurnstileInstance } from '@marsidev/react-turnstile';
 import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 export function ContactForm() {
+  const turnstileRef = React.useRef<TurnstileInstance | null>(null);
   const [state, action, isSubmitting] = React.useActionState(submitContactForm, null);
 
   React.useEffect(() => {
@@ -32,10 +33,13 @@ export function ContactForm() {
         description: 'We will get back to you as soon as possible.',
         duration: 5000,
       });
+      form.reset();
+      turnstileRef.current?.render();
+
       return;
     }
 
-    if (state.errors) {
+    if (state.errors.length > 0) {
       toast.error(state.errors.join('\n'));
     }
 
@@ -123,6 +127,7 @@ export function ContactForm() {
           />
 
           <Turnstile
+            ref={turnstileRef}
             siteKey={env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITEKEY}
             injectScript={false}
             options={{
