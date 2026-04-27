@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { env } from '@/env.mjs';
 import { newsletterSchema } from '@/schemas/newsletter';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Turnstile } from '@marsidev/react-turnstile';
+import { Turnstile, TurnstileInstance } from '@marsidev/react-turnstile';
 import { SendHorizonal } from 'lucide-react';
 import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -16,6 +16,7 @@ import { ButtonGroup } from './ui/button-group';
 import { Spinner } from './ui/spinner';
 
 export function Newsletter() {
+  const turnstileRef = React.useRef<TurnstileInstance | null>(null!);
   const [state, action, isSubscribing] = React.useActionState(
     subscribeToNewsletter,
     null,
@@ -26,6 +27,8 @@ export function Newsletter() {
 
     if (state === true) {
       toast.success('Subscribed to newsletter!');
+      form.reset();
+      turnstileRef.current?.reset();
       return;
     }
 
@@ -109,6 +112,7 @@ export function Newsletter() {
             />
             <Field>
               <Turnstile
+                ref={turnstileRef}
                 siteKey={env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_INVISIBLE_SITEKEY}
                 injectScript={false}
                 options={{

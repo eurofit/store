@@ -38,8 +38,6 @@ export function ContactForm() {
       return;
     }
 
-    console.log('errors', state.errors);
-
     if (state.errors.length > 0) {
       toast.error(state.errors.join('\n'));
     }
