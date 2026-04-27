@@ -26,6 +26,7 @@ export function ContactForm() {
 
   React.useEffect(() => {
     if (!state) return;
+
     if (state === true) {
       toast.success('Email sent successfully!', {
         description: 'We will get back to you as soon as possible.',
@@ -33,6 +34,7 @@ export function ContactForm() {
       });
       return;
     }
+
     if (state.errors) {
       toast.error(state.errors.join('\n'));
     }
