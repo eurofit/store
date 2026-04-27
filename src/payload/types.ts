@@ -202,6 +202,7 @@ export interface SliderBlock {
     link?: string | null;
     id?: string | null;
   }[];
+  active: boolean;
   showArrows?: boolean | null;
   showDots?: boolean | null;
   id?: string | null;
@@ -1957,6 +1958,7 @@ export interface Nav {
  */
 export interface Footer {
   id: string;
+  tagline: string;
   nav: {
     label: string;
     links?:
@@ -1992,6 +1994,7 @@ export interface NavSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
+  tagline?: T;
   nav?:
     | T
     | {

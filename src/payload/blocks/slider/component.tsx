@@ -14,11 +14,11 @@ import { type SliderBlock } from '@/payload/types';
 import Autoplay from 'embla-carousel-autoplay';
 import Link from 'next/link';
 
-export function Slider({ slides, showArrows, showDots }: SliderBlock) {
+export function Slider({ slides, active, showArrows, showDots }: SliderBlock) {
   const isMobile = useIsMobile();
   const { ref, isInView } = useInView();
 
-  const isActive = isInView && slides.length > 1;
+  const isActive = active && isInView && slides.length > 1;
   const hasSlides = slides.length > 0;
 
   if (!hasSlides) {

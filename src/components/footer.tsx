@@ -31,10 +31,7 @@ export async function Footer() {
         <div className="flex flex-col items-start gap-4">
           <div>
             <Logo className="text-xl font-bold" />
-            <p className="text-muted-foreground max-w-xs text-sm">
-              Your Authentic European fitness, health and skincare supplier &
-              retailer in Kenya
-            </p>
+            <p className="text-muted-foreground max-w-xs text-sm">{footer.tagline}</p>
           </div>
 
           <address className="text-muted-foreground max-w-sm text-sm not-italic">

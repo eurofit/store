@@ -50,6 +50,12 @@ export const slider: Block = {
       label: 'Config',
       fields: [
         {
+          name: 'active',
+          type: 'checkbox',
+          required: true,
+          defaultValue: true,
+        },
+        {
           name: 'showArrows',
           label: 'Show Arrows',
           type: 'checkbox',
