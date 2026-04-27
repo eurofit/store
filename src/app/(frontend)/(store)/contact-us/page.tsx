@@ -97,7 +97,7 @@ export default async function ContactUs() {
           <ContactsSection />
         </div>
         <div className="flex-1">
-          <ContactForm form={form} />
+          <ContactForm />
         </div>
       </div>
     </div>
