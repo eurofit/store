@@ -1,8 +1,8 @@
 'use server';
 
 import payloadConfig from '@/payload/config';
-import { cache } from 'react';
 import { getPayload } from 'payload';
+import { cache } from 'react';
 
 type GetCategoryArgs = {
   slug: string;
