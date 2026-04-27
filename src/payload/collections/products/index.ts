@@ -130,7 +130,7 @@ export const products: CollectionConfig = {
         allowCreate: true,
       },
       required: true,
-      maxDepth: 6,
+      maxDepth: 2,
     },
     {
       name: 'categories',

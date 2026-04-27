@@ -45,6 +45,9 @@ export const getProductBySlug = cache(async (slug: string) => {
         category: true,
         discounts: true,
       },
+      discounts: {
+        productLines: false,
+      },
       categories: {
         slug: true,
         title: true,

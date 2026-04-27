@@ -9,12 +9,13 @@ import { type ProductLine } from '@/types';
 import { buildWhatsAppLink } from '@/utils/build-wa-link';
 import { cn } from '@/utils/cn';
 import { formatWithCommas } from '@/utils/format-with-commas';
-import { format } from 'date-fns';
+import { format, isFuture } from 'date-fns';
 import { clamp } from 'lodash-es';
 import { Minus, Plus } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 import { useDebouncedCallback } from 'use-debounce';
+import { Countdown } from './countdown';
 import { Whatsapp } from './icons/whatsapp';
 import { NotifyMeButton } from './notify-me-button';
 import { Badge } from './ui/badge';
@@ -156,145 +157,154 @@ export function ProductLine({ product, userId, line }: ProductLineProps) {
   const discount = line.discounts?.[0];
 
   return (
-    <>
-      <pre>{JSON.stringify(line.discounts, null, 2)}</pre>
-      <div
-        className={cn(
-          'relative flex w-full flex-col items-center justify-between rounded-lg p-3 transition-all duration-200 md:flex-row',
-          {
-            'border-blue-300 bg-blue-50': line.price && qty > 0,
-            'border-gray-200 bg-white hover:bg-gray-50': !line.price || qty === 0,
-            'border-red-200 bg-red-50 hover:bg-red-50': line.isOutOfStock,
-            'gap-4 max-md:flex-col max-md:items-start': line.stock,
-          },
-        )}
-        aria-label={line.title}
-      >
-        <div className="w-full min-w-0 grow">
-          <div className="mb-1 flex items-center gap-2">
-            {line.variant && (
-              <h3
-                id={line.slug}
-                className="max-w-xs scroll-m-20 font-medium text-pretty capitalize"
+    <div
+      className={cn(
+        'relative flex w-full flex-col items-center justify-between rounded-lg p-3 transition-all duration-200 md:flex-row',
+        {
+          'border-blue-300 bg-blue-50': line.price && qty > 0,
+          'border-gray-200 bg-white hover:bg-gray-50': !line.price || qty === 0,
+          'border-red-200 bg-red-50 hover:bg-red-50': line.isOutOfStock,
+          'gap-4 max-md:flex-col max-md:items-start': line.stock,
+        },
+      )}
+      aria-label={line.title}
+    >
+      <div className="w-full min-w-0 grow">
+        <div className="mb-1 flex items-center gap-2">
+          {line.variant && (
+            <h3
+              id={line.slug}
+              className="max-w-xs scroll-m-20 font-medium text-pretty capitalize"
+            >
+              {line.variant}
+            </h3>
+          )}
+          {discount && discount.type === 'amount' && (
+            <div>
+              <Badge
+                className={cn('bg-destructive text-xs text-white uppercase', {
+                  'rounded-e-none': !!discount.endDate && isFuture(discount.endDate),
+                })}
               >
-                {line.variant}
-              </h3>
-            )}
-            {discount && discount.type === 'amount' && (
-              <Badge variant="destructive" className="text-xs">
                 {discount.valueType === 'percentage' && `${discount.value}% Off`}
                 {discount.valueType === 'fixed' &&
                   `Ksh ${formatWithCommas(discount.value!)} Off`}
               </Badge>
-            )}
-          </div>
-
-          <div className="flex items-center">
-            {line.sku && (
-              <p className="text-muted-foreground text-xs">SKU:&nbsp;{line.sku}</p>
-            )}
-            {line.expiryDate && (
-              <>
-                {line.sku && <span>&nbsp;&bull;&nbsp;</span>}
-                <p className="text-xs">
-                  BBE:&nbsp;{format(line.expiryDate, 'dd/MM/yyyy')}
-                </p>
-              </>
-            )}
-          </div>
-
-          <div className="mt-3 flex items-center gap-3">
-            {line.price && (
-              <span className="font-variant-numeric-tabular-nums font-semibold">
-                <span className="text-muted-foreground text-xs">Ksh</span>
-                {formatWithCommas(line.price)}
-              </span>
-            )}
-            {line.isLowStock && (
-              <span className="font-variant-numeric-tabular-nums text-xs font-medium text-red-600">
-                Only {line.stock} Left
-              </span>
-            )}
-            {!line.isLowStock && !line.isOutOfStock && (
-              <span className="font-variant-numeric-tabular-nums text-xs text-green-600">
-                {line.stock} in Stock
-              </span>
-            )}
-            {line.isOutOfStock && (
-              <span className="text-xs text-gray-500">Out of Stock</span>
-            )}
-          </div>
+              {discount.endDate && isFuture(discount.endDate) && (
+                <Badge className="rounded-s-none text-xs uppercase">
+                  <Countdown
+                    date={discount.endDate}
+                    className="w-fit text-xs font-medium lowercase"
+                  />
+                </Badge>
+              )}
+            </div>
+          )}
         </div>
 
-        <div>
+        <div className="flex items-center">
+          {line.sku && (
+            <p className="text-muted-foreground text-xs">SKU:&nbsp;{line.sku}</p>
+          )}
+          {line.expiryDate && (
+            <>
+              {line.sku && <span>&nbsp;&bull;&nbsp;</span>}
+              <p className="text-xs">BBE:&nbsp;{format(line.expiryDate, 'dd/MM/yyyy')}</p>
+            </>
+          )}
+        </div>
+
+        <div className="mt-3 flex items-center gap-3">
+          {line.price && (
+            <span className="font-variant-numeric-tabular-nums font-semibold">
+              <span className="text-muted-foreground text-xs">Ksh</span>
+              {formatWithCommas(line.price)}
+            </span>
+          )}
+          {line.isLowStock && (
+            <span className="font-variant-numeric-tabular-nums text-xs font-medium text-red-600">
+              Only {line.stock} Left
+            </span>
+          )}
+          {!line.isLowStock && !line.isOutOfStock && (
+            <span className="font-variant-numeric-tabular-nums text-xs text-green-600">
+              {line.stock} in Stock
+            </span>
+          )}
           {line.isOutOfStock && (
-            <NotifyMeButton
-              userId={userId}
-              productLineId={line.id}
-              isNotifyRequested={line.isNotifyRequested}
-            />
-          )}
-
-          {!line.isOutOfStock && line.price && (
-            <ButtonGroup
-              className={cn('relative w-full', {
-                'outline outline-amber-500': isUpdatingCartItem,
-              })}
-            >
-              <Button
-                variant="outline"
-                size="icon"
-                aria-label="Decrease quantity"
-                disabled={isMounted() && qty <= 0}
-                onClick={handleDecrement}
-              >
-                <Minus aria-hidden="true" />
-              </Button>
-
-              <Input
-                type="number"
-                min={0}
-                max={line.stock}
-                className="bg-background hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 w-16 text-center text-sm shadow-xs"
-                aria-label="Quantity input"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                placeholder="0"
-                value={qty || ''}
-                onChange={(e) =>
-                  handleQtyChange(clamp(Number(e.target.value), 0, line.stock))
-                }
-              />
-
-              <Button
-                variant="outline"
-                size="icon"
-                aria-label="Increase quantity"
-                disabled={isMounted() && qty >= line.stock}
-                onClick={handleIncrement}
-              >
-                <Plus aria-hidden="true" />
-              </Button>
-            </ButtonGroup>
-          )}
-
-          {!line.isOutOfStock && !line.price && (
-            <Button variant="outline" className="text-whatsapp" asChild>
-              <Link
-                href={buildWhatsAppLink({
-                  phone: '254110990666',
-                  message: `Hello Eurofit Team,\n\nI would like to inquire about the price for this product:\n\n*Product*: ${line.title}\n${line.variant ? `*Variant*: ${line.variant}` : ''}\n*SKU*: ${line.sku}\n\nThank you.`,
-                })}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Whatsapp aria-hidden="true" />
-                Inquire Price
-              </Link>
-            </Button>
+            <span className="text-xs text-gray-500">Out of Stock</span>
           )}
         </div>
       </div>
-    </>
+
+      <div>
+        {line.isOutOfStock && (
+          <NotifyMeButton
+            userId={userId}
+            productLineId={line.id}
+            isNotifyRequested={line.isNotifyRequested}
+          />
+        )}
+
+        {!line.isOutOfStock && line.price && (
+          <ButtonGroup
+            className={cn('relative w-full', {
+              'outline outline-amber-500': isUpdatingCartItem,
+            })}
+          >
+            <Button
+              variant="outline"
+              size="icon"
+              aria-label="Decrease quantity"
+              disabled={isMounted() && qty <= 0}
+              onClick={handleDecrement}
+            >
+              <Minus aria-hidden="true" />
+            </Button>
+
+            <Input
+              type="number"
+              min={0}
+              max={line.stock}
+              className="bg-background hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 w-16 text-center text-sm shadow-xs"
+              aria-label="Quantity input"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              placeholder="0"
+              value={qty || ''}
+              onChange={(e) =>
+                handleQtyChange(clamp(Number(e.target.value), 0, line.stock))
+              }
+            />
+
+            <Button
+              variant="outline"
+              size="icon"
+              aria-label="Increase quantity"
+              disabled={isMounted() && qty >= line.stock}
+              onClick={handleIncrement}
+            >
+              <Plus aria-hidden="true" />
+            </Button>
+          </ButtonGroup>
+        )}
+
+        {!line.isOutOfStock && !line.price && (
+          <Button variant="outline" className="text-whatsapp" asChild>
+            <Link
+              href={buildWhatsAppLink({
+                phone: '254110990666',
+                message: `Hello Eurofit Team,\n\nI would like to inquire about the price for this product:\n\n*Product*: ${line.title}\n${line.variant ? `*Variant*: ${line.variant}` : ''}\n*SKU*: ${line.sku}\n\nThank you.`,
+              })}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Whatsapp aria-hidden="true" />
+              Inquire Price
+            </Link>
+          </Button>
+        )}
+      </div>
+    </div>
   );
 }
