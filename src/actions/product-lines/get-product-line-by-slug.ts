@@ -32,6 +32,13 @@ export async function getProductLineBySlug(unsafeInput: UnsafeArgs) {
       select: {
         slug: true,
         title: true,
+        images: true,
+        variant: true,
+        size: true,
+        sku: true,
+        retailPrice: true,
+        barcode: true,
+        product: true,
         discounts: true,
       },
       populate: {
@@ -40,6 +47,12 @@ export async function getProductLineBySlug(unsafeInput: UnsafeArgs) {
           valueType: true,
           value: true,
           endDate: true,
+        },
+        products: {
+          slug: true,
+          title: true,
+          srcImage: true,
+          origin: true,
         },
       },
     });

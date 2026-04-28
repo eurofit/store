@@ -1030,10 +1030,10 @@ export interface Cart {
     /**
      * A snapshot of the product line at the time it was added to the cart.
      */
-    snapshot: {
-      retailPrice: number;
-      inventoryStock: number;
-      virtualStock: number;
+    snapshot?: {
+      retailPrice?: number | null;
+      inventoryStock?: number | null;
+      virtualStock?: number | null;
     };
     id?: string | null;
   }[];

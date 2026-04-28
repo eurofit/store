@@ -1,5 +1,7 @@
 import { CollectionConfig } from 'payload';
+import { ensureSnapshots } from './hooks/ensure-snapshots';
 import { validateCartItems } from './hooks/validate-cart-items';
+import { validateQty } from './validators/validate-qty';
 
 export const carts: CollectionConfig = {
   slug: 'carts',
@@ -7,11 +9,7 @@ export const carts: CollectionConfig = {
     interface: 'Cart',
   },
   access: {
-    create: ({ req: { user } }) => Boolean(user),
-    read: ({ req: { user } }) => Boolean(user),
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => Boolean(user),
-    admin: ({ req: { user } }) => Boolean(user),
+    update: () => true,
   },
   labels: {
     singular: 'Cart',
@@ -57,6 +55,7 @@ export const carts: CollectionConfig = {
           name: 'quantity',
           type: 'number',
           required: true,
+          validate: validateQty,
         },
         {
           name: 'snapshot',
@@ -65,26 +64,23 @@ export const carts: CollectionConfig = {
           admin: {
             description:
               'A snapshot of the product line at the time it was added to the cart.',
-            readOnly: true,
+            hidden: true,
           },
           fields: [
             {
               name: 'retailPrice',
               type: 'number',
               label: 'Retail Price',
-              required: true,
             },
             {
               name: 'inventoryStock',
               type: 'number',
               label: 'Stock',
-              required: true,
             },
             {
               name: 'virtualStock',
               type: 'number',
               label: 'Virtual Stock',
-              required: true,
             },
           ],
         },
@@ -113,6 +109,6 @@ export const carts: CollectionConfig = {
     },
   ],
   hooks: {
-    beforeChange: [validateCartItems],
+    beforeChange: [validateCartItems, ensureSnapshots],
   },
 };

@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse, userAgent } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 import { COOKIE_KEYS } from './constants/keys';
 
-export function proxy(req: NextRequest) {
+export function middleware(req: NextRequest) {
   const ua = userAgent(req);
   const res = NextResponse.next();
 
