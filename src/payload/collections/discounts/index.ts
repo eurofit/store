@@ -53,6 +53,12 @@ export const discounts: CollectionConfig = {
       },
     },
     {
+      name: 'title',
+      label: 'Title',
+      type: 'text',
+      required: true,
+    },
+    {
       name: 'type',
       type: 'select',
       options: DISCOUNT_TYPES,

@@ -578,6 +578,7 @@ export interface InventoryItem {
 export interface Discount {
   id: string;
   isActive: boolean;
+  title: string;
   type: 'amount' | 'buy-x-get-y';
   valueType?: ('fixed' | 'percentage') | null;
   value?: number | null;
@@ -1550,6 +1551,7 @@ export interface CollectionsSelect<T extends boolean = true> {
  */
 export interface DiscountsSelect<T extends boolean = true> {
   isActive?: T;
+  title?: T;
   type?: T;
   valueType?: T;
   value?: T;
