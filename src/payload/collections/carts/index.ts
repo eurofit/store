@@ -1,5 +1,4 @@
 import { CollectionConfig } from 'payload';
-import { ensureSnapshots } from './hooks/ensure-snapshots';
 import { validateCartItems } from './hooks/validate-cart-items';
 import { validateQty } from './validators/validate-qty';
 
@@ -109,6 +108,6 @@ export const carts: CollectionConfig = {
     },
   ],
   hooks: {
-    beforeChange: [validateCartItems, ensureSnapshots],
+    beforeChange: [validateCartItems],
   },
 };

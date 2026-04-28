@@ -22,7 +22,7 @@ const dirname = path.dirname(filename);
 
 export default buildConfig({
   serverURL: site.url,
-  cors: [publicUrl],
+  // cors: [publicUrl],
   cookiePrefix: COOKIES_NAMESPACE,
   admin: {
     user: users.slug,
